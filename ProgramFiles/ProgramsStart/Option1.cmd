@@ -10,8 +10,3 @@ echo Options:
 ::all permissions
 echo %op%.  Back.
 set /a op=%op%+1
-::Chrome
-IF "%permnum%" GTR "0" ( 
- 	echo %op%.  Start Chrome.
-	set /a op=%op%+1
-)
