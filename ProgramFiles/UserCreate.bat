@@ -173,12 +173,12 @@ echo Creating..
 
 md %file%\Users\%usern% >nul
 md %file%\Users\%usern%\logs >nul
-@echo password=%pass%>%file%\Users\%usern%\pass.txt
-@echo perm=%perm%>%file%\Users\%usern%\permfull.txt
-@echo %permnum%>%file%\Users\%usern%\permnum.txt
-@echo creator=%ruser%>%file%\Users\%usern%\creator.txt
-@echo %usern%:perm=%perm%,permnum=%permnum%,password=%pass%,creator=%ruser%>>%file%\Users\ALL\userdat.txt
-echo._%usern%_>>%file%\Users\ALL\users.txt
+echo.password=%pass% > %file%\Users\%usern%\pass.txt
+echo.perm=%perm% > %file%\Users\%usern%\permfull.txt
+echo.%permnum% > %file%\Users\%usern%\permnum.txt
+echo.creator=%ruser% > %file%\Users\%usern%\creator.txt
+echo.%usern%:perm=%perm%,permnum=%permnum%,password=%pass%,creator=%ruser% >> %file%\Users\ALL\userdat.txt
+echo._%usern%_ >> %file%\Users\ALL\users.txt
 goto :menu
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ echo [32mAre you sure you want to run OMEGA? [%textb%;%textf%m
 echo This program can be dangerous to your computer.
 
 ::using simple boolean system
-set boolean=
+set "boolean="
 set /p boolean=
 IF "%boolean%"=="yes" (
 	cmd /C %file%\ProgramFiles\Login.cmd
