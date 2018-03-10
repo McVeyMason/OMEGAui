@@ -1,3 +1,0 @@
-Log started on 18/03/09 at 23:12:03.90 using Mason by computer account Mason. 
-Using program OMEGA USER CREATE 0.5.
-[23:12:07.04]:Permission level is perm=5 
