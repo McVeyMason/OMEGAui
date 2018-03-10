@@ -1,22 +1,22 @@
 :startup
 @echo off
-set file=%~dp0
+set "file=%~dp0"
 cd %file%
 cd..
-set file=%cd%
-set ruser=%username%
+set "file=%cd%"
+set "ruser=%username%"
 title %title%
 ::getting time and date that it was started at
 SETLOCAL ENABLEDELAYEDEXPANSION
-set log=Started session on %date% at %time%.
+set "log=Started session on %date% at %time%."
 FOR /F "skip=1 tokens=1-6" %%A IN ('WMIC ^Path Win32_LocalTime Get Day^,Hour^,Minute^,Month^,Second^,Year /Format:table') DO (
     IF %%A GTR 0 (
-	SET Day=%%A
-	SET Hour=%%B
-	SET Min=%%C
-	SET Month=%%D
-	SET Sec=%%E
-	SET Year=%%F
+		SET "Day=%%A"
+		SET "Hour=%%B"
+		SET "Min=%%C"
+		SET "Month=%%D"
+		SET "Sec=%%E"
+		SET "Year=%%F"
     )
 )
 if %Month% LSS 10 set Month=0%Month%
@@ -44,8 +44,8 @@ echo:
 echo [32mDo you want to use your default account? [%textb%;%textf%m
 
 ::using simple boolean system
-set boolean=
-set /p boolean=
+set "boolean="
+set /p "boolean="
 IF "%boolean%"=="yes" (
 	goto :creduser
 )
@@ -64,7 +64,7 @@ goto :logon
 cls
 echo %title%
 ::setting user to computers username
-set user=%ruser%
+set "user=%ruser%"
 echo:
 set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your password[%textb%;%textf%m' -AsSecureString ; ^
     $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
@@ -106,14 +106,21 @@ echo.Log started on %date% at %time% using %user% by computer account %ruser%.> 
 echo.Using program %title%.>> %file%\Users\%user%\logs\%now%.txt
 echo.%now%.txt >> %file%\Users\%user%\logs\ALL.txt
 
-::converting password to correct format
-set pass=password=%password%
 ::converting strings to uppercase 
 for /f "usebackq delims=" %%I in (`powershell "\"%password%\".toUpper()"`) do set "password=%%~I"
 for /f "usebackq delims=" %%I in (`powershell "\"%user%\".toUpper()"`) do set "user=%%~I" 
-
+::converting password to correct format
+set "pass=password=%password%"
 ::setting variables to match user data
 ::fetches from the User file 
+cls
+type %file%\Users\%user%\pass.txt
+echo:
+type %file%\Users\%user%\permfull.txt
+echo:
+type %file%\Users\%user%\permnum.txt
+echo:
+pause
 set /p RP=<%file%\Users\%user%\pass.txt
 set /p perm=<%file%\Users\%user%\permfull.txt
 ::permnum is just the raw user permission level
@@ -126,36 +133,26 @@ set perm=%perm: =%
 set pass=%pass: =%
 
 set permnum=%permnum: =%
-
-cls
-echo pass="%pass%"
-echo perm="%perm%"
-echo permfull="%permfull%"
-echo RP="%RP%"
-echo permnum="%pernum%"
-echo password="%password%"
-@echo %permnum%==%permfull%>%file%\plswork.txt
-pause
 ::converting permnum to correct format
 IF "%permnum%"=="" (
-	set permfull=perm=1
-	set permnum=1
+	set "permfull=perm=1"
+	set "permnum=1"
 )
 IF "%permnum%"=="" (
-	set permfull=perm=2
-	set permnum=2
+	set "permfull=perm=2"
+	set "permnum=2"
 )
 IF "%permnum%"=="" (
-	set permfull=perm=3
-	set permnum=3
+	set "permfull=perm=3"
+	set "permnum=3"
 )
 IF "%permnum%"=="" (
-	set permfull=perm=4
-	set permnum=4
+	set "permfull=perm=4
+	set "permnum=4"
 )
 IF "%permnum%"=="" (
-	set permfull=perm=5
-	set permnum=5
+	set "permfull=perm=5"
+	set "permnum=5"
 )
 ::debug
 cls
