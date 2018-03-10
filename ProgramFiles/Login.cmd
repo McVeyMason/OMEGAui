@@ -110,29 +110,22 @@ echo.%now%.txt >> %file%\Users\%user%\logs\ALL.txt
 for /f "usebackq delims=" %%I in (`powershell "\"%password%\".toUpper()"`) do set "password=%%~I"
 for /f "usebackq delims=" %%I in (`powershell "\"%user%\".toUpper()"`) do set "user=%%~I" 
 ::converting password to correct format
+::pass= the user entered password
 set "pass=password=%password%"
+set pass=%pass: =%
 ::setting variables to match user data
 ::fetches from the User file 
-cls
-type %file%\Users\%user%\pass.txt
-echo:
-type %file%\Users\%user%\permfull.txt
-echo:
-type %file%\Users\%user%\permnum.txt
-echo:
-pause
-set /p RP=<%file%\Users\%user%\pass.txt
-set /p perm=<%file%\Users\%user%\permfull.txt
-::permnum is just the raw user permission level
-set /p permnum=<%file%\Users\%user%\permnum.txt
 ::RP= real password
+set /P RP=<%file%\Users\%user%\pass.txt
 set RP=%RP: =%
 ::perm= permission level
+set /P perm=<%file%\Users\%user%\permfull.txt
 set perm=%perm: =%
-::pass= the user entered password
-set pass=%pass: =%
-
+::permnum is just the raw user permission level
+set /P permnum=<%file%\Users\%user%\permnum.txt
 set permnum=%permnum: =%
+::creator is the creator of the user
+set /P creator=<%file%\Users\%user%\creator.txt
 ::converting permnum to correct format
 IF "%permnum%"=="" (
 	set "permfull=perm=1"
@@ -151,19 +144,18 @@ IF "%permnum%"=="" (
 	set "permnum=4"
 )
 IF "%permnum%"=="" (
-	set "permfull=perm=5"
+	set "permfull=perm=5"
 	set "permnum=5"
 )
 ::debug
-cls
-echo pass="%pass%"
-echo perm="%perm%"
-echo permfull="%permfull%"
-echo RP="%RP%"
-echo permnum="%pernum%"
-echo password="%password%"
-@echo %perm%==%permfull%>%file%\plswork.txt
-pause
+REM cls
+REM echo pass="%pass%"
+REM echo perm="%perm%"
+REM echo permfull="%permfull%"
+REM echo RP="%RP%"
+REM echo permnum="%pernum%"
+REM echo password="%password%"
+REM pause
 ::deletes user and blacklists account if user forges data
 set permfull=%permfull: =%
 IF NOT "%perm%"=="%permfull%" (
@@ -202,4 +194,5 @@ echo.%perm%> %file%\ProgramFiles\perm.temp
 echo.%permnum%> %file%\ProgramFiles\permnum.temp
 echo.%user%> %file%\ProgramFiles\user.temp
 echo.%now%> %file%\ProgramFiles\now.temp
+echo.
 exit
