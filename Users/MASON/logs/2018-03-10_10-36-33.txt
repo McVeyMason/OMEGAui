@@ -1,0 +1,2 @@
+Log started on 18/03/10 at 10:36:43.56 using Mason by computer account Mason. 
+Using program OMEGA 0.9.0.
