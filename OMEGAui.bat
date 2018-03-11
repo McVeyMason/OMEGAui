@@ -115,6 +115,12 @@ echo %op%.  Open the [31mc[32mo[33ml[34mo[35mr[36m s[37me[91ml[92me[93
 set /a op=%op%+1
 ::all permission
 echo %op%. Change my password.
+set /a op=%op%+1
+::Permissions at 5
+IF "%permnum%" EQU "5" (
+	echo %op%. Run daughter program.
+	set /a op=%op%+1
+)
 
 echo:
 echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
@@ -209,7 +215,16 @@ IF "%choice%"=="%op%" (
 	goto :password
 )
 set /a op=%op%+1
-IF "%choice%"=="%op%" (
+::permission level 5 only
+IF "%permnum%" EQU "5" (
+	IF "%choice%"=="%op%" (
+		::Enters daughter program menu.
+		echo.[%time%]:Opened daughter program menu. >> %file%\Users\%user%\logs\%now%.txt  
+		goto :subprograms
+	)
+	set /a op=%op%+1
+)
+IF "%choice%"=="debug" (
 	::do anything
 )
 ::error script
@@ -949,4 +964,47 @@ timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
+:subprograms
+::Daughter program menu
+IF NOT "%perm%"=="perm=5" (
+	goto :menu
+)
+::no need to setup permissions
+cls
+echo OMEGAui build version %build%
+echo:
+echo Welcome to the Daughter program menu.
+echo Options:
+echo 0. Back
+echo 1. Run User Manager.
+echo 2. Run Program Manager
+echo:
+echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+set "choice="
+set /p choice=
+
+IF "%choice%"=="0" (
+	::goes back to menu
+	echo.[%time%]:----Exited daughter program menu. >> %file%\Users\%user%\logs\%now%.txt
+	goto :menu
+)
+IF "%choice%"=="1" (
+	::Opens User Manager
+	echo.[%time%]:----Opened User Managment. >> %file%\Users\%user%\logs\%now%.txt
+	cmd /C %file%\ProgramFiles\UserCreate.bat
+	goto :menu
+)
+IF "%choice%"=="2" (
+	::Opens Program Manager
+	echo.[%time%]:----Opened Program Managment. >> %file%\Users\%user%\logs\%now%.txt
+	cmd /C %file%\ProgramFiles\ProgramAdd.bat
+	goto :menu
+)
+cls
+echo OMEGAui build version %build%
+echo:
+echo [91mInvalid option. [%textb%;%textf%m
+timeout 2 >nul
+goto :subprograms
+	
 pause
