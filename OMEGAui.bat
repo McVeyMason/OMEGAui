@@ -884,7 +884,7 @@ echo Type exit to exit.
 set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your password[%textb%;%textf%m' -AsSecureString ; ^
     $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
 		[System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
-for /f "usebackq delims=" %%p in (`%psCommand%`) do set password=%%p 
+for /f "usebackq delims=" %%p in (`%psCommand%`) do set "password=%%p" 
 set /p RP=<%file%\Users\%user%\pass.txt
 for /f "usebackq delims=" %%I in (`powershell "\"%password%\".toUpper()"`) do set "password=%%~I"
 set "pass=password=%password%"

@@ -1,16 +1,16 @@
 :startup
 @echo off
-set build=0.5
-set title=OMEGA USER CREATE %build%
-set file=%~dp0
+set "build=0.5"
+set "title=OMEGA USER CREATE %build%"
+set "file=%~dp0"
 cd %file%
 cd..
-set file=%cd%
-set ruser=%username%
+set "file=%cd%"
+set "ruser=%username%"
 title %title%
 color 0c
-set textf=91
-set textb=0
+set "textf=91"
+set "textb=0"
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%username%.txt exit
 goto :start
@@ -67,7 +67,7 @@ echo 3. View user logs.
 echo 4. Change a user.
 echo:
 echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
-set choice=
+set "choice="
 set /p choice=
 
 IF "%choice%"=="0" (
@@ -94,7 +94,7 @@ cls
 echo:
 echo Type exit to exit.
 echo|set /p="Please enter username of the new user:"
-set usern=
+set "usern="
 set /p usern=
 IF %usern%==exit (
 	goto :menu
@@ -105,7 +105,7 @@ IF EXIST %file%\Users\%usern% (
 	echo:
 	echo User %usern% already exists.
 	echo Are you sure you want to continue?
-	set boolean=
+	set "boolean="
 	set /p boolean=
 
 	IF "%boolean%"=="yes" (
@@ -124,7 +124,7 @@ IF EXIST %file%\Users\%usern% (
 		cls
 		echo:
 		echo Canceled.
-		set usern=
+		set "usern="
 		timeout 1 >nul
 		goto :menu
 	)
@@ -140,35 +140,35 @@ IF EXIST %file%\Users\%usern% (
 cls 
 echo:
 echo|set /p="Please enter the password of user %usern%:"
-set pass=
+set "pass="
 set /p pass=
 
 cls 
 echo:
 echo|set /p="Please enter the permition level of user %usern%(1-5):"
-set perm=
+set "perm="
 set /p perm=
 
 set perm=%perm: =%
 set pass=%pass: =%
 for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I"
 for /f "usebackq delims=" %%I in (`powershell "\"%pass%\".toUpper()"`) do set "pass=%%~I"
-set permnum=%perm%
+set "permnum=%perm%"
 ::anti forge
 IF "%permnum%"=="1" (
-	set permnum=
+	set "permnum="
 )
 IF "%permnum%"=="2" (
-	set permnum=
+	set "permnum="
 )
 IF "%permnum%"=="3" (
-	set permnum=
+	set "permnum="
 )
 IF "%permnum%"=="4" (
-	set permnum=
+	set "permnum="
 )
 IF "%permnum%"=="5" (
-	set permnum=
+	set "permnum="
 )
 cls
 echo:
@@ -195,7 +195,7 @@ type %file%\Users\ALL\users.txt
 echo:
 echo Type exit to exit.
 echo|set /p="Please enter the username of the user that you want to delete:"
-set usern=
+set "usern="
 set /p usern=
 set usern=%usern: =%
 IF "%usern%"=="exit" (
@@ -226,7 +226,7 @@ cls
 echo:
 echo Are you sure that you want to delete %usern% from the database?
 
-set boolean=
+set "boolean="
 set /p boolean=
 for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I"
 IF "%boolean%"=="yes" (
@@ -246,7 +246,7 @@ IF "%boolean%"=="no" (
 	cls
 	echo:
 	echo Canceled.
-	set usern=
+	set "usern="
 	timeout 2 >nul
 	goto :menu
 )
@@ -269,7 +269,7 @@ echo:
 type %file%\Users\ALL\users.txt
 echo:
 echo|set /p="Please enter the username of the user that logs you want to view or delete:"
-set usern=
+set "usern="
 set /p usern=
 
 IF "%usern%"=="exit" (
@@ -297,7 +297,7 @@ echo 2. View logs.
 echo 3. Delete logs.
 echo:
 echo echo|set /p="Please enter the your choice:"
-set option=
+set "option="
 set /p option=
 
 IF "%option%"=="0" (
@@ -326,7 +326,7 @@ echo:
 type %file%\Users\%usern%\logs\ALL.txt
 echo:
 echo|set /p="Please enter the log name of the log that you want to view(ex. 2000-01-01_00-00-00):"
-set log=
+set "log="
 set /p log=
 
 
@@ -349,7 +349,7 @@ echo 0. Back.
 echo 1. View another log.
 echo 2. View another users logs.
 echo|set /p="please enter you choice:"
-set option=
+set "option="
 set /p option=
 
 IF "%option%"=="0" (
@@ -375,7 +375,7 @@ echo 0. Back.
 echo 1. Delete all.
 echo 2. Delete 1.
 echo|set /p="please enter you choice:"
-set option=
+set "option="
 set /p option=
 
 IF "%option%"=="0" (
@@ -398,7 +398,7 @@ cls
 echo:
 echo Are you sure that you want to delete all of %usern% logs from the database?
 
-set boolean=
+set "boolean="
 set /p boolean=
 IF "%boolean%"=="yes" (
 	for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I"
@@ -433,7 +433,7 @@ echo:
 type %file%\Users\%usern%\logs\ALL.txt
 echo:
 echo|set /p="Please enter the log name of the log that you want to delete(ex. 2000-01-01_00-00-00):"
-set log=
+set "log="
 set /p log=
 
 IF "%log%"=="exit" (
@@ -451,7 +451,7 @@ cls
 echo:
 echo Are you sure that you want to delete log %log%?
 
-set boolean=
+set "boolean="
 set /p boolean=
 IF "%boolean%"=="yes" (
 	for /f "usebackq delims=" %%I in (`powershell "\"%log%\".toUpper()"`) do set "log=%%~I"

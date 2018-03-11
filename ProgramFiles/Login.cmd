@@ -23,8 +23,8 @@ if %Month% LSS 10 set Month=0%Month%
 if %Day% LSS 10 set Day=0%Day%
 if %Min% LSS 10 set Minute=0%Minute%
 if %Hour% LSS 10 set Hour=0%Hour%
-set now=%year%-%month%-%day%_%hour%-%min%-%sec%
-set now=%now%
+set "now=%year%-%month%-%day%_%hour%-%min%-%sec%"
+set "now=%now%"
 cls
 goto :logon
 --------------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ echo:
 set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your password[%textb%;%textf%m' -AsSecureString ; ^
     $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
 		[System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
-for /f "usebackq delims=" %%p in (`%psCommand%`) do set password=%%p 
+for /f "usebackq delims=" %%p in (`%psCommand%`) do set "password=%%p" 
 goto :logonscript
 --------------------------------------------------------------------------------------------------
 :creddefaut
@@ -84,7 +84,7 @@ goto :logonscript
 cls
 echo %title%
 echo:
-set user=
+set "user="
 echo|set /p="[32mPlease enter your username:[%textb%;%textf%m"
 set /p user=
 
@@ -101,7 +101,7 @@ echo:
 set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your password[%textb%;%textf%m' -AsSecureString ; ^
     $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
         [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
-for /f "usebackq delims=" %%p in (`%psCommand%`) do set password=%%p 
+for /f "usebackq delims=" %%p in (`%psCommand%`) do set "password=%%p" 
 goto :logonscript
 --------------------------------------------------------------------------------------------------
 :logonscript

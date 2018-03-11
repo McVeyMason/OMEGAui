@@ -21,3 +21,4 @@ echo    8O          OO  IO+ OO:7O? OO,   OO======  OO     8OOOOOO   OO    OO:
 echo    .OO        IO7  OO   OOOO   OO   OO        ,OO        IOI  OOOOOOOOOO       
 echo     7OO      ZOO  +OI   :OO    8O.  OO         ZOO      OOO  OO7=======OO      
 echo       OOOOOOOO,   OO     O?     OO  OOOOOOOO     OOOOOOOO.  ?O8        ~O8      
+exit

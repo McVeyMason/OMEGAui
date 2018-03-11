@@ -1,16 +1,16 @@
 :startup
 @echo off
-set build=0.5
-set title=OMEGA PROGRAM EDITOR %build%
-set file=%~dp0
+set "build=0.5"
+set "title=OMEGA PROGRAM EDITOR %build%"
+set "file=%~dp0"
 cd %file%
 cd..
-set file=%cd%
-set ruser=%username%
+set "file=%cd%"
+set "ruser=%username%"
 title %title%
 color 0c
-set textf=91
-set textb=0
+set "textf=91"
+set "textb=0"
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%username%.txt exit
 goto :start
@@ -66,7 +66,7 @@ echo 3. Add a section.
 echo 4. Remove a section. (WIP)
 echo.
 echo|set /p="Please enter your choice:"
-set choice=
+set "choice="
 set /p choice=
 
 IF "%choice%"=="0" (
@@ -94,20 +94,20 @@ cls
 echo Type exit to exit.
 echo.
 echo|set /p="What is the name of this program:"
-set nameA=
+set "nameA="
 set /p nameA=
 
 cls
 echo Type exit to exit.
 echo.
 echo|set /p="Please renter the name:"
-set nameB=
+set "nameB="
 set /p nameB=
 
 IF "%nameA%"=="exit" exit
 IF "%nameB%"=="exit" exit
 IF "%nameA%"=="%nameB%" (
-	set name=%nameA%
+	set "name=%nameA%"
 	goto :type
 )
 cls
@@ -128,7 +128,7 @@ echo 2.  Game.
 echo 3.  Utility.
 echo 4.  Other.
 echo|set /p="What type is %name%:"
-set type=
+set "type="
 set /p type=
 
 IF "%type%"=="0" goto :menu
@@ -150,7 +150,7 @@ cls
 echo Type exit to exit.
 echo.
 echo|set /p="Please type the file path for %name%:"
-set path=
+set "path="
 set /p path=
 
 IF "%path%"=="exit" goto :type
@@ -162,7 +162,7 @@ cls
 echo Type exit to exit.
 echo.
 echo|set /p="Please type the requred permition level for %name%(1-4):"
-set perm=
+set "perm="
 set /p perm=
 
 IF "%perm%"=="exit" goto :type
@@ -178,7 +178,7 @@ echo Path=%path%.
 echo Type=%type%.
 echo Perition greater than %perm%.
 
-set boolean=
+set "boolean="
 set /p boolean=
 IF "%boolean%"=="yes" (
 	cd %file%\ProgramFiles\ProgramsStart\
