@@ -38,6 +38,12 @@ timeout 2 >nul
 goto :logon
 --------------------------------------------------------------------------------------------------
 :logon
+
+for /f "usebackq delims=" %%I in (`powershell "\"%ruser%\".toUpper()"`) do set "ruser=%%~I" 
+findstr "_%ruser%_" "%file%\Users\ALL\Users.txt
+IF "%ERRORLEVEL%"=="1" (
+	goto :creddefaut
+)
 cls 
 echo %title%
 echo:
@@ -45,7 +51,7 @@ echo [32mDo you want to use your default account? [%textb%;%textf%m
 
 ::using simple boolean system
 set "boolean="
-set /p "boolean="
+set /p boolean=
 IF "%boolean%"=="yes" (
 	goto :creduser
 )
@@ -82,6 +88,11 @@ set user=
 echo|set /p="[32mPlease enter your username:[%textb%;%textf%m"
 set /p user=
 
+for /f "usebackq delims=" %%I in (`powershell "\"%user%\".toUpper()"`) do set "user=%%~I" 
+findstr "_%user%_" "%file%\Users\ALL\Users.txt
+IF "%ERRORLEVEL%"=="1" (
+	goto :error
+)
 ::password
 ::masks with PowerShell script
 cls
@@ -194,5 +205,5 @@ echo.%perm%> %file%\ProgramFiles\perm.temp
 echo.%permnum%> %file%\ProgramFiles\permnum.temp
 echo.%user%> %file%\ProgramFiles\user.temp
 echo.%now%> %file%\ProgramFiles\now.temp
-echo.
+echo.%creator%> %file%\ProgramFiles\creator.temp
 exit

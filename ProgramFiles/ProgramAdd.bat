@@ -29,11 +29,12 @@ cmd /K %file%\ProgramFiles\Login.cmd
 
 del %file%\Users\%user%\logs\%now%.txt
 
-set miss=0
-IF NOT EXIST %file%\ProgramFiles\perm.temp set miss=1
-IF NOT EXIST %file%\ProgramFiles\permnum.temp set miss=1
-IF NOT EXIST %file%\ProgramFiles\user.temp set miss=1
-IF NOT EXIST %file%\ProgramFiles\now.temp set miss=1
+set "miss=0"
+IF NOT EXIST %file%\ProgramFiles\perm.temp set "miss=1"
+IF NOT EXIST %file%\ProgramFiles\permnum.temp set "miss=1"
+IF NOT EXIST %file%\ProgramFiles\user.temp set "miss=1"
+IF NOT EXIST %file%\ProgramFiles\now.temp set "miss=1"
+IF NOT EXIST %file%\ProgramFiles\creator.temp set "miss=1"
 IF "miss"=="1" exit
 IF EXIST %file%\Users\BLACKLIST\%ruser%.txt exit
 
@@ -41,11 +42,13 @@ set /p perm=<%file%\ProgramFiles\perm.temp
 set /p permnum=<%file%\ProgramFiles\permnum.temp
 set /p user=<%file%\ProgramFiles\user.temp
 set /p now=<%file%\ProgramFiles\now.temp
+set /p creator=<%file%\ProgramFiles\creator.temp
 
 del %file%\ProgramFiles\perm.temp
 del %file%\ProgramFiles\permnum.temp
 del %file%\ProgramFiles\user.temp
 del %file%\ProgramFiles\now.temp
+del %file%\ProgramFiles\creator.temp
 title %title%
 IF "%permnum%" GTR "4" goto :menu
 exit

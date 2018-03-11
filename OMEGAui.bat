@@ -35,11 +35,12 @@ set "boolean="
 set /p boolean=
 IF "%boolean%"=="yes" (
 	cmd /C %file%\ProgramFiles\Login.cmd
-	set miss=0
-	IF NOT EXIST %file%\ProgramFiles\perm.temp set miss=1
-	IF NOT EXIST %file%\ProgramFiles\permnum.temp set miss=1
-	IF NOT EXIST %file%\ProgramFiles\user.temp set miss=1
-	IF NOT EXIST %file%\ProgramFiles\now.temp set miss=1
+	set "miss=0"
+	IF NOT EXIST %file%\ProgramFiles\perm.temp set "miss=1"
+	IF NOT EXIST %file%\ProgramFiles\permnum.temp set "miss=1"
+	IF NOT EXIST %file%\ProgramFiles\user.temp set "miss=1"
+	IF NOT EXIST %file%\ProgramFiles\now.temp set "miss=1"
+	IF NOT EXIST %file%\ProgramFiles\creator.temp set "miss=1"
 	IF "miss"=="1" exit
 	IF EXIST %file%\Users\BLACKLIST\%ruser%.txt exit
 	
@@ -47,11 +48,13 @@ IF "%boolean%"=="yes" (
 	set /p permnum=<%file%\ProgramFiles\permnum.temp
 	set /p user=<%file%\ProgramFiles\user.temp
 	set /p now=<%file%\ProgramFiles\now.temp
+	set /p creator=<%file%\ProgramFiles\creator.temp
 	
 	del %file%\ProgramFiles\perm.temp
 	del %file%\ProgramFiles\permnum.temp
 	del %file%\ProgramFiles\user.temp
 	del %file%\ProgramFiles\now.temp
+	del %file%\ProgramFiles\creator.temp
 	goto :menu
 	title %title%
 )
@@ -70,7 +73,7 @@ goto :start
 
 ::setup for restrictions
 ::op=option
-set op=0
+set "op=0"
 
 ::Main selector
 cls
@@ -115,10 +118,10 @@ echo %op%. Change my password.
 
 echo:
 echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
-set choice=
+set "choice="
 set /p choice=
 
-set op=0
+set "op=0"
 
 IF "%choice%"=="%op%" (
 	:logout
@@ -224,7 +227,7 @@ cmd /C %file%\ProgramFiles\ProgramsStart\Option%menu%.cmd
 
 echo:
 echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
-set choice=
+set "choice="
 set /p choice=
 
 echo.false> %file%\ProgramFiles\ProgramsStart\success.temp
@@ -234,24 +237,24 @@ set /p success=<%file%\ProgramFiles\ProgramsStart\success.temp
 del %file%\ProgramFiles\ProgramsStart\success.temp >nul
 IF "%success%"=="true" goto :programs
 IF "%success%"=="1" (
-	set menu=1
+	set "menu=1"
 	goto :programs
 )
 IF "%success%"=="2" (
-	set menu=2
+	set "menu=2"
 	goto :programs
 )
 IF "%success%"=="3" (
-	set menu=3
+	set "menu=3"
 	goto :programs
 )
 IF "%success%"=="4" (
-	set menu=4
+	set "menu=4"
 	goto :programs
 )
 IF "%menu%" GTR "0" (
 	IF "%success%"=="exit" (
-		set menu=0
+		set "menu=0"
 		goto :programs
 	)
 )
@@ -266,7 +269,7 @@ goto :programs
 --------------------------------------------------------------------------------------------------
 :fork
 ::setup for permissions
-set op=0
+set "op=0"
 
 cls
 echo OMEGAui build version %build%
@@ -289,11 +292,11 @@ set /a op=%op%+1
 echo %op%. Run file explorer fork bomb.
 echo:
 echo|set /p="[32mPlease enter your choice: [%textb%;%textf%m"
-set choice=
+set "choice="
 set /p choice=
 
 ::setup for permissions
-set op=0
+set "op=0"
 
 IF "%choice%"=="%op%" (
 	::goes to main menu
@@ -315,6 +318,7 @@ IF "%choice%"=="%op%" (
 	start %file%\ProgramFiles\Fork.bat
 	goto :fork
 )
+set /a op=%op%+1
 IF "%choice%"=="%op%" (
 	::runs a rickrolling fork bomb
 	echo.[%time%]:----Started rick fork bomb. >> %file%\Users\%user%\logs\%now%.txt
@@ -346,7 +350,7 @@ goto :fork
 --------------------------------------------------------------------------------------------------
 :forkcopy
 ::setup for permissions
-set op=0
+set "op=0"
 
 cls
 echo OMEGAui build version %build%
@@ -365,7 +369,7 @@ IF "%permnum%" GTR "4" (
 )
 echo:
 echo|set /p="[32mPlease enter your choice: [%textb%;%textf%m"
-set choice=
+set "choice="
 set /p choice=
 IF "%choice%"=="0" (
 	::goes to main fork selector
@@ -442,7 +446,7 @@ goto :forkcopy
 --------------------------------------------------------------------------------------------------
 :servers
 ::setup for permissions
-set op=0
+set "op=0"
 
 cls
 echo OMEGAui build version %build%
@@ -470,7 +474,7 @@ echo %op%. \\SNOCDCR1 -Domain Controller
 
 echo:
 echo|set /p="[32mPlease enter your choice: [%textb%;%textf%m"
-set choice=
+set "choice="
 set /p choice=
 set op=0
 
@@ -571,7 +575,7 @@ echo 6. #741-Rhs
 
 echo:
 echo|set /p="[32mPlease enter your choice: [%textb%;%textf%m"
-set choice=
+set "choice="
 set /p choice=
 
 IF "%choice%"=="0" (
@@ -669,70 +673,70 @@ echo F = Bright White
 echo:
 echo|set /p="Please select a background color:"
 ::sets background color
-set bc=
+set "bc="
 set /p bc=
 IF "%bc%"=="0" (
-	set textb=40
+	set "textb=40"
 	goto :fc
 )
 IF "%bc%"=="1" (
-	set textb=44
+	set "textb=44"
 	goto :fc
 )
 IF "%bc%"=="2" (
-	set textb=42
+	set "textb=42"
 	goto :fc
 )
 IF "%bc%"=="3" (
-	set textb=46
+	set "textb=46"
 	goto :fc
 )
 IF "%bc%"=="4" (
-	set textb=41
+	set "textb=41"
 	goto :fc
 )
 IF "%bc%"=="5" (
-	set textb=45
+	set "textb=45"
 	goto :fc
 )
 IF "%bc%"=="6" (
-	set textb=43
+	set "textb=43"
 	goto :fc
 )
 IF "%bc%"=="7" (
-	set textb=37
+	set "textb=37"
 	goto :fc
 )
 IF "%bc%"=="8" (
-	set textb=100
+	set "textb=100"
 	goto :fc
 )
 IF "%bc%"=="9" (
-	set textb=104
+	set "textb=104"
 	goto :fc
 )
 IF "%bc%"=="A" (
-	set textb=102
+	set "textb=102"
 	goto :fc
 )
 IF "%bc%"=="B" (
-	set textb=106
+	set "textb=106"
 	goto :fc
 )
 IF "%bc%"=="C" (
-	set textb=101
+	set "textb=101"
 	goto :fc
 )
 IF "%bc%"=="D" (
-	set textb=105
+	set "textb=105"
 	goto :fc
 )
 IF "%bc%"=="E" (
-	set textb=103
+	set "textb=103"
 	goto :fc
 )
 IF "%bc%"=="F" (
-	set textb=107
+	set "textb=107"
 	goto :fc
 )
 cls
@@ -767,70 +771,70 @@ echo F = Bright White
 echo:
 echo|set /p="Please enter a Foreground color:"
 ::sets foreground color
-set fc=
+set "fc="
 set /p fc=
 IF "%fc%"=="0" (
-	set textf=30
+	set "textf=30"
 	goto :setc
 )
 IF "%fc%"=="1" (
-	set textf=34
+	set "textf=34"
 	goto :setc
 )
 IF "%fc%"=="2" (
-	set textf=32
+	set "textf=32"
 	goto :setc
 )
 IF "%fc%"=="3" (
-	set textf=36
+	set "textf=36"
 	goto :setc
 )
 IF "%fc%"=="4" (
-	set textf=31
+	set "textf=31"
 	goto :setc
 )
 IF "%fc%"=="5" (
-	set textf=35
+	set "textf=35"
 	goto :setc
 )
 IF "%fc%"=="6" (
-	set textf=33
+	set "textf=33"
 	goto :setc
 )
 IF "%fc%"=="7" (
-	set textf=37
+	set "textf=37"
 	goto :setc
 )
 IF "%fc%"=="8" (
-	set textf=90
+	set "textf=90"
 	goto :setc
 )
 IF "%fc%"=="9" (
-	set textf=94
+	set "textf=94"
 	goto :setc
 )
 IF "%fc%"=="A" (
-	set textf=92
+	set "textf=92"
 	goto :setc
 )
 IF "%fc%"=="B" (
-	set textf=96
+	set "textf=96"
 	goto :setc
 )
 IF "%fc%"=="C" (
-	set textf=91
+	set "textf=91"
 	goto :setc
 )
 IF "%fc%"=="D" (
-	set textf=95
+	set "textf=95"
 	goto :setc
 )
 IF "%fc%"=="E" (
-	set textf=93
+	set "textf=93"
 	goto :setc
 )
 IF "%fc%"=="F" (
-	set textf=97
+	set "textf=97"
 	goto :setc
 )
 cls
@@ -857,7 +861,7 @@ echo:
 echo [32mAre you sure you want to change your password?[%textb%;%textf%m
 
 ::using simple boolean system
-set boolean=
+set "boolean="
 set /p boolean=
 IF "%boolean%"=="yes" (
 	goto :auth
@@ -883,10 +887,7 @@ set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your p
 for /f "usebackq delims=" %%p in (`%psCommand%`) do set password=%%p 
 set /p RP=<%file%\Users\%user%\pass.txt
 for /f "usebackq delims=" %%I in (`powershell "\"%password%\".toUpper()"`) do set "password=%%~I"
-cls
-echo %password%
-pause
-set pass=password=%password%
+set "pass=password=%password%"
 set pass=%pass: =%
 set RP=%RP: =%
 IF "%RP%"=="%pass%" (
@@ -907,30 +908,18 @@ cls
 echo OMEGAui build version %build%
 echo:
 echo Please enter new password:
-set npass0=
+set "npass0="
 set /p npass0=
 for /f "usebackq delims=" %%I in (`powershell "\"%npass0%\".toUpper()"`) do set "npass0=%%~I"
 cls
 echo OMEGAui build version %build%
 echo:
 echo Please reenter new password:
-set npass1=
+set "npass1="
 set /p npass1=
 for /f "usebackq delims=" %%I in (`powershell "\"%npass1%\".toUpper()"`) do set "npass1=%%~I"
 IF "%npass0%"=="%npass1%" (
-	del %file%\Users\%user%\pass.txt
-	echo.password=%npass0%>%file%\Users\%user%\pass.txt
-	findstr /v %log%.txt ALL.txt > ALLgood.txt
-	del ALL.txt
-	ren ALLgood.txt ALL.txt
-	cls
-	echo OMEGAui build version %build%
-	echo:
-	echo %npass0%=%npass1%
-	echo [92mPassword changed. [%textb%;%textf%m
-	echo.[%time%]:----Password changed. >> %file%\Users\%user%\logs\%now%.txt
-	timeout 2 >nul
-	goto :menu
+	goto :editfiles
 )
 cls
 echo OMEGAui build version %build%
@@ -938,6 +927,26 @@ echo:
 echo [91mPasswords do not match. Please try again. [%textb%;%textf%m
 timeout 2 >nul
 goto :change
+--------------------------------------------------------------------------------------------------
+:editfiles
+::fetching raw permnum
+set /P permraw=<%file%\Users\%user%\permnum.txt
+set permraw=%permraw: =%
+del %file%\Users\%user%\pass.txt
+echo.password=%npass0% > %file%\Users\%user%\pass.txt
+cd %file%\Users\ALL\
+findstr /v "%user%:" "Userdat.txt" > UserdatGood.txt
+del Userdat.txt
+ren UserdatGood.txt Userdat.txt
+cd %file%
+echo.%user%:%perm%,permnum=%permraw%,password=%npass0%,%creator% >> %file%\Users\ALL\Userdat.txt
+cls
+echo OMEGAui build version %build%
+echo:
+echo [92mPassword changed. [%textb%;%textf%m
+echo.[%time%]:----Password changed. >> %file%\Users\%user%\logs\%now%.txt
+timeout 2 >nul
+goto :menu
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
 pause
