@@ -19,6 +19,21 @@ set "textb=0"
 IF NOT EXIST %file%\Users\BLACKLIST\ md %file%\Users\BLACKLIST\
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%ruser%.txt exit
+::Check if the user is logged in
+IF "%loggedin%"=="y" (
+	set "miss=0"
+	IF "%perm%"=="" set "miss=1"
+	IF "%permnum%"=="" set "miss=1"
+	IF "%user%"=="" set "miss=1"
+	IF "%now%"=="" set "miss=1"
+	IF "%creator%"=="" set "miss=1"
+	IF "%miss%"=="1" goto :start
+	
+	IF NOT EXIST %file%\Users\%user% (
+		goto :start
+	)
+	goto :menu
+)
 goto :start
 --------------------------------------------------------------------------------------------------
 :start
@@ -49,6 +64,7 @@ IF "%boolean%"=="yes" (
 	set /p user=<%file%\ProgramFiles\user.temp
 	set /p now=<%file%\ProgramFiles\now.temp
 	set /p creator=<%file%\ProgramFiles\creator.temp
+	set "loggedin=y"
 	
 	del %file%\ProgramFiles\perm.temp
 	del %file%\ProgramFiles\permnum.temp
@@ -158,7 +174,7 @@ IF "%choice%"=="%op%" (
 set /a op=%op%+1
 IF "%choice%"=="%op%" (
 	echo.[%time%]:Opened program menu. >> %file%\Users\%user%\logs\%now%.txt 
-	set menu=0
+	set "menu=0"
 	goto :programs
 )
 
@@ -216,7 +232,7 @@ IF "%choice%"=="%op%" (
 )
 set /a op=%op%+1
 ::permission level 5 only
-IF "%permnum%" EQU "5" (
+IF "%permnum%" GTR "4" (
 	IF "%choice%"=="%op%" (
 		::Enters daughter program menu.
 		echo.[%time%]:Opened daughter program menu. >> %file%\Users\%user%\logs\%now%.txt  
@@ -225,8 +241,18 @@ IF "%permnum%" EQU "5" (
 	set /a op=%op%+1
 )
 IF "%choice%"=="debug" (
-	::do anything
+	::do
+	cls
+	echo OMEGAui build version %build%
+	echo:
+	echo %perm%
+	echo %permnum%
+	echo %user%
+	echo %creator%
+	pause
+	goto :menu
 )
+
 ::error script
 cls
 echo OMEGAui build version %build%
@@ -966,7 +992,7 @@ goto :menu
 --------------------------------------------------------------------------------------------------
 :subprograms
 ::Daughter program menu
-IF NOT "%perm%"=="perm=5" (
+IF NOT "%perm%"=="perm=5" (
 	goto :menu
 )
 ::no need to setup permissions

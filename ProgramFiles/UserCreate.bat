@@ -13,6 +13,21 @@ set "textf=91"
 set "textb=0"
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%username%.txt exit
+::Check if the user is logged in
+IF "%loggedin%"=="y" (
+	set "miss=0"
+	IF "%perm%"=="" set "miss=1"
+	IF "%permnum%"=="" set "miss=1"
+	IF "%user%"=="" set "miss=1"
+	IF "%now%"=="" set "miss=1"
+	IF "%creator%"=="" set "miss=1"
+	IF "%miss%"=="1" goto :start
+	
+	IF NOT EXIST %file%\Users\%user% (
+		goto :start
+	)
+	goto :menu
+)
 goto :start
 --------------------------------------------------------------------------------------------------
 :start
@@ -43,6 +58,7 @@ set /p permnum=<%file%\ProgramFiles\permnum.temp
 set /p user=<%file%\ProgramFiles\user.temp
 set /p now=<%file%\ProgramFiles\now.temp
 set /p creator=<%file%\ProgramFiles\creator.temp
+set "loggedin=y"
 
 del %file%\ProgramFiles\perm.temp
 del %file%\ProgramFiles\permnum.temp
@@ -303,13 +319,13 @@ set /p option=
 IF "%option%"=="0" (
 	goto :menu
 )
-ELSE IF "%option%"=="1" (
+IF "%option%"=="1" (
 	goto :logs
 )
-ELSE IF "%option%"=="2" (
+IF "%option%"=="2" (
 	goto :logview
 )
-ELSE IF "%option%"=="3" (
+IF "%option%"=="3" (
 	goto :dellogs
 )
 cls

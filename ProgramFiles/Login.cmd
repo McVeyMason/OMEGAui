@@ -89,7 +89,7 @@ echo|set /p="[32mPlease enter your username:[%textb%;%textf%m"
 set /p user=
 
 for /f "usebackq delims=" %%I in (`powershell "\"%user%\".toUpper()"`) do set "user=%%~I" 
-findstr "_%user%_" "%file%\Users\ALL\Users.txt
+findstr "_%user%_" "%file%\Users\ALL\Users.txt"
 IF "%ERRORLEVEL%"=="1" (
 	goto :error
 )
@@ -151,7 +151,7 @@ IF "%permnum%"=="" (
 	set "permnum=3"
 )
 IF "%permnum%"=="" (
-	set "permfull=perm=4
+	set "permfull=perm=4"
 	set "permnum=4"
 )
 IF "%permnum%"=="" (
