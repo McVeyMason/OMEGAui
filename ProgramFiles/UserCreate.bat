@@ -1,5 +1,5 @@
 :startup
-@echo off
+@echo off 
 set "build=0.5"
 set "title=OMEGA USER MANAGER %build%"
 set "header=User Manager Version %build%"
@@ -15,7 +15,8 @@ set "textb=0"
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%username%.txt exit
 ::Check if the user is logged in
-IF "%loggedin%"=="y" (
+IF "%loggedin%" == "y" (
+	IF "%current%"=="EXIT" exit
 	set "miss=0"
 	IF "%perm%"=="" set "miss=1"
 	IF "%permnum%"=="" set "miss=1"
@@ -24,10 +25,17 @@ IF "%loggedin%"=="y" (
 	IF "%creator%"=="" set "miss=1"
 	IF "%miss%"=="1" goto :start
 	
+	cls
+	echo %header%
+	echo:
+	echo Current session is %current%
+	echo Host is %host%
+	pause
+	
 	IF NOT EXIST %file%\Users\%user% (
 		goto :start
 	)
-	
+
 	::checking if this is the correct program to be in
 	IF NOT "%current%"=="USER" (
 		::if its another go to that program
@@ -39,12 +47,15 @@ IF "%loggedin%"=="y" (
 			cmd /C %file%\ProgramFiles\ProgramAdd.bat
 			goto :start
 		)
+		IF "%current%"=="EXIT" (
+			exit
+		)
 		cls
 		echo %header%
 		echo:
 		echo Error in current program
 		echo current program is set to %current%
-		pause
+		pause >nul
 		goto :start
 	)
 	goto :menu
@@ -97,11 +108,12 @@ exit
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
 :menu
+::main menu for all functionality
 cls
 echo %header%
 echo:
 echo Options:
-echo 0. Exit 
+echo 0. Switch programs or exit.
 echo 1. Create user.
 echo 2. Delete user.
 echo 3. View user logs.
@@ -112,7 +124,7 @@ set "choice="
 set /p choice=
 
 IF "%choice%"=="0" (
-	exit
+	goto :switch
 )
 IF "%choice%"=="1" (
 	goto :create
@@ -133,6 +145,80 @@ echo:
 echo Invalid option!
 pause >nul
 goto :menu
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+:switch
+::for exiting program or switching to another program
+cls
+echo %header%
+echo current is %current%
+echo:
+echo What would you like to do?
+echo 0. Exit.
+echo 1. Switch to OMEGAui.
+echo 2. Switch to Program Manager.
+echo:
+echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+set "choice="
+set /p choice=
+
+IF "%choice%"=="0" (
+	::set program to exit and exits User Manager
+	set "current=EXIT"
+	exit
+)
+IF "%choice%"=="1" (
+	::opens OMEGAui 
+	IF "%host%"=="PROGRAM" (
+		set "current=OMEGA"
+		exit
+	)
+	IF "%host%"=="USER" (
+		set "current=OMEGA"
+		cmd /C %file%\OMEGAui.bat
+		goto :startup
+	)
+	IF "%host%"=="OMEGA" (
+		set "current=OMEGA"
+		exit
+	)
+	cls
+	echo %header%
+	echo:
+	echo Error invalid host
+	echo Host=%host%
+	pause >nul
+	goto :startup
+)
+IF "%choice%"=="2" (
+	::opens Program manager 
+	IF "%host%"=="PROGRAM" (
+		set "current=PROGRAM"
+		exit
+	)
+	IF "%host%"=="USER" (
+		set "current=PROGRAM"
+		cmd /C %file%\ProgramFiles\ProgramAdd.bat
+		goto :startup
+	)
+	IF "%host%"=="OMEGA" (
+		set "current=PROGRAM"
+		exit
+	)
+	cls
+	echo %header%
+	echo:
+	echo Error invalid host
+	echo Host=%host%
+	pause >nul
+	goto :startup
+)
+cls
+echo %header%
+echo:
+echo [91mInvalid option. [%textb%;%textf%m
+timeout 2 >nul
+goto :switch
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
 :create

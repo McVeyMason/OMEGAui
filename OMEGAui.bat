@@ -22,6 +22,7 @@ IF NOT EXIST %file%\Users\BLACKLIST\ md %file%\Users\BLACKLIST\
 IF EXIST %file%\Users\BLACKLIST\%ruser%.txt exit
 ::Check if the user is logged in
 IF "%loggedin%"=="y" (
+	IF "%current%"=="EXIT" exit
 	::checks all important variable
 	set "miss=0"
 	IF "%perm%"=="" set "miss=1"
@@ -30,6 +31,13 @@ IF "%loggedin%"=="y" (
 	IF "%now%"=="" set "miss=1"
 	IF "%creator%"=="" set "miss=1"
 	IF "%miss%"=="1" goto :start
+	
+	cls
+	echo %header%
+	echo:
+	echo Current session is %current%
+	echo Host is %host%
+	pause
 	
 	IF NOT EXIST %file%\Users\%user% (
 		goto :start
@@ -46,12 +54,15 @@ IF "%loggedin%"=="y" (
 			cmd /C %file%\ProgramFiles\UserCreate.bat
 			goto :start
 		)
+		IF "%current%"=="EXIT" (
+			exit
+		)
 		cls
 		echo %header%
 		echo:
 		echo Error in current program
 		echo current program is set to %current%
-		pause
+		pause >nul
 		goto :start
 	)
 	goto :menu
@@ -123,9 +134,16 @@ echo OMEGAui Main Menu
 echo Options:
 ::adds one if user has the required permission level
 ::all numbers are fluid no matter the permission level
-::all permissions
-echo %op%.  Exit OMEGAui.
-set /a op=%op%+1
+::Permissions less than 5
+IF "%permnum%" LSS "5" (
+	echo %op%.  Exit OMEGAui.
+	set /a op=%op%+1
+)
+::Permissions at 5
+IF "%permnum%" EQU "5" (
+	echo %op%.  Switch programs or exit.
+	set /a op=%op%+1
+)
 ::all permissions
 echo %op%.  Logout.
 set /a op=%op%+1
@@ -156,11 +174,7 @@ set /a op=%op%+1
 ::all permission
 echo %op%. Change my password.
 set /a op=%op%+1
-::Permissions at 5
-IF "%permnum%" EQU "5" (
-	echo %op%. Run daughter program.
-	set /a op=%op%+1
-)
+
 
 echo:
 echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
@@ -169,14 +183,24 @@ set /p choice=
 
 set "op=0"
 
-IF "%choice%"=="%op%" (
-	:logout
-	::saves log
-	echo.[%time%]:Logged out >> %file%\Users\%user%\logs\%now%.txt  
-	::deletes the live log
-	Exit
+IF "%permnum%" LEQ "4" (
+	IF "%choice%"=="%op%" (
+		:logout
+		::saves log
+		echo.[%time%]:Logged out >> %file%\Users\%user%\logs\%now%.txt  
+		::deletes the live log
+		Exit
+	)
+	set /a op=%op%+1
 )
-set /a op=%op%+1
+IF "%permnum%" GEQ "5" (
+	IF "%choice%"=="%op%" (
+		::Enters daughter program menu.
+		echo.[%time%]:Opened daughter program menu. >> %file%\Users\%user%\logs\%now%.txt  
+		goto :switch
+	)
+	set /a op=%op%+1
+)
 IF "%choice%"=="%op%" (
 	::logout of computer and omega
 	shutdown -l
@@ -284,6 +308,78 @@ echo:
 echo [91mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :menu
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+:switch
+::Daughter program menu
+IF NOT "%perm%"=="perm=5" (
+	goto :menu
+)
+::for exiting program or switching to another program
+cls
+echo %header%
+echo current is %current%
+echo:
+echo What would you like to do?
+echo 0. Exit.
+echo 1. Switch to User Manager.
+echo 2. Switch to Program Manager.
+echo:
+echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+set "choice="
+set /p choice=
+
+IF "%choice%"=="0" (
+	::set program to exit and exits User Manager
+	set "current=EXIT"
+	exit
+)
+IF "%choice%"=="1" (
+	::opens User Manager 
+	set "current=USER"
+	IF "%host%"=="PROGRAM" exit
+	IF "%host%"=="USER" exit
+	IF "%host%"=="OMEGA" (
+		cmd /C %file%\ProgramFiles\UserCreate.bat
+		goto :startup
+	)
+	cls
+	echo %header%
+	echo:
+	echo Error invalid host
+	echo Host=%host%
+	pause >nul
+	goto :startup
+)
+IF "%choice%"=="2" (
+	::opens Program manager 
+	IF "%host%"=="PROGRAM" (
+		set "current=PROGRAM"
+		exit
+	)
+	IF "%host%"=="USER" (
+		set "current=PROGRAM"
+		exit
+	)
+	IF "%host%"=="OMEGA" (
+		set "current=PROGRAM"
+		cmd /C %file%\ProgramFiles\ProgramAdd.bat
+		goto :startup
+	)
+	cls
+	echo %header%
+	echo:
+	echo Error invalid host
+	echo Host=%host%
+	pause >nul
+	goto :startup
+)
+cls
+echo %header%
+echo:
+echo [91mInvalid option. [%textb%;%textf%m
+timeout 2 >nul
+goto :switch
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
 :programs
@@ -1014,53 +1110,5 @@ timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
-:subprograms
-::Daughter program menu
-IF NOT "%perm%"=="perm=5" (
-	goto :menu
-)
-::no need to setup permissions
-cls
-echo %header%
-echo:
-echo Welcome to the Daughter program menu.
-echo Options:
-echo 0. Back
-echo 1. Run User Manager.
-echo 2. Run Program Manager
-echo:
-echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
-set "choice="
-set /p choice=
 
-IF "%choice%"=="0" (
-	::goes back to menu
-	echo.[%time%]:----Exited daughter program menu. >> %file%\Users\%user%\logs\%now%.txt
-	goto :menu
-)
-IF "%choice%"=="1" (
-	::Opens User Manager
-	echo.[%time%]:----Opened User Managment. >> %file%\Users\%user%\logs\%now%.txt
-	IF "%host%"=="USER" (
-		exit
-	)
-	cmd /C %file%\ProgramFiles\UserCreate.bat
-	goto :start
-)
-IF "%choice%"=="2" (
-	::Opens Program Manager
-	echo.[%time%]:----Opened Program Managment. >> %file%\Users\%user%\logs\%now%.txt
-	IF "%host%"=="PROGRAM" (
-		exit
-	)
-	cmd /C %file%\ProgramFiles\ProgramAdd.bat
-	goto :start
-)
-cls
-echo %header%
-echo:
-echo [91mInvalid option. [%textb%;%textf%m
-timeout 2 >nul
-goto :subprograms
-	
 pause

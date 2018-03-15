@@ -17,6 +17,7 @@ set "textb=0"
 IF EXIST %file%\Users\BLACKLIST\%username%.txt exit
 ::Check if the user is logged in
 IF "%loggedin%"=="y" (
+	IF "%current%"=="EXIT" exit
 	set "miss=0"
 	IF "%perm%"=="" set "miss=1"
 	IF "%permnum%"=="" set "miss=1"
@@ -24,6 +25,13 @@ IF "%loggedin%"=="y" (
 	IF "%now%"=="" set "miss=1"
 	IF "%creator%"=="" set "miss=1"
 	IF "%miss%"=="1" goto :start
+	
+	cls
+	echo %header%
+	echo:
+	echo Current session is %current%
+	echo Host is %host%
+	pause
 	
 	IF NOT EXIST %file%\Users\%user% (
 		goto :start
@@ -39,6 +47,9 @@ IF "%loggedin%"=="y" (
 		IF "%current%"=="USER" (
 			cmd /C %file%\ProgramFiles\UserCreate.bat
 			goto :start
+		)
+		IF "%current%"=="EXIT" (
+			exit
 		)
 		cls
 		echo %header%
@@ -104,7 +115,7 @@ cls
 echo %header%
 echo:
 echo Please select an option.
-echo 0. Exit.
+echo 0. Switch programs or exit.
 echo 1. Add a program.
 echo 2. Remove a program. (WIP)
 echo 3. Add a section.
@@ -115,8 +126,8 @@ set "choice="
 set /p choice=
 
 IF "%choice%"=="0" (
-	::exits
-	exit
+	::goes to switch menu
+	goto :switch
 )
 IF "%choice%"=="1" (
 	::goes to program creation menu
@@ -141,6 +152,84 @@ echo:
 echo [91mWrong username or password. [%textb%;%textf%m
 timeout 2 >nul
 goto :menu
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+:switch
+::for exiting program or switching to another program
+cls
+echo %header%
+echo current is %current%
+echo:
+echo What would you like to do?
+echo 0. Exit.
+echo 1. Switch to OMEGAui.
+echo 2. Switch to User Manager.
+echo:
+echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+set "choice="
+set /p choice=
+
+set "current=EXIT"
+IF "%choice%"=="0" (
+	::set program to exit and exits User Manager
+	set "current=EXIT"
+	exit
+)
+set "current=OMEGA"
+IF "%choice%"=="1" (
+	::opens OMEGAui 
+	IF "%host%"=="PROGRAM" (
+		set "current=OMEGA"
+		cmd /C %file%\OMEGAui.bat
+		goto :startup
+	)
+	IF "%host%"=="USER" (
+		set "current=OMEGA"
+		exit
+	)
+	IF "%host%"=="OMEGA" (
+		set "current=OMEGA"
+		exit
+	)
+	cls
+	echo %header%
+	echo:
+	echo Error invalid host
+	echo Host=%host%
+	pause >nul
+	goto :startup
+)
+set "current=USER"
+IF "%choice%"=="2" (
+	::opens Program manager 
+	IF "%host%"=="PROGRAM" (
+		set "current=USER"
+		cmd /C %file%\ProgramFiles\UserCreate.bat
+		goto :startup
+	)
+	IF "%host%"=="USER" (
+		set "current=USER"
+		exit
+	)
+	IF "%host%"=="OMEGA" (
+		set "current=USER"
+		exit
+	)
+	cls
+	echo %header%
+	echo:
+	echo Error invalid host
+	echo Host=%host%
+	pause >nul
+	goto :startup
+)
+set "current=PROGRAM"
+cls
+echo %header%
+echo:
+echo [91mInvalid option. [%textb%;%textf%m
+timeout 2 >nul
+goto :switch
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
 :pcreate
