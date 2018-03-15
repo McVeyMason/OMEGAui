@@ -346,6 +346,7 @@ echo Perition greater than %perm%.
 set "boolean="
 set /p boolean=
 
+IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="yes" (
 	cd %file%\ProgramFiles\ProgramsStart\
 	ren Option%type%.cmd option%type%.txt
@@ -368,6 +369,7 @@ IF "%boolean%"=="yes" (
 	cd %file%
 	goto :menu
 )
+IF "%boolean%"=="n" goto :menu
 IF "%boolean%"=="no" goto :menu
 cls
 echo %header%

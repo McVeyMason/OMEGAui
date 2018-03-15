@@ -86,6 +86,7 @@ echo This program can be dangerous to your computer.
 ::using simple boolean system
 set "boolean="
 set /p boolean=
+IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="yes" (
 	cmd /C %file%\ProgramFiles\Login.cmd
 	set "miss=0"
@@ -115,7 +116,7 @@ IF "%boolean%"=="yes" (
 	title %title%
 )
 IF "%boolean%"=="no" exit
-
+IF "%boolean%"=="n" exit
 ::error script
 cls
 echo %header%
@@ -1025,12 +1026,10 @@ echo [32mAre you sure you want to change your password?[%textb%;%textf%m
 ::using simple boolean system
 set "boolean="
 set /p boolean=
-IF "%boolean%"=="yes" (
-	goto :auth
-)
-IF "%boolean%"=="no" (
-	goto :menu
-)
+IF "%boolean%"=="yes" goto :auth
+IF "%boolean%"=="y" goto :auth
+IF "%boolean%"=="no" goto :menu
+IF "%boolean%"=="n" goto :menu
 cls
 echo %header%
 echo:

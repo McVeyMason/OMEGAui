@@ -250,7 +250,9 @@ IF EXIST %file%\Users\%usern% (
 	echo Are you sure you want to continue?
 	set "boolean="
 	set /p boolean=
-
+	
+	IF "%boolean%"=="y" set "boolean=yes"
+	IF "%boolean%"=="n" set "boolean=no"
 	IF "%boolean%"=="yes" (
 		for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I"
 		cd %file%\Users\ALL\
@@ -383,6 +385,8 @@ echo Are you sure that you want to delete %usern% from the database?
 set "boolean="
 set /p boolean=
 for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I"
+IF "%boolean%"=="y" set "boolean=yes"
+IF "%boolean%"=="n" set "boolean=no"
 IF "%boolean%"=="yes" (
 	del /F /Q %file%\Users\%usern%
 	rd /s /q %file%\Users\%usern%
@@ -575,6 +579,9 @@ echo Are you sure that you want to delete all of %usern%'s logs from the databas
 
 set "boolean="
 set /p boolean=
+
+IF "%boolean%"=="y" set "boolean=yes"
+IF "%boolean%"=="n" set "boolean=no"
 IF "%boolean%"=="yes" (
 	for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I"
 	del /F %file%\Users\%usern%\logs
@@ -636,6 +643,9 @@ echo Are you sure that you want to delete log %log%?
 
 set "boolean="
 set /p boolean=
+
+IF "%boolean%"=="y" set "boolean=yes"
+IF "%boolean%"=="n" set "boolean=no"
 IF "%boolean%"=="yes" (
 	for /f "usebackq delims=" %%I in (`powershell "\"%log%\".toUpper()"`) do set "log=%%~I"
 	del /F %file%\Users\%usern%\logs\%log%.txt

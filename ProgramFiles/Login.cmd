@@ -53,12 +53,10 @@ echo [32mDo you want to use your default account? [%textb%;%textf%m
 ::using simple boolean system
 set "boolean="
 set /p boolean=
-IF "%boolean%"=="yes" (
-	goto :creduser
-)
-IF "%boolean%"=="no" (
-	goto :creddefaut
-)
+IF "%boolean%"=="y" goto :creduser
+IF "%boolean%"=="yes" goto :creduser
+IF "%boolean%"=="n" goto :creddefaut
+IF "%boolean%"=="no" goto :creddefaut
 ::error script
 cls
 echo %header%
