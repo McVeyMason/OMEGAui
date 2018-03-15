@@ -1,5 +1,7 @@
 :startup
+::setup
 @echo off 
+cls
 set "build=0.5"
 set "title=OMEGA USER MANAGER %build%"
 set "header=User Manager Version %build%"
@@ -14,6 +16,10 @@ set "textf=91"
 set "textb=0"
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%username%.txt exit
+::sets the current variable
+set /p current=<%file%\current.temp
+set current=%current: =%
+del %file%\current.temp
 ::Check if the user is logged in
 IF "%loggedin%" == "y" (
 	IF "%current%"=="EXIT" exit
@@ -25,12 +31,12 @@ IF "%loggedin%" == "y" (
 	IF "%creator%"=="" set "miss=1"
 	IF "%miss%"=="1" goto :start
 	
-	cls
-	echo %header%
-	echo:
-	echo Current session is %current%
-	echo Host is %host%
-	pause
+	REM cls
+	REM echo %header%
+	REM echo:
+	REM echo Current session is %current%
+	REM echo Host is %host%
+	REM pause
 	
 	IF NOT EXIST %file%\Users\%user% (
 		goto :start
@@ -41,11 +47,11 @@ IF "%loggedin%" == "y" (
 		::if its another go to that program
 		IF "%current%"=="OMEGA" (
 			cmd /C %file%\OMEGAui.bat
-			goto :start
+			goto :startup
 		)
 		IF "%current%"=="PROGRAM" (
 			cmd /C %file%\ProgramFiles\ProgramAdd.bat
-			goto :start
+			goto :startup
 		)
 		IF "%current%"=="EXIT" (
 			exit
@@ -165,21 +171,23 @@ set /p choice=
 IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
 	set "current=EXIT"
+	echo.EXIT > %file%\current.temp
 	exit
 )
 IF "%choice%"=="1" (
 	::opens OMEGAui 
 	IF "%host%"=="PROGRAM" (
-		set "current=OMEGA"
+		echo.OMEGA > %file%\current.temp
 		exit
 	)
 	IF "%host%"=="USER" (
 		set "current=OMEGA"
+		echo.OMEGA > %file%\current.temp
 		cmd /C %file%\OMEGAui.bat
 		goto :startup
 	)
 	IF "%host%"=="OMEGA" (
-		set "current=OMEGA"
+		echo.OMEGA > %file%\current.temp
 		exit
 	)
 	cls
@@ -193,16 +201,17 @@ IF "%choice%"=="1" (
 IF "%choice%"=="2" (
 	::opens Program manager 
 	IF "%host%"=="PROGRAM" (
-		set "current=PROGRAM"
+		echo.PROGRAM > %file%\current.temp
 		exit
 	)
 	IF "%host%"=="USER" (
 		set "current=PROGRAM"
+		echo.PROGRAM > %file%\current.temp
 		cmd /C %file%\ProgramFiles\ProgramAdd.bat
 		goto :startup
 	)
 	IF "%host%"=="OMEGA" (
-		set "current=PROGRAM"
+		echo.PROGRAM > %file%\current.temp
 		exit
 	)
 	cls

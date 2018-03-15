@@ -4,6 +4,7 @@
 ::put quotes around all variables to prevent crashing
 ::Thanks to all you on stack overflow
 @echo off
+cls
 set "build=0.9.0"
 set "title=OMEGA %build%"
 set "header=OMEGAui version %build%"
@@ -20,6 +21,10 @@ set "textb=0"
 IF NOT EXIST %file%\Users\BLACKLIST\ md %file%\Users\BLACKLIST\
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%ruser%.txt exit
+::sets the current variable
+set /p current=<%file%\current.temp
+set current=%current: =%
+del %file%\current.temp
 ::Check if the user is logged in
 IF "%loggedin%"=="y" (
 	IF "%current%"=="EXIT" exit
@@ -32,12 +37,12 @@ IF "%loggedin%"=="y" (
 	IF "%creator%"=="" set "miss=1"
 	IF "%miss%"=="1" goto :start
 	
-	cls
-	echo %header%
-	echo:
-	echo Current session is %current%
-	echo Host is %host%
-	pause
+	REM cls
+	REM echo %header%
+	REM echo:
+	REM echo Current session is %current%
+	REM echo Host is %host%
+	REM pause
 	
 	IF NOT EXIST %file%\Users\%user% (
 		goto :start
@@ -48,11 +53,11 @@ IF "%loggedin%"=="y" (
 		::if its another go to that program
 		IF "%current%"=="PROGRAM" (
 			cmd /C %file%\ProgramFiles\ProgramAdd.bat
-			goto :start
+			goto :startup
 		)
 		IF "%current%"=="USER" (
 			cmd /C %file%\ProgramFiles\UserCreate.bat
-			goto :start
+			goto :startup
 		)
 		IF "%current%"=="EXIT" (
 			exit
@@ -332,14 +337,22 @@ set /p choice=
 IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
 	set "current=EXIT"
+	echo.EXIT > %file%\current.temp
 	exit
 )
 IF "%choice%"=="1" (
 	::opens User Manager 
-	set "current=USER"
-	IF "%host%"=="PROGRAM" exit
-	IF "%host%"=="USER" exit
+	IF "%host%"=="PROGRAM" (
+		echo.USER > %file%\current.temp
+		exit
+	)
+	IF "%host%"=="USER" (
+		echo.USER > %file%\current.temp
+		exit
+	)
 	IF "%host%"=="OMEGA" (
+		set "current=USER"
+		echo.USER > %file%\current.temp
 		cmd /C %file%\ProgramFiles\UserCreate.bat
 		goto :startup
 	)
@@ -354,15 +367,16 @@ IF "%choice%"=="1" (
 IF "%choice%"=="2" (
 	::opens Program manager 
 	IF "%host%"=="PROGRAM" (
-		set "current=PROGRAM"
+		echo.PROGRAM > %file%\current.temp
 		exit
 	)
 	IF "%host%"=="USER" (
-		set "current=PROGRAM"
+		echo.PROGRAM > %file%\current.temp
 		exit
 	)
 	IF "%host%"=="OMEGA" (
 		set "current=PROGRAM"
+		echo.PROGRAM > %file%\current.temp
 		cmd /C %file%\ProgramFiles\ProgramAdd.bat
 		goto :startup
 	)
