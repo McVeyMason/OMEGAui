@@ -1,5 +1,4 @@
 @echo off
-title %title%
 echo                                    +$OOI,                                      
 echo                                :OO       ZOZ                                   
 echo                               OO,          OO:                                 

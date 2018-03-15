@@ -161,7 +161,7 @@ set /a op=%op%+1
 ::only shows fork bomb menu to users with permissions above 2
 IF "%permnum%" GTR "2" (
 	echo %op%.  Open the fork bomb menu.
-	set /a op=%op%+2
+	set /a op=%op%+1
 ) 
 ::only shows the sever menu to users with permissions above 3
 IF "%permnum%" GTR "3" (
@@ -222,6 +222,7 @@ IF "%choice%"=="%op%" (
 	echo.[%time%]:Found option 3, user is Observant. >> %file%\Users\%user%\logs\%now%.txt  
 	::Rick roll
 	cmd /C %file%\ProgramFiles\TOP_SECRET.cmd
+	echo  [%textb%;%textf%m
 	goto :menu
 )
 set /a op=%op%+1
@@ -230,7 +231,7 @@ IF "%choice%"=="%op%" (
 	set "menu=0"
 	goto :programs
 )
-
+set /a op=%op%+1
 ::permission level 3+ only
 IF "%permnum%" GTR "2" (
 	IF "%choice%"=="%op%" (
@@ -238,9 +239,8 @@ IF "%permnum%" GTR "2" (
 		echo.[%time%]:Opened fork bomb menu. >> %file%\Users\%user%\logs\%now%.txt
 		goto :fork
 	)
+	set /a op=%op%+1
 )
-
-set /a op=%op%+1
 ::permission level 4+ only
 IF "%permnum%" GTR "3" (
 	IF "%choice%"=="%op%" (
@@ -252,18 +252,6 @@ IF "%permnum%" GTR "3" (
 )
 ::permission level 2+ only
 IF "%permnum%" GTR "1" (
-	IF NOT "%permnum%"=="2" (
-		IF "%choice%"=="%op%" (
-			::starts powershell, a better cmd
-			echo.[%time%]:Started powershell. >> %file%\Users\%user%\logs\%now%.txt  
-			start PowerShell.exe
-			goto :menu
-		)
-		set /a op=%op%+1
-	)
-)
-::permission level 2+ only
-IF "%permnum%" GTR "1" (
 	IF "%choice%"=="%op%" (
 		::goes to the web server selector
 		echo.[%time%]:Opened web server menu. >> %file%\Users\%user%\logs\%now%.txt  
@@ -271,7 +259,6 @@ IF "%permnum%" GTR "1" (
 	)
 	set /a op=%op%+1
 )
-set /a op=%op%+1
 IF "%choice%"=="%op%" (
 	::goes to the colour  selector
 	echo.[%time%]:Changed the color. >> %file%\Users\%user%\logs\%now%.txt  
