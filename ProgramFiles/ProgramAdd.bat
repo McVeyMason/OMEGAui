@@ -1,7 +1,9 @@
 :startup
+::setup
 @echo off
 set "build=0.5"
-set "title=OMEGA PROGRAM EDITOR %build%"
+set "title=OMEGA PROGRAM MANAGER %build%"
+set "header=Program Manager Version %build%"
 set "file=%~dp0"
 cd %file%
 cd..
@@ -26,24 +28,47 @@ IF "%loggedin%"=="y" (
 	IF NOT EXIST %file%\Users\%user% (
 		goto :start
 	)
+	
+	::checking if this is the correct program to be in
+	IF NOT "%current%"=="PROGRAM" (
+		::if its another go to that program
+		IF "%current%"=="OMEGA" (
+			cmd /C %file%\OMEGAui.bat
+			goto :start
+		)
+		IF "%current%"=="USER" (
+			cmd /C %file%\ProgramFiles\UserCreate.bat
+			goto :start
+		)
+		cls
+		echo %header%
+		echo:
+		echo Error in current program
+		echo current program is set to %current%
+		pause
+		goto :start
+	)
 	goto :menu
 )
 goto :start
 --------------------------------------------------------------------------------------------------
 :start
 cls
-echo.
+echo %header%
+echo:
 cmd /C %file%\ProgramFiles\Symbol.cmd
-echo.
+echo:
 echo Welcome to the OMEGAui program editor.
 pause >nul
 goto :login
 --------------------------------------------------------------------------------------------------
 :login
+::login script
 cmd /K %file%\ProgramFiles\Login.cmd
 
 del %file%\Users\%user%\logs\%now%.txt
 
+::setting account variable
 set "miss=0"
 IF NOT EXIST %file%\ProgramFiles\perm.temp set "miss=1"
 IF NOT EXIST %file%\ProgramFiles\permnum.temp set "miss=1"
@@ -59,7 +84,10 @@ set /p user=<%file%\ProgramFiles\user.temp
 set /p now=<%file%\ProgramFiles\now.temp
 set /p creator=<%file%\ProgramFiles\creator.temp
 set "loggedin=y"
+set "host=PROGRAM"
+set "current=PROGRAM"
 
+::deleting temp files
 del %file%\ProgramFiles\perm.temp
 del %file%\ProgramFiles\permnum.temp
 del %file%\ProgramFiles\user.temp
@@ -73,49 +101,68 @@ exit
 :menu
 
 cls
-echo.
+echo %header%
+echo:
 echo Please select an option.
 echo 0. Exit.
 echo 1. Add a program.
 echo 2. Remove a program. (WIP)
 echo 3. Add a section.
 echo 4. Remove a section. (WIP)
-echo.
+echo:
 echo|set /p="Please enter your choice:"
 set "choice="
 set /p choice=
 
 IF "%choice%"=="0" (
+	::exits
 	exit
 )
 IF "%choice%"=="1" (
-	goto :create
+	::goes to program creation menu
+	goto :pcreate
 )
 IF "%choice%"=="2" (
-	goto :delete
+	::goes to program deletion menu
+	goto :pdelete
+)
+IF "%choice%"=="3" (
+	::does to section creation menu
+	goto :screate
+)
+IF "%choice%"=="4" (
+	::does to section deletion menu
+	goto :sdelete
 )
 
 cls
-echo %title%
-echo.
+echo %header%
+echo:
 echo [91mWrong username or password. [%textb%;%textf%m
 timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
-:create
+:pcreate
 
 :name
+::name program
 cls
+echo %header%
+echo:
 echo Type exit to exit.
-echo.
+echo:
 echo|set /p="What is the name of this program:"
 set "nameA="
 set /p nameA=
 
+
+::verify name
 cls
+echo %header%
+echo:
 echo Type exit to exit.
-echo.
+echo:
 echo|set /p="Please renter the name:"
 set "nameB="
 set /p nameB=
@@ -127,16 +174,18 @@ IF "%nameA%"=="%nameB%" (
 	goto :type
 )
 cls
-echo.
+echo %header%
+echo:
 echo ERROR:Names do not match.
 echo Pleas try again.
 timeout 2>nul
 goto :name
 --------------------------------------------------------------------------------------------------
 :type
-
+::set the type of program
 cls
-echo.
+echo %header%
+echo:
 echo Options:
 echo 0. Exit.
 echo 1.  Browser.
@@ -155,16 +204,19 @@ IF "%type%"=="4" goto :path
 
 
 cls
-echo.
+echo %header%
+echo:
 echo Invalid option.
 timeout 2>nul
 goto :type
 --------------------------------------------------------------------------------------------------
 :path
-
+::set file path of program
 cls
+echo %header%
+echo:
 echo Type exit to exit.
-echo.
+echo:
 echo|set /p="Please type the file path for %name%:"
 set "path="
 set /p path=
@@ -173,11 +225,13 @@ IF "%path%"=="exit" goto :type
 goto :perm
 --------------------------------------------------------------------------------------------------
 :perm
-
+::set permission level 
 cls
+echo %header%
+echo:
 echo Type exit to exit.
-echo.
-echo|set /p="Please type the requred permition level for %name%(1-4):"
+echo:
+echo|set /p="Please type the requred permission level for %name%(1-4):"
 set "perm="
 set /p perm=
 
@@ -186,9 +240,10 @@ set /a perm=%perm%-1
 goto :confirm
 --------------------------------------------------------------------------------------------------
 :confirm
-
+::verify the program
 cls
-echo.
+echo %header%
+echo:
 echo Are you sure you want to add program %name%?
 echo Path=%path%.
 echo Type=%type%.
@@ -196,11 +251,12 @@ echo Perition greater than %perm%.
 
 set "boolean="
 set /p boolean=
+
 IF "%boolean%"=="yes" (
 	cd %file%\ProgramFiles\ProgramsStart\
 	ren Option%type%.cmd option%type%.txt
 	echo.IF "%%permnum%%" GTR "%perm%" ^( >>Option%type%.txt
-	echo. 	echo %%op%%.  Start %name%.>>Option%type%.txt
+	echo.	echo %%op%%.  Start %name%.>>Option%type%.txt
 	echo.	set /a op^=%%op%%+1>>Option%type%.txt
 	echo.^)>>Option%type%.txt
 	ren Option%type%.txt Option%type%.cmd
@@ -220,12 +276,28 @@ IF "%boolean%"=="yes" (
 )
 IF "%boolean%"=="no" goto :menu
 cls
-echo.
+echo %header%
+echo:
 echo Invalid option.
 timeout 2 >nul
 goto :confirm
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
-:delete 
+:pdelete 
 
+goto :menu
 
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+:screate
+
+goto :menu
+
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+:sdelete
+
+goto :menu
+
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------

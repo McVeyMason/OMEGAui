@@ -1,7 +1,8 @@
 :startup
 @echo off
 set "build=0.5"
-set "title=OMEGA USER CREATE %build%"
+set "title=OMEGA USER MANAGER %build%"
+set "header=User Manager Version %build%"
 set "file=%~dp0"
 cd %file%
 cd..
@@ -26,12 +27,33 @@ IF "%loggedin%"=="y" (
 	IF NOT EXIST %file%\Users\%user% (
 		goto :start
 	)
+	
+	::checking if this is the correct program to be in
+	IF NOT "%current%"=="USER" (
+		::if its another go to that program
+		IF "%current%"=="OMEGA" (
+			cmd /C %file%\OMEGAui.bat
+			goto :start
+		)
+		IF "%current%"=="PROGRAM" (
+			cmd /C %file%\ProgramFiles\ProgramAdd.bat
+			goto :start
+		)
+		cls
+		echo %header%
+		echo:
+		echo Error in current program
+		echo current program is set to %current%
+		pause
+		goto :start
+	)
 	goto :menu
 )
 goto :start
 --------------------------------------------------------------------------------------------------
 :start
 cls
+echo %header%
 echo:
 cmd /C %file%\ProgramFiles\Symbol.cmd
 echo:
@@ -59,6 +81,8 @@ set /p user=<%file%\ProgramFiles\user.temp
 set /p now=<%file%\ProgramFiles\now.temp
 set /p creator=<%file%\ProgramFiles\creator.temp
 set "loggedin=y"
+set "host=USER"
+set "current=USER"
 
 del %file%\ProgramFiles\perm.temp
 del %file%\ProgramFiles\permnum.temp
@@ -74,9 +98,10 @@ exit
 --------------------------------------------------------------------------------------------------
 :menu
 cls
+echo %header%
 echo:
 echo Options:
-echo 0. Exit.
+echo 0. Exit 
 echo 1. Create user.
 echo 2. Delete user.
 echo 3. View user logs.
@@ -98,8 +123,13 @@ IF "%choice%"=="2" (
 IF "%choice%"=="3" (
 	goto :logs
 )
+IF "%choice%"=="4" (
+	goto :change
+)
 
 cls
+echo %header%
+echo:
 echo Invalid option!
 pause >nul
 goto :menu
@@ -107,6 +137,7 @@ goto :menu
 --------------------------------------------------------------------------------------------------
 :create
 cls
+echo %header%
 echo:
 echo Type exit to exit.
 echo|set /p="Please enter username of the new user:"
@@ -118,6 +149,7 @@ IF %usern%==exit (
 
 IF EXIST %file%\Users\%usern% (
 	cls
+	echo %header%
 	echo:
 	echo User %usern% already exists.
 	echo Are you sure you want to continue?
@@ -138,6 +170,7 @@ IF EXIST %file%\Users\%usern% (
 	)
 	IF "%boolean%"=="no" (
 		cls
+		echo %header%
 		echo:
 		echo Canceled.
 		set "usern="
@@ -145,6 +178,8 @@ IF EXIST %file%\Users\%usern% (
 		goto :menu
 	)
 	cls
+	echo %header%
+	echo:
 	echo Invalid option!
 	echo Aborting..
 	timeout 1 >nul
@@ -153,13 +188,15 @@ IF EXIST %file%\Users\%usern% (
 --------------------------------------------------------------------------------------------------
 :createcont
 
-cls 
+cls
+echo %header%
 echo:
 echo|set /p="Please enter the password of user %usern%:"
 set "pass="
 set /p pass=
 
-cls 
+cls
+echo %header%
 echo:
 echo|set /p="Please enter the permition level of user %usern%(1-5):"
 set "perm="
@@ -187,6 +224,7 @@ IF "%permnum%"=="5" (
 	set "permnum="
 )
 cls
+echo %header%
 echo:
 echo Creating..
 
@@ -203,6 +241,7 @@ goto :menu
 --------------------------------------------------------------------------------------------------
 :delete
 cls
+echo %header%
 echo:
 echo Users:
 echo The username is between the underscores.
@@ -219,6 +258,7 @@ IF "%usern%"=="exit" (
 )
 IF NOT EXIST %file%\Users\%usern% (
 	cls
+	echo %header%
 	echo:
 	echo The user you entered does not exist.
 	timeout 2 >nul
@@ -226,6 +266,7 @@ IF NOT EXIST %file%\Users\%usern% (
 )
 IF "%usern%"==" =" (
 	cls
+	echo %header%
 	echo:
 	echo The user you entered does not exist.
 	timeout 2 >nul
@@ -233,12 +274,14 @@ IF "%usern%"==" =" (
 )
 IF "%usern%"=="" (
 	cls
+	echo %header%
 	echo:
 	echo The user you entered does not exist.
 	timeout 2 >nul
 	goto :delete
 )
 cls
+echo %header%
 echo:
 echo Are you sure that you want to delete %usern% from the database?
 
@@ -260,6 +303,7 @@ IF "%boolean%"=="yes" (
 )
 IF "%boolean%"=="no" (
 	cls
+	echo %header%
 	echo:
 	echo Canceled.
 	set "usern="
@@ -267,6 +311,8 @@ IF "%boolean%"=="no" (
 	goto :menu
 )
 cls
+echo %header%
+echo:
 echo Invalid option!
 echo Aborting..
 timeout 1 >nul
@@ -274,8 +320,10 @@ goto :delete
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
 :logs
-
+::log editor, deleter, and viewer
+::get user name
 cls
+echo %header%
 echo:
 echo Type exit to exit.
 echo:
@@ -293,6 +341,7 @@ IF "%usern%"=="exit" (
 )
 IF NOT EXIST %file%\Users\%usern% (
 	cls
+	echo %header%
 	echo:
 	echo The user you entered does not exist.
 	timeout 2 >nul
@@ -300,7 +349,9 @@ IF NOT EXIST %file%\Users\%usern% (
 ) ELSE goto :logselect
 --------------------------------------------------------------------------------------------------
 :logselect
+::show logs and ask what to do with them
 cls
+echo %header%
 echo:
 echo User %usern% Logs:
 echo:
@@ -329,13 +380,16 @@ IF "%option%"=="3" (
 	goto :dellogs
 )
 cls
+echo %header%
 echo:
 echo Invalid option!
 pause >nul
 goto :logselect
 --------------------------------------------------------------------------------------------------
 :logview
+::log viewer
 cls
+echo %header%
 echo:
 echo User %usern% Logs:
 echo:
@@ -345,15 +399,18 @@ echo|set /p="Please enter the log name of the log that you want to view(ex. 2000
 set "log="
 set /p log=
 
-
+::checks if it exists
 IF NOT EXIST %file%\Users\%usern%\logs\%log%.txt (
 	cls
+	echo %header%
 	echo:
 	echo The log you entered does not exist.
 	timeout 2 >nul
 	goto :logselect
 )
+::displays log and prompts what to do next
 cls
+echo %header%
 echo:
 echo Log %log%:
 echo:
@@ -378,15 +435,18 @@ IF "%option%"=="2" (
 	goto :logs
 )
 cls
+echo %header%
 echo:
 echo Invalid option!
 pause >nul
 goto :logop
 --------------------------------------------------------------------------------------------------
 :dellogs
+::log deleter
 cls
+echo %header%
 echo:
-echo What would you like to do with %usern% logs?
+echo What would you like to do with %usern%'s logs?
 echo 0. Back.
 echo 1. Delete all.
 echo 2. Delete 1.
@@ -404,15 +464,19 @@ IF "%option%"=="2" (
 	goto :dellog
 )
 cls
+echo %header%
+echo:
 echo Invalid option!
 echo Aborting..
 timeout 1 >nul
 goto :logs
 --------------------------------------------------------------------------------------------------
 :delall
+::deletes all
 cls
+echo %header%
 echo:
-echo Are you sure that you want to delete all of %usern% logs from the database?
+echo Are you sure that you want to delete all of %usern%'s logs from the database?
 
 set "boolean="
 set /p boolean=
@@ -421,6 +485,7 @@ IF "%boolean%"=="yes" (
 	del /F %file%\Users\%usern%\logs
 	echo. > %file%\Users\%usern%\logs\ALL.txt
 	cls
+	echo %header%
 	echo:
 	echo Deleted.
 	timeout 1 >nul
@@ -428,19 +493,24 @@ IF "%boolean%"=="yes" (
 )
 IF "%boolean%"=="no" (
 	cls
+	echo %header%
 	echo:
 	echo Canceled.
 	timeout 1 >nul
 	goto :logs
 )
 cls
+echo %header%
+echo:
 echo Invalid option!
 echo Aborting..
 timeout 1 >nul
 goto :logs
 --------------------------------------------------------------------------------------------------
 :dellog
+::deletes one
 cls
+echo %header%
 echo:
 echo Type exit to exit.
 echo:
@@ -457,6 +527,7 @@ IF "%log%"=="exit" (
 )
 IF NOT EXIST %file%\Users\%usern%\logs\%log%.txt (
 	cls
+	echo %header%
 	echo:
 	echo The log you entered does not exist.
 	timeout 2 >nul
@@ -464,6 +535,7 @@ IF NOT EXIST %file%\Users\%usern%\logs\%log%.txt (
 )
 
 cls
+echo %header%
 echo:
 echo Are you sure that you want to delete log %log%?
 
@@ -481,14 +553,20 @@ IF "%boolean%"=="yes" (
 )
 IF "%boolean%"=="no" (
 	cls
+	echo %header%
 	echo:
 	echo Canceled.
 	timeout 1 >nul
 	goto :dellogs
-)
 cls
+echo %header%
+echo:
 echo Invalid option!
 echo Aborting..
 timeout 1 >nul
 goto :dellogs
 --------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+:change
+
+

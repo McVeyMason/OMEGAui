@@ -1,4 +1,5 @@
 :startup
+::setup
 @echo off
 set "file=%~dp0"
 cd %file%
@@ -31,7 +32,7 @@ goto :logon
 :error
 ::originally skipped
 cls
-echo %title%
+echo %header%
 echo:
 echo [91mWrong username or password. [%textb%;%textf%m
 timeout 2 >nul
@@ -45,7 +46,7 @@ IF "%ERRORLEVEL%"=="1" (
 	goto :creddefaut
 )
 cls 
-echo %title%
+echo %header%
 echo:
 echo [32mDo you want to use your default account? [%textb%;%textf%m
 
@@ -60,7 +61,7 @@ IF "%boolean%"=="no" (
 )
 ::error script
 cls
-echo %title%
+echo %header%
 echo:
 echo [91mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
@@ -68,7 +69,7 @@ goto :logon
 --------------------------------------------------------------------------------------------------
 :creduser
 cls
-echo %title%
+echo %header%
 ::setting user to computers username
 set "user=%ruser%"
 echo:
@@ -82,7 +83,7 @@ goto :logonscript
 ::username
 
 cls
-echo %title%
+echo %header%
 echo:
 set "user="
 echo|set /p="[32mPlease enter your username:[%textb%;%textf%m"
@@ -96,7 +97,7 @@ IF "%ERRORLEVEL%"=="1" (
 ::password
 ::masks with PowerShell script
 cls
-echo %title%
+echo %header%
 echo:
 set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your password[%textb%;%textf%m' -AsSecureString ; ^
     $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
