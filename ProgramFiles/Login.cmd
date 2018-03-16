@@ -1,4 +1,5 @@
 :startup
+::setup
 @echo off
 set "file=%~dp0"
 cd %file%
@@ -31,7 +32,7 @@ goto :logon
 :error
 ::originally skipped
 cls
-echo %title%
+echo %header%
 echo:
 echo [91mWrong username or password. [%textb%;%textf%m
 timeout 2 >nul
@@ -45,22 +46,20 @@ IF "%ERRORLEVEL%"=="1" (
 	goto :creddefaut
 )
 cls 
-echo %title%
+echo %header%
 echo:
 echo [32mDo you want to use your default account? [%textb%;%textf%m
 
 ::using simple boolean system
 set "boolean="
 set /p boolean=
-IF "%boolean%"=="yes" (
-	goto :creduser
-)
-IF "%boolean%"=="no" (
-	goto :creddefaut
-)
+IF "%boolean%"=="y" goto :creduser
+IF "%boolean%"=="yes" goto :creduser
+IF "%boolean%"=="n" goto :creddefaut
+IF "%boolean%"=="no" goto :creddefaut
 ::error script
 cls
-echo %title%
+echo %header%
 echo:
 echo [91mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
@@ -68,7 +67,7 @@ goto :logon
 --------------------------------------------------------------------------------------
 :creduser
 cls
-echo %title%
+echo %header%
 ::setting user to computers username
 set "user=%ruser%"
 echo:
@@ -82,21 +81,21 @@ goto :logonscript
 ::username
 
 cls
-echo %title%
+echo %header%
 echo:
 set "user="
 echo|set /p="[32mPlease enter your username:[%textb%;%textf%m"
 set /p user=
 
 for /f "usebackq delims=" %%I in (`powershell "\"%user%\".toUpper()"`) do set "user=%%~I" 
-findstr "_%user%_" "%file%\Users\ALL\Users.txt
+findstr "_%user%_" "%file%\Users\ALL\Users.txt"
 IF "%ERRORLEVEL%"=="1" (
 	goto :error
 )
 ::password
 ::masks with PowerShell script
 cls
-echo %title%
+echo %header%
 echo:
 set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your password[%textb%;%textf%m' -AsSecureString ; ^
     $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
@@ -151,7 +150,7 @@ IF "%permnum%"=="" (
 	set "permnum=3"
 )
 IF "%permnum%"=="" (
-	set "permfull=perm=4
+	set "permfull=perm=4"
 	set "permnum=4"
 )
 IF "%permnum%"=="" (
