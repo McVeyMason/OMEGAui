@@ -1,5 +1,4 @@
 @echo off
-title %title%
 echo                                    +$OOI,                                      
 echo                                :OO       ZOZ                                   
 echo                               OO,          OO:                                 
@@ -11,7 +10,7 @@ echo                              OO$            OO
 echo                               OO:          OO.                                 
 echo                             8  :O$       .OO  ,,                               
 echo                             .OOOOOO     7OOOOOO                                
-echo.                                                                               
+echo:                                                                               
 echo        .7OO$,                .      ++++++++      .7OO$,           +           
 echo      ,OOOOOOOO7      I8      O,     OOOOOOOO    :OOOOOOOOI        OO           
 echo     8OO      ~OO     OO:    IOO     OO         8O$      =O:      OOOO          

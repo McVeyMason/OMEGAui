@@ -4,8 +4,10 @@
 ::put quotes around all variables to prevent crashing
 ::Thanks to all you on stack overflow
 @echo off
+cls
 set "build=0.9.0"
 set "title=OMEGA %build%"
+set "header=OMEGAui version %build%"
 ::sets file director to current directory
 set "file=%~dp0"
 ::sets real username to %username%
@@ -19,12 +21,63 @@ set "textb=0"
 IF NOT EXIST %file%\Users\BLACKLIST\ md %file%\Users\BLACKLIST\
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%ruser%.txt exit
+::sets the current variable
+set /p current=<%file%\current.temp
+set current=%current: =%
+del %file%\current.temp
+::Check if the user is logged in
+IF "%loggedin%"=="y" (
+	IF "%current%"=="EXIT" exit
+	::checks all important variable
+	set "miss=0"
+	IF "%perm%"=="" set "miss=1"
+	IF "%permnum%"=="" set "miss=1"
+	IF "%user%"=="" set "miss=1"
+	IF "%now%"=="" set "miss=1"
+	IF "%creator%"=="" set "miss=1"
+	IF "%miss%"=="1" goto :start
+	
+	REM cls
+	REM echo %header%
+	REM echo:
+	REM echo Current session is %current%
+	REM echo Host is %host%
+	REM pause
+	
+	IF NOT EXIST %file%\Users\%user% (
+		goto :start
+	)
+	
+	::checking if this is the correct program to be in
+	IF NOT "%current%"=="OMEGA" (
+		::if its another go to that program
+		IF "%current%"=="PROGRAM" (
+			cmd /C %file%\ProgramFiles\ProgramAdd.bat
+			goto :startup
+		)
+		IF "%current%"=="USER" (
+			cmd /C %file%\ProgramFiles\UserCreate.bat
+			goto :startup
+		)
+		IF "%current%"=="EXIT" (
+			exit
+		)
+		cls
+		echo %header%
+		echo:
+		echo Error in current program
+		echo current program is set to %current%
+		pause >nul
+		goto :start
+	)
+	goto :menu
+)
 goto :start
 --------------------------------------------------------------------------------------------------
 :start
 
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 cmd /C %file%\ProgramFiles\Symbol.cmd
 echo [32mAre you sure you want to run OMEGA? [%textb%;%textf%m
@@ -33,6 +86,7 @@ echo This program can be dangerous to your computer.
 ::using simple boolean system
 set "boolean="
 set /p boolean=
+IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="yes" (
 	cmd /C %file%\ProgramFiles\Login.cmd
 	set "miss=0"
@@ -49,6 +103,9 @@ IF "%boolean%"=="yes" (
 	set /p user=<%file%\ProgramFiles\user.temp
 	set /p now=<%file%\ProgramFiles\now.temp
 	set /p creator=<%file%\ProgramFiles\creator.temp
+	set "loggedin=y"
+	set "host=OMEGA"
+	set "current=OMEGA"
 	
 	del %file%\ProgramFiles\perm.temp
 	del %file%\ProgramFiles\permnum.temp
@@ -59,10 +116,10 @@ IF "%boolean%"=="yes" (
 	title %title%
 )
 IF "%boolean%"=="no" exit
-
+IF "%boolean%"=="n" exit
 ::error script
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [91mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
@@ -77,15 +134,22 @@ set "op=0"
 
 ::Main selector
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo OMEGAui Main Menu
 echo Options:
 ::adds one if user has the required permission level
 ::all numbers are fluid no matter the permission level
-::all permissions
-echo %op%.  Exit OMEGAui.
-set /a op=%op%+1
+::Permissions less than 5
+IF "%permnum%" LSS "5" (
+	echo %op%.  Exit OMEGAui.
+	set /a op=%op%+1
+)
+::Permissions at 5
+IF "%permnum%" EQU "5" (
+	echo %op%.  Switch programs or exit.
+	set /a op=%op%+1
+)
 ::all permissions
 echo %op%.  Logout.
 set /a op=%op%+1
@@ -98,7 +162,7 @@ set /a op=%op%+1
 ::only shows fork bomb menu to users with permissions above 2
 IF "%permnum%" GTR "2" (
 	echo %op%.  Open the fork bomb menu.
-	set /a op=%op%+2
+	set /a op=%op%+1
 ) 
 ::only shows the sever menu to users with permissions above 3
 IF "%permnum%" GTR "3" (
@@ -115,6 +179,8 @@ echo %op%.  Open the [31mc[32mo[33ml[34mo[35mr[36m s[37me[91ml[92me[93
 set /a op=%op%+1
 ::all permission
 echo %op%. Change my password.
+set /a op=%op%+1
+
 
 echo:
 echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
@@ -123,14 +189,24 @@ set /p choice=
 
 set "op=0"
 
-IF "%choice%"=="%op%" (
-	:logout
-	::saves log
-	echo.[%time%]:Logged out >> %file%\Users\%user%\logs\%now%.txt  
-	::deletes the live log
-	Exit
+IF "%permnum%" LEQ "4" (
+	IF "%choice%"=="%op%" (
+		:logout
+		::saves log
+		echo.[%time%]:Logged out >> %file%\Users\%user%\logs\%now%.txt  
+		::deletes the live log
+		Exit
+	)
+	set /a op=%op%+1
 )
-set /a op=%op%+1
+IF "%permnum%" GEQ "5" (
+	IF "%choice%"=="%op%" (
+		::Enters daughter program menu.
+		echo.[%time%]:Opened daughter program menu. >> %file%\Users\%user%\logs\%now%.txt  
+		goto :switch
+	)
+	set /a op=%op%+1
+)
 IF "%choice%"=="%op%" (
 	::logout of computer and omega
 	shutdown -l
@@ -147,15 +223,16 @@ IF "%choice%"=="%op%" (
 	echo.[%time%]:Found option 3, user is Observant. >> %file%\Users\%user%\logs\%now%.txt  
 	::Rick roll
 	cmd /C %file%\ProgramFiles\TOP_SECRET.cmd
+	echo  [%textb%;%textf%m
 	goto :menu
 )
 set /a op=%op%+1
 IF "%choice%"=="%op%" (
 	echo.[%time%]:Opened program menu. >> %file%\Users\%user%\logs\%now%.txt 
-	set menu=0
+	set "menu=0"
 	goto :programs
 )
-
+set /a op=%op%+1
 ::permission level 3+ only
 IF "%permnum%" GTR "2" (
 	IF "%choice%"=="%op%" (
@@ -163,9 +240,8 @@ IF "%permnum%" GTR "2" (
 		echo.[%time%]:Opened fork bomb menu. >> %file%\Users\%user%\logs\%now%.txt
 		goto :fork
 	)
+	set /a op=%op%+1
 )
-
-set /a op=%op%+1
 ::permission level 4+ only
 IF "%permnum%" GTR "3" (
 	IF "%choice%"=="%op%" (
@@ -177,18 +253,6 @@ IF "%permnum%" GTR "3" (
 )
 ::permission level 2+ only
 IF "%permnum%" GTR "1" (
-	IF NOT "%permnum%"=="2" (
-		IF "%choice%"=="%op%" (
-			::starts powershell, a better cmd
-			echo.[%time%]:Started powershell. >> %file%\Users\%user%\logs\%now%.txt  
-			start PowerShell.exe
-			goto :menu
-		)
-		set /a op=%op%+1
-	)
-)
-::permission level 2+ only
-IF "%permnum%" GTR "1" (
 	IF "%choice%"=="%op%" (
 		::goes to the web server selector
 		echo.[%time%]:Opened web server menu. >> %file%\Users\%user%\logs\%now%.txt  
@@ -196,7 +260,6 @@ IF "%permnum%" GTR "1" (
 	)
 	set /a op=%op%+1
 )
-set /a op=%op%+1
 IF "%choice%"=="%op%" (
 	::goes to the colour  selector
 	echo.[%time%]:Changed the color. >> %file%\Users\%user%\logs\%now%.txt  
@@ -209,16 +272,116 @@ IF "%choice%"=="%op%" (
 	goto :password
 )
 set /a op=%op%+1
-IF "%choice%"=="%op%" (
-	::do anything
+::permission level 5 only
+IF "%permnum%" GTR "4" (
+	IF "%choice%"=="%op%" (
+		::Enters daughter program menu.
+		echo.[%time%]:Opened daughter program menu. >> %file%\Users\%user%\logs\%now%.txt  
+		goto :subprograms
+	)
+	set /a op=%op%+1
 )
+IF "%choice%"=="debug" (
+	::do
+	cls
+	echo %header%
+	echo:
+	echo %perm%
+	echo %permnum%
+	echo %user%
+	echo %creator%
+	pause
+	goto :menu
+)
+
 ::error script
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [91mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :menu
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+:switch
+::Daughter program menu
+IF NOT "%perm%"=="perm=5" (
+	goto :menu
+)
+::for exiting program or switching to another program
+cls
+echo %header%
+echo current is %current%
+echo:
+echo What would you like to do?
+echo 0. Exit.
+echo 1. Switch to User Manager.
+echo 2. Switch to Program Manager.
+echo:
+echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+set "choice="
+set /p choice=
+
+IF "%choice%"=="0" (
+	::set program to exit and exits User Manager
+	set "current=EXIT"
+	echo.EXIT > %file%\current.temp
+	exit
+)
+IF "%choice%"=="1" (
+	::opens User Manager 
+	IF "%host%"=="PROGRAM" (
+		echo.USER > %file%\current.temp
+		exit
+	)
+	IF "%host%"=="USER" (
+		echo.USER > %file%\current.temp
+		exit
+	)
+	IF "%host%"=="OMEGA" (
+		set "current=USER"
+		echo.USER > %file%\current.temp
+		cmd /C %file%\ProgramFiles\UserCreate.bat
+		goto :startup
+	)
+	cls
+	echo %header%
+	echo:
+	echo Error invalid host
+	echo Host=%host%
+	pause >nul
+	goto :startup
+)
+IF "%choice%"=="2" (
+	::opens Program manager 
+	IF "%host%"=="PROGRAM" (
+		echo.PROGRAM > %file%\current.temp
+		exit
+	)
+	IF "%host%"=="USER" (
+		echo.PROGRAM > %file%\current.temp
+		exit
+	)
+	IF "%host%"=="OMEGA" (
+		set "current=PROGRAM"
+		echo.PROGRAM > %file%\current.temp
+		cmd /C %file%\ProgramFiles\ProgramAdd.bat
+		goto :startup
+	)
+	cls
+	echo %header%
+	echo:
+	echo Error invalid host
+	echo Host=%host%
+	pause >nul
+	goto :startup
+)
+cls
+echo %header%
+echo:
+echo [91mInvalid option. [%textb%;%textf%m
+timeout 2 >nul
+goto :switch
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
 :programs
@@ -260,7 +423,7 @@ IF "%menu%" GTR "0" (
 )
 IF "%success%"=="exit" goto :menu
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [91mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
@@ -272,7 +435,7 @@ goto :programs
 set "op=0"
 
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo Welcome to the fork bomb selector.
 echo Options:
@@ -341,7 +504,7 @@ IF "%choice%"=="%op%" (
 )
 
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [91mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
@@ -353,7 +516,7 @@ goto :fork
 set "op=0"
 
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo Welcome to the fork bomb copier.
 echo All files will be copied to H:/Fork
@@ -437,7 +600,7 @@ IF "%permnum%" GTR "4" (
 	)
 )
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [91mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
@@ -447,7 +610,7 @@ goto :forkcopy
 :color
 ::pretty self explanatory
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo ERROR: Please pay $0.99 to unlock this feature.
 timeout 3 >nul 
@@ -457,7 +620,7 @@ goto :bc
 --------------------------------------------------------------------------------------------------
 :bc
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo Welcome to the [31mc[32mo[33ml[34mo[35mr[36m s[37me[91ml[92me[93mc[94mt[95mo[96mr[97m.[%textb%;%textf%m
 echo To begin select a background color.
@@ -549,14 +712,14 @@ IF "%bc%"=="F" (
 	goto :fc
 )
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [91mInvalid Color. Please use capitals. [%textb%;%textf%m
 goto :bc
 --------------------------------------------------------------------------------------------------
 :fc
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo Now select a foreground color.
 echo:
@@ -647,7 +810,7 @@ IF "%fc%"=="F" (
 	goto :setc
 )
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [91mInvalid Color. Please use capitals. [%textb%;%textf%m
 goto :fc
@@ -656,7 +819,7 @@ goto :fc
 :setc
 color %bc%%fc%
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo Color changed!
 timeout 2 >nul
@@ -665,21 +828,19 @@ goto :menu
 --------------------------------------------------------------------------------------------------
 :password
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [32mAre you sure you want to change your password?[%textb%;%textf%m
 
 ::using simple boolean system
 set "boolean="
 set /p boolean=
-IF "%boolean%"=="yes" (
-	goto :auth
-)
-IF "%boolean%"=="no" (
-	goto :menu
-)
+IF "%boolean%"=="yes" goto :auth
+IF "%boolean%"=="y" goto :auth
+IF "%boolean%"=="no" goto :menu
+IF "%boolean%"=="n" goto :menu
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [91mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
@@ -687,7 +848,7 @@ goto :password
 --------------------------------------------------------------------------------------------------
 :auth
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo Type exit to exit.
 set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your password[%textb%;%textf%m' -AsSecureString ; ^
@@ -706,7 +867,7 @@ IF "exit"=="%password%" (
 	goto :menu
 )
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [91mWrong password. [%textb%;%textf%m
 timeout 2 >nul
@@ -714,14 +875,14 @@ goto :auth
 --------------------------------------------------------------------------------------------------
 :change
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo Please enter new password:
 set "npass0="
 set /p npass0=
 for /f "usebackq delims=" %%I in (`powershell "\"%npass0%\".toUpper()"`) do set "npass0=%%~I"
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo Please reenter new password:
 set "npass1="
@@ -731,7 +892,7 @@ IF "%npass0%"=="%npass1%" (
 	goto :editfiles
 )
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [91mPasswords do not match. Please try again. [%textb%;%textf%m
 timeout 2 >nul
@@ -750,7 +911,7 @@ ren UserdatGood.txt Userdat.txt
 cd %file%
 echo.%user%:%perm%,permnum=%permraw%,password=%npass0%,%creator% >> %file%\Users\ALL\Userdat.txt
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo [92mPassword changed. [%textb%;%textf%m
 echo.[%time%]:----Password changed. >> %file%\Users\%user%\logs\%now%.txt
@@ -758,4 +919,5 @@ timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
+
 pause
