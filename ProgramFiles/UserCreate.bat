@@ -157,7 +157,6 @@ goto :menu
 ::for exiting program or switching to another program
 cls
 echo %header%
-echo current is %current%
 echo:
 echo What would you like to do?
 echo 0. Exit.

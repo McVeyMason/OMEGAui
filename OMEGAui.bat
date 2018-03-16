@@ -178,7 +178,7 @@ IF "%permnum%" GTR "1" (
 echo %op%.  Open the [31mc[32mo[33ml[34mo[35mr[36m s[37me[91ml[92me[93mc[94mt[95mo[96mr[97m.[%textb%;%textf%m
 set /a op=%op%+1
 ::all permission
-echo %op%. Change my password.
+echo %op%.  Change my password.
 set /a op=%op%+1
 
 
@@ -311,7 +311,6 @@ IF NOT "%perm%"=="perm=5" (
 ::for exiting program or switching to another program
 cls
 echo %header%
-echo current is %current%
 echo:
 echo What would you like to do?
 echo 0. Exit.
