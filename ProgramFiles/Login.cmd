@@ -27,7 +27,7 @@ set "now=%year%-%month%-%day%_%hour%-%min%-%sec%"
 set "now=%now%"
 cls
 goto :logon
---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 :error
 ::originally skipped
 cls
@@ -36,7 +36,7 @@ echo:
 echo [91mWrong username or password. [%textb%;%textf%m
 timeout 2 >nul
 goto :logon
---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 :logon
 
 for /f "usebackq delims=" %%I in (`powershell "\"%ruser%\".toUpper()"`) do set "ruser=%%~I" 
@@ -65,7 +65,7 @@ echo:
 echo [91mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :logon
---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 :creduser
 cls
 echo %title%
@@ -77,7 +77,7 @@ set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your p
 		[System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
 for /f "usebackq delims=" %%p in (`%psCommand%`) do set "password=%%p" 
 goto :logonscript
---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 :creddefaut
 ::username
 
@@ -103,7 +103,7 @@ set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your p
         [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
 for /f "usebackq delims=" %%p in (`%psCommand%`) do set "password=%%p" 
 goto :logonscript
---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 :logonscript
 ::checks if user exists
 IF NOT EXIST %file%\Users\%user% (
@@ -199,7 +199,7 @@ IF /I "%pass%"=="%RP%" (
 )
 ::going to error phase if any variables are incorrect
 goto :error
---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 :load
 echo.%perm%> %file%\ProgramFiles\perm.temp
 echo.%permnum%> %file%\ProgramFiles\permnum.temp
