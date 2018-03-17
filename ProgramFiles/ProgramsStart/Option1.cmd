@@ -4,7 +4,7 @@ title OMEGA %build%
 set op=0
 cls
 echo OMEGAui build version %build%
-echo:
+echo.
 echo Welcome to the Browser selector.
 echo Options:
 ::all permissions
