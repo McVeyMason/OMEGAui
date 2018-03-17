@@ -41,7 +41,7 @@ goto :logon
 :logon
 
 for /f "usebackq delims=" %%I in (`powershell "\"%ruser%\".toUpper()"`) do set "ruser=%%~I" 
-findstr "_%ruser%_" "%file%\Users\ALL\Users.txt
+findstr "_%ruser%_" "%file%\Users\ALL\Users.dat
 IF "%ERRORLEVEL%"=="1" (
 	goto :creddefaut
 )
@@ -88,7 +88,7 @@ echo|set /p="[32mPlease enter your username:[%textb%;%textf%m"
 set /p user=
 
 for /f "usebackq delims=" %%I in (`powershell "\"%user%\".toUpper()"`) do set "user=%%~I" 
-findstr "_%user%_" "%file%\Users\ALL\Users.txt"
+findstr "_%user%_" "%file%\Users\ALL\Users.dat"
 IF "%ERRORLEVEL%"=="1" (
 	goto :error
 )
@@ -112,9 +112,9 @@ IF NOT EXIST %file%\Users\%user%\logs (
 	md %file%\Users\%user%\logs
 )
 ::logging real username
-echo.Log started on %date% at %time% using %user% by computer account %ruser%.> %file%\Users\%user%\logs\%now%.txt 
-echo.Using program %title%.>> %file%\Users\%user%\logs\%now%.txt
-echo.%now%.txt >> %file%\Users\%user%\logs\ALL.txt
+echo.Log started on %date% at %time% using %user% by computer account %ruser%.> %file%\Users\%user%\logs\%now%.log 
+echo.Using program %title%.>> %file%\Users\%user%\logs\%now%.log
+echo.%now%.log >> %file%\Users\%user%\logs\ALL.dat
 
 ::converting strings to uppercase 
 for /f "usebackq delims=" %%I in (`powershell "\"%password%\".toUpper()"`) do set "password=%%~I"
@@ -126,16 +126,16 @@ set pass=%pass: =%
 ::setting variables to match user data
 ::fetches from the User file 
 ::RP= real password
-set /P RP=<%file%\Users\%user%\pass.txt
+set /P RP=<%file%\Users\%user%\pass.dat
 set RP=%RP: =%
 ::perm= permission level
-set /P perm=<%file%\Users\%user%\permfull.txt
+set /P perm=<%file%\Users\%user%\permfull.dat
 set perm=%perm: =%
 ::permnum is just the raw user permission level
-set /P permnum=<%file%\Users\%user%\permnum.txt
+set /P permnum=<%file%\Users\%user%\permnum.dat
 set permnum=%permnum: =%
 ::creator is the creator of the user
-set /P creator=<%file%\Users\%user%\creator.txt
+set /P creator=<%file%\Users\%user%\creator.dat
 ::converting permnum to correct format
 IF "%permnum%"=="" (
 	set "permfull=perm=1"
@@ -175,15 +175,15 @@ IF NOT "%perm%"=="%permfull%" (
 	del /F /Q %file%Users\%user%
 	rd /s /q %file%Users\%user%
 	echo User %user% deleted
-	echo.%ruser% >> %file%\Users\BLACKLIST\users.txt 
-	echo.%ruser% > %file%\Users\BLACKLIST\%ruser%.txt
+	echo.%ruser% >> %file%\Users\BLACKLIST\users.dat 
+	echo.%ruser% > %file%\Users\BLACKLIST\%ruser%.dat
 	cd %file%\Users\ALL\
-	findstr /v "%usern%:" %file%\Users\ALL\Userdat.txt > %file%\Users\ALL\Userdatgood.txt
-	del %file%\Users\ALL\Userdat.txt
-	ren Userdatgood.txt Userdat.txt
-	findstr /v "_%usern%_" %file%\Users\ALL\Users.txt > %file%\Users\ALL\Usersgood.txt
-	del %file%\Users\ALL\Users.txt
-	ren Usersgood.txt Users.txt
+	findstr /v "%usern%:" %file%\Users\ALL\Userdat.dat > %file%\Users\ALL\Userdatgood.temp
+	del %file%\Users\ALL\Userdat.dat
+	ren Userdatgood.temp Userdat.dat
+	findstr /v "_%usern%_" %file%\Users\ALL\Users.dat > %file%\Users\ALL\Usersgood.temp
+	del %file%\Users\ALL\Users.dat
+	ren Usersgood.temp Users.dat
 	cd %file%
 	echo Didn't expect that %ruser%, did you?
 	pause
@@ -191,7 +191,7 @@ IF NOT "%perm%"=="%permfull%" (
 	exit
 )
 
-echo.[%time%]:Permission level is %perm% >> %file%\Users\%user%\logs\%now%.txt
+echo.[%time%]:Permission level is %perm% >> %file%\Users\%user%\logs\%now%.log
 ::comparing passwords to user files
 IF /I "%pass%"=="%RP%" (
 	goto :load

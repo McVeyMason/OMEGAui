@@ -20,7 +20,7 @@ set "textb=0"
 ::adds backlist file
 IF NOT EXIST %file%\Users\BLACKLIST\ md %file%\Users\BLACKLIST\
 ::exits for a blacklisted computer username 
-IF EXIST %file%\Users\BLACKLIST\%ruser%.txt exit
+IF EXIST %file%\Users\BLACKLIST\%ruser%.dat exit
 ::sets the current variable
 set /p current=<%file%\current.temp
 set current=%current: =%
@@ -96,7 +96,7 @@ IF "%boolean%"=="yes" (
 	IF NOT EXIST %file%\ProgramFiles\now.temp set "miss=1"
 	IF NOT EXIST %file%\ProgramFiles\creator.temp set "miss=1"
 	IF "miss"=="1" exit
-	IF EXIST %file%\Users\BLACKLIST\%ruser%.txt exit
+	IF EXIST %file%\Users\BLACKLIST\%ruser%.dat exit
 	
 	set /p perm=<%file%\ProgramFiles\perm.temp
 	set /p permnum=<%file%\ProgramFiles\permnum.temp
@@ -193,7 +193,7 @@ IF "%permnum%" LEQ "4" (
 	IF "%choice%"=="%op%" (
 		:logout
 		::saves log
-		echo.[%time%]:Logged out >> %file%\Users\%user%\logs\%now%.txt  
+		echo.[%time%]:Logged out >> %file%\Users\%user%\logs\%now%.log  
 		::deletes the live log
 		Exit
 	)
@@ -202,7 +202,7 @@ IF "%permnum%" LEQ "4" (
 IF "%permnum%" GEQ "5" (
 	IF "%choice%"=="%op%" (
 		::Enters daughter program menu.
-		echo.[%time%]:Opened daughter program menu. >> %file%\Users\%user%\logs\%now%.txt  
+		echo.[%time%]:Opened daughter program menu. >> %file%\Users\%user%\logs\%now%.log  
 		goto :switch
 	)
 	set /a op=%op%+1
@@ -220,7 +220,7 @@ IF "%choice%"=="%op%" (
 )
 set /a op=%op%+1
 IF "%choice%"=="%op%" (
-	echo.[%time%]:Found option 3, user is Observant. >> %file%\Users\%user%\logs\%now%.txt  
+	echo.[%time%]:Found option 3, user is Observant. >> %file%\Users\%user%\logs\%now%.log  
 	::Rick roll
 	cmd /C %file%\ProgramFiles\TOP_SECRET.cmd
 	echo  [%textb%;%textf%m
@@ -228,7 +228,7 @@ IF "%choice%"=="%op%" (
 )
 set /a op=%op%+1
 IF "%choice%"=="%op%" (
-	echo.[%time%]:Opened program menu. >> %file%\Users\%user%\logs\%now%.txt 
+	echo.[%time%]:Opened program menu. >> %file%\Users\%user%\logs\%now%.log 
 	set "menu=0"
 	goto :programs
 )
@@ -237,7 +237,7 @@ set /a op=%op%+1
 IF "%permnum%" GTR "2" (
 	IF "%choice%"=="%op%" (
 		::goes to fork selector
-		echo.[%time%]:Opened fork bomb menu. >> %file%\Users\%user%\logs\%now%.txt
+		echo.[%time%]:Opened fork bomb menu. >> %file%\Users\%user%\logs\%now%.log
 		goto :fork
 	)
 	set /a op=%op%+1
@@ -246,7 +246,7 @@ IF "%permnum%" GTR "2" (
 IF "%permnum%" GTR "3" (
 	IF "%choice%"=="%op%" (
 		::Logging servers
-		echo.[%time%]:Opened server menu. >> %file%\Users\%user%\logs\%now%.txt  
+		echo.[%time%]:Opened server menu. >> %file%\Users\%user%\logs\%now%.log  
 		goto :servers
 	)
 	set /a op=%op%+1
@@ -255,20 +255,20 @@ IF "%permnum%" GTR "3" (
 IF "%permnum%" GTR "1" (
 	IF "%choice%"=="%op%" (
 		::goes to the web server selector
-		echo.[%time%]:Opened web server menu. >> %file%\Users\%user%\logs\%now%.txt  
+		echo.[%time%]:Opened web server menu. >> %file%\Users\%user%\logs\%now%.log  
 		goto :webserver
 	)
 	set /a op=%op%+1
 )
 IF "%choice%"=="%op%" (
 	::goes to the colour  selector
-	echo.[%time%]:Changed the color. >> %file%\Users\%user%\logs\%now%.txt  
+	echo.[%time%]:Changed the color. >> %file%\Users\%user%\logs\%now%.log  
 	goto :color
 )
 set /a op=%op%+1
 IF "%choice%"=="%op%" (
 	::goes to the password changer.
-	echo.[%time%]:Changing their password. >> %file%\Users\%user%\logs\%now%.txt  
+	echo.[%time%]:Changing their password. >> %file%\Users\%user%\logs\%now%.log  
 	goto :password
 )
 set /a op=%op%+1
@@ -276,7 +276,7 @@ set /a op=%op%+1
 IF "%permnum%" GTR "4" (
 	IF "%choice%"=="%op%" (
 		::Enters daughter program menu.
-		echo.[%time%]:Opened daughter program menu. >> %file%\Users\%user%\logs\%now%.txt  
+		echo.[%time%]:Opened daughter program menu. >> %file%\Users\%user%\logs\%now%.log  
 		goto :subprograms
 	)
 	set /a op=%op%+1
@@ -462,42 +462,42 @@ set "op=0"
 
 IF "%choice%"=="%op%" (
 	::goes to main menu
-	echo.[%time%]:----Closed fork menu. >> %file%\Users\%user%\logs\%now%.txt
+	echo.[%time%]:----Closed fork menu. >> %file%\Users\%user%\logs\%now%.log
 	goto :menu
 )
 set /a op=%op%+1
 IF "%permnum%" GTR "3" (
 	IF "%choice%"=="%op%" (
 		::goes to fork copier menu
-		echo.[%time%]:----Opened copy menu. >> %file%\Users\%user%\logs\%now%.txt
+		echo.[%time%]:----Opened copy menu. >> %file%\Users\%user%\logs\%now%.log
 		goto :forkcopy
 	)
 	set /a op=%op%+1
 )
 IF "%choice%"=="%op%" (
 	::runs a standard fork bomb
-	echo.[%time%]:----Started Regular fork bomb. >> %file%\Users\%user%\logs\%now%.txt
+	echo.[%time%]:----Started Regular fork bomb. >> %file%\Users\%user%\logs\%now%.log
 	start %file%\ProgramFiles\Fork.bat
 	goto :fork
 )
 set /a op=%op%+1
 IF "%choice%"=="%op%" (
 	::runs a rickrolling fork bomb
-	echo.[%time%]:----Started rick fork bomb. >> %file%\Users\%user%\logs\%now%.txt
+	echo.[%time%]:----Started rick fork bomb. >> %file%\Users\%user%\logs\%now%.log
 	start %file%\ProgramFiles\RickFork.bat
 	goto :fork
 )
 set /a op=%op%+1
 IF "%choice%"=="%op%" (
 	::runs a Internet explorer fork bomb
-	echo.[%time%]:----Started Internet explorer fork bomb. >> %file%\Users\%user%\logs\%now%.txt
+	echo.[%time%]:----Started Internet explorer fork bomb. >> %file%\Users\%user%\logs\%now%.log
 	start %file%\ProgramFiles\IEXFork.bat
 	goto :fork
 )
 set /a op=%op%+1
 IF "%choice%"=="%op%" (
 	::runs a File explorer fork bomb
-	echo.[%time%]:Started file explorer fork bomb. >> %file%\Users\%user%\logs\%now%.txt
+	echo.[%time%]:Started file explorer fork bomb. >> %file%\Users\%user%\logs\%now%.log
 	start %file%\ProgramFiles\EXFork.bat
 	goto :fork
 )
@@ -535,7 +535,7 @@ set "choice="
 set /p choice=
 IF "%choice%"=="0" (
 	::goes to main fork selector
-	echo.[%time%]:----++++Exited fork copy menu. >> %file%\Users\%user%\logs\%now%.txt
+	echo.[%time%]:----++++Exited fork copy menu. >> %file%\Users\%user%\logs\%now%.log
 	goto :fork
 )
 IF "%choice%"=="1" (
@@ -544,7 +544,7 @@ IF "%choice%"=="1" (
 		md H:/Fork
 	)
 	::downloads all fork bombs
-	echo.[%time%]:----++++Copied all. >> %file%\Users\%user%\logs\%now%.txt 
+	echo.[%time%]:----++++Copied all. >> %file%\Users\%user%\logs\%now%.log 
 	ROBOCOPY %file%\ProgramFiles\Fork\Fork.bat H:/Fork /s >nul
 	ROBOCOPY %file%\ProgramFiles\Fork\RickFork.bat H:/Fork /s >nul
 	ROBOCOPY %file%\ProgramFiles\Fork\IEXFork.bat H:/Fork /s >nul
@@ -557,7 +557,7 @@ IF "%choice%"=="2" (
 		md H:/Fork
 	)
 	::downloads a standard fork bomb
-	echo.[%time%]:----++++Copied regular. >> %file%\Users\%user%\logs\%now%.txt 
+	echo.[%time%]:----++++Copied regular. >> %file%\Users\%user%\logs\%now%.log 
 	ROBOCOPY %file%\ProgramFiles\Fork\Fork.bat H:/Fork /s >nul
 	goto :forkcopy
 )
@@ -567,7 +567,7 @@ IF "%choice%"=="3" (
 		md H:/Fork
 	)
 	::downloads a rickrolling fork bomb
-	echo.[%time%]:----++++Copied rick. >> %file%\Users\%user%\logs\%now%.txt 
+	echo.[%time%]:----++++Copied rick. >> %file%\Users\%user%\logs\%now%.log 
 	ROBOCOPY %file%\ProgramFiles\Fork\RickFork.bat H:/Fork /s >nul
 	goto :forkcopy
 )
@@ -577,7 +577,7 @@ IF "%choice%"=="4" (
 		md H:/Fork
 	)
 	::downloads a internet explorer fork bomb
-	echo.[%time%]:----++++Copied internet explorer. >> %file%\Users\%user%\logs\%now%.txt 
+	echo.[%time%]:----++++Copied internet explorer. >> %file%\Users\%user%\logs\%now%.log 
 	ROBOCOPY %file%ProgramFiles\Fork\IEXFork.bat H:/Fork /s >nul
 	goto :forkcopy
 )
@@ -587,13 +587,13 @@ IF "%choice%"=="5" (
 		md H:/Fork
 	)
 	::downloads a file explorer fork bomb
-	echo.[%time%]:Copied file explorer. >> %file%\Users\%user%\logs\%now%.txt 
+	echo.[%time%]:Copied file explorer. >> %file%\Users\%user%\logs\%now%.log 
 	ROBOCOPY %file%ProgramFiles\Fork\EXFork.bat H:/Fork /s >nul
 	goto :forkcopy
 )
 IF "%permnum%" GTR "4" (
 	IF "%choice%"=="6" (
-		echo.[%time%]:----++++Opened file. >> %file%\Users\%user%\logs\%now%.txt
+		echo.[%time%]:----++++Opened file. >> %file%\Users\%user%\logs\%now%.log
 		start %file%ProgramFiles\Fork
 		goto :forkcopy
 	)
@@ -854,7 +854,7 @@ set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your p
     $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
 		[System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
 for /f "usebackq delims=" %%p in (`%psCommand%`) do set "password=%%p" 
-set /p RP=<%file%\Users\%user%\pass.txt
+set /p RP=<%file%\Users\%user%\pass.dat
 for /f "usebackq delims=" %%I in (`powershell "\"%password%\".toUpper()"`) do set "password=%%~I"
 set "pass=password=%password%"
 set pass=%pass: =%
@@ -899,21 +899,21 @@ goto :change
 --------------------------------------------------------------------------------------
 :editfiles
 ::fetching raw permnum
-set /P permraw=<%file%\Users\%user%\permnum.txt
+set /P permraw=<%file%\Users\%user%\permnum.dat
 set permraw=%permraw: =%
-del %file%\Users\%user%\pass.txt
-echo.password=%npass0% > %file%\Users\%user%\pass.txt
+del %file%\Users\%user%\pass.dat
+echo.password=%npass0% > %file%\Users\%user%\pass.dat
 cd %file%\Users\ALL\
-findstr /v "%user%:" "Userdat.txt" > UserdatGood.txt
-del Userdat.txt
-ren UserdatGood.txt Userdat.txt
+findstr /v "%user%:" "Userdat.dat" > UserdatGood.temp
+del Userdat.dat
+ren UserdatGood.temp Userdat.dat
 cd %file%
-echo.%user%:%perm%,permnum=%permraw%,password=%npass0%,%creator% >> %file%\Users\ALL\Userdat.txt
+echo.%user%:%perm%,permnum=%permraw%,password=%npass0%,%creator% >> %file%\Users\ALL\Userdat.dat
 cls
 echo %header%
 echo:
 echo [92mPassword changed. [%textb%;%textf%m
-echo.[%time%]:----Password changed. >> %file%\Users\%user%\logs\%now%.txt
+echo.[%time%]:----Password changed. >> %file%\Users\%user%\logs\%now%.log
 timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------

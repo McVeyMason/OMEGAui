@@ -15,7 +15,7 @@ color 0c
 set "textf=91"
 set "textb=0"
 ::exits for a blacklisted computer username 
-IF EXIST %file%\Users\BLACKLIST\%username%.txt exit
+IF EXIST %file%\Users\BLACKLIST\%username%.dat exit
 ::sets the current variable
 set /p current=<%file%\current.temp
 set current=%current: =%
@@ -82,7 +82,7 @@ goto :login
 ::login script
 cmd /K %file%\ProgramFiles\Login.cmd
 
-del %file%\Users\%user%\logs\%now%.txt
+del %file%\Users\%user%\logs\%now%.log
 
 ::setting account variable
 set "miss=0"
@@ -92,7 +92,7 @@ IF NOT EXIST %file%\ProgramFiles\user.temp set "miss=1"
 IF NOT EXIST %file%\ProgramFiles\now.temp set "miss=1"
 IF NOT EXIST %file%\ProgramFiles\creator.temp set "miss=1"
 IF "miss"=="1" exit
-IF EXIST %file%\Users\BLACKLIST\%ruser%.txt exit
+IF EXIST %file%\Users\BLACKLIST\%ruser%.dat exit
 
 set /p perm=<%file%\ProgramFiles\perm.temp
 set /p permnum=<%file%\ProgramFiles\permnum.temp
@@ -249,6 +249,7 @@ echo|set /p="What is the name of this program:"
 set "nameA="
 set /p nameA=
 
+for /f "usebackq delims=" %%I in (`powershell "\"%nameA%\".toUpper()"`) do set "nameA=%%~I" 
 
 ::verify name
 cls
@@ -259,6 +260,8 @@ echo:
 echo|set /p="Please renter the name:"
 set "nameB="
 set /p nameB=
+
+for /f "usebackq delims=" %%I in (`powershell "\"%nameB%\".toUpper()"`) do set "nameB=%%~I" 
 
 IF "%nameA%"=="exit" exit
 IF "%nameB%"=="exit" exit
@@ -345,27 +348,38 @@ echo Perition greater than %perm%.
 set "boolean="
 set /p boolean=
 
+for /f "usebackq delims=" %%I in (`powershell "\"%name%\".toUpper()"`) do set "name=%%~I" 
+
 IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="yes" (
+	::Edits option file
 	cd %file%\ProgramFiles\ProgramsStart\
-	ren Option%type%.cmd option%type%.txt
-	echo.IF "%%permnum%%" GTR "%perm%" ^( >>Option%type%.txt
-	echo.	echo %%op%%.  Start %name%.>>Option%type%.txt
-	echo.	set /a op^=%%op%%+1>>Option%type%.txt
-	echo.^)>>Option%type%.txt
-	ren Option%type%.txt Option%type%.cmd
-	ren Choice%type%.cmd Choice%type%.txt
-	echo.IF "%%permnum%%" GTR "%perm%" (>>%file%\ProgramFiles\ProgramsStart\Choice%type%.txt
-	echo.	IF "%%choice%%"=="%%op%%" (>>%file%\ProgramFiles\ProgramsStart\Choice%type%.txt
-	echo.		::Starts %name%>>%file%\ProgramFiles\ProgramsStart\Choice%type%.txt
-	echo.		echo.[%%time%%]:----++++Started %name%.^>^>%%file%%\Users\%%user%%\logs\%%now%%.txt>>%file%\ProgramFiles\ProgramsStart\Choice%type%.txt
-	echo.		start "" "%path%">>%file%\ProgramFiles\ProgramsStart\Choice%type%.txt
-	echo.		echo.true^> %%file%%\ProgramFiles\ProgramsStart\success.txt>>%file%\ProgramFiles\ProgramsStart\Choice%type%.txt
-	echo.	^)>>%file%\ProgramFiles\ProgramsStart\Choice%type%.txt
-	echo.	set /a o^p=%%op%%+1>>%file%\ProgramFiles\ProgramsStart\Choice%type%.txt
-	echo.^)>>%file%\ProgramFiles\ProgramsStart\Choice%type%.txt
-	ren Choice%type%.txt Choice%type%.cmd
+	ren Option%type%.cmd Option%type%.temp
+	echo.::%name%>> Option%type%.temp
+	echo.IF "%%permnum%%" GTR "%perm%" ^( >> Option%type%.temp
+	echo.	echo %%op%%.  Start %name%.>> Option%type%.temp
+	echo.	set /a op^=%%op%%+1>> Option%type%.temp
+	echo.^)>> Option%type%.temp
+	ren Option%type%.temp Option%type%.cmd
+	
+	::Edits Choice file
+	ren Choice%type%.cmd Choice%type%.temp
+	echo.::%name%>> Choice%type%.temp
+	echo.IF "%%permnum%%" GTR "%perm%" (>> Choice%type%.temp
+	echo.	IF "%%choice%%"=="%%op%%" (>> Choice%type%.temp
+	echo.		::Starts %name%>> Choice%type%.temp
+	echo.		echo.[%%time%%]:----++++Started %name%.^>^>%%file%%\Users\%%user%%\logs\%%now%%.log>> Choice%type%.temp
+	echo.		start "" "%path%">> Choice%type%.temp
+	echo.		echo.true^> %%file%%\ProgramFiles\ProgramsStart\success.temp>> Choice%type%.temp
+	echo.	^)>> Choice%type%.temp
+	echo.	set /a o^p=%%op%%+1>> Choice%type%.temp
+	echo.^)>> Choice%type%.temp
+	ren Choice%type%.temp Choice%type%.cmd
 	cd %file%
+	
+	::Adds program to list
+	echo._%name%_ >> %file%\ProgramFiles\ProgramsStart\Programs%type%.dat
+	
 	goto :menu
 )
 IF "%boolean%"=="n" goto :menu
@@ -376,23 +390,123 @@ echo:
 echo Invalid option.
 timeout 2 >nul
 goto :confirm
---------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 :pdelete
+::set the type of program
+cls
+echo %header%
+echo:
+echo Options:
+echo 0. Exit.
+echo 1.  Browser.
+echo 2.  Game.
+echo 3.  Utility.
+echo 4.  Other.
+echo|set /p="What type of program do you want to delete:"
+set "type="
+set /p type=
+
+IF "%type%"=="0" goto :menu
+IF "%type%"=="1" goto :pname
+IF "%type%"=="2" goto :pname
+IF "%type%"=="3" goto :pname
+IF "%type%"=="4" goto :pname
+
+cls
+echo %header%
+echo:
+echo Invalid option.
+timeout 2>nul
+goto :pdelete
+--------------------------------------------------------------------------------------
+:pname
+::name of program
+cls
+echo %header%
+echo:
+echo Programs:
+type %file%\ProgramFiles\ProgramsStart\Programs%type%.dat
+echo:
+echo Type name without underscores.
+echo Type exit to exit.
+echo|set /p="What program would you like to delete:"
+set "name="
+set /p name=
+
+for /f "usebackq delims=" %%I in (`powershell "\"%name%\".toUpper()"`) do set "name=%%~I"
+IF "%name%"=="EXIT" goto :menu
+findstr "_%name%_" "%file%\ProgramFiles\ProgramsStart\Programs%type%.dat"
+IF "%ERRORLEVEL%"=="1" (
+	cls
+	echo %header%
+	echo:
+	echo Invalid name.
+	timeout 2 >nul
+	goto :pname
+)
+pause
+goto :confirmdel
+--------------------------------------------------------------------------------------
+:confirmdel
+::verify deletion of the program
+cls
+echo %header%
+echo:
+echo Are you sure you want to delete program %name%?
+
+set "boolean="
+set /p boolean=
+
+
+IF "%boolean%"=="y" set "boolean=yes"
+IF "%boolean%"=="n" set "boolean=no"
+IF "%boolean%"=="yes" (
+	
+	set "startstring=::%name%"
+	set "delfile=%file%\ProgramFiles\ProgramsStart\Option%type%.cmd"
+	set "numlines=5"
+	cmd /C %file%\ProgramFiles\dellines.cmd
+	
+	set "startstring=::%name%"
+	set "delfile=%file%\ProgramFiles\ProgramsStart\Choice%type%.cmd"
+	set "numlines=9"
+	cmd /C %file%\ProgramFiles\dellines.cmd
+	cls
+	echo %header%
+	echo:
+	echo Done!
+	pause 
+	goto :menu
+)
+IF "%boolean%"=="no" (
+	cls
+	echo %header%
+	echo:
+	echo Canceled.
+	timeout 2 >nul
+	goto :menu
+)
+cls
+echo %header%
+echo:
+echo Invalid option.
+timeout 2>nul
+goto :confirmdel
 
 goto :menu
 
---------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 :screate
 
 goto :menu
 
---------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 :sdelete
 
 goto :menu
 
---------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------

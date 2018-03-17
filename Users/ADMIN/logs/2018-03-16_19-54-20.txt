@@ -1,0 +1,3 @@
+[19:57:18.40]:----Selected Browser. 
+[19:58:52.34]:----++++Closed Browser menu. 
+[19:58:54.02]:----Closed programs menu. 

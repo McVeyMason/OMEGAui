@@ -15,7 +15,7 @@ color 0c
 set "textf=91"
 set "textb=0"
 ::exits for a blacklisted computer username 
-IF EXIST %file%\Users\BLACKLIST\%username%.txt exit
+IF EXIST %file%\Users\BLACKLIST\%username%.dat exit
 ::sets the current variable
 set /p current=<%file%\current.temp
 set current=%current: =%
@@ -81,7 +81,7 @@ goto :logon
 :logon
 cmd /K %file%\ProgramFiles\Login.cmd
 
-del %file%\Users\%user%\logs\%now%.txt
+del %file%\Users\%user%\logs\%now%.dat
 
 set "miss=0"
 	IF NOT EXIST %file%\ProgramFiles\perm.temp set "miss=1"
@@ -90,7 +90,7 @@ IF NOT EXIST %file%\ProgramFiles\user.temp set "miss=1"
 IF NOT EXIST %file%\ProgramFiles\now.temp set "miss=1"
 IF NOT EXIST %file%\ProgramFiles\creator.temp set "miss=1"
 IF "miss"=="1" exit
-IF EXIST %file%\Users\BLACKLIST\%ruser%.txt exit
+IF EXIST %file%\Users\BLACKLIST\%ruser%.dat exit
 
 set /p perm=<%file%\ProgramFiles\perm.temp
 set /p permnum=<%file%\ProgramFiles\permnum.temp
@@ -255,12 +255,12 @@ IF EXIST %file%\Users\%usern% (
 	IF "%boolean%"=="yes" (
 		for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I"
 		cd %file%\Users\ALL\
-		findstr /v %usern%: Userdat.txt > Userdatgood.txt
-		del Userdat.txt
-		ren Userdatgood.txt Userdat.txt
-		findstr /v _%usern%_ Users.txt > Usersgood.txt
-		del Users.txt
-		ren Usersgood.txt Users.txt
+		findstr /v %usern%: Userdat.dat > Userdatgood.temp
+		del Userdat.dat
+		ren Userdatgood.temp Userdat.dat
+		findstr /v _%usern%_ Users.dat > Usersgood.temp
+		del Users.dat
+		ren Usersgood.temp Users.dat
 		cd %file%
 		goto :createcont
 	)
@@ -326,12 +326,12 @@ echo Creating..
 
 md %file%\Users\%usern% >nul
 md %file%\Users\%usern%\logs >nul
-echo.password=%pass% > %file%\Users\%usern%\pass.txt
-echo.perm=%perm% > %file%\Users\%usern%\permfull.txt
-echo.%permnum% > %file%\Users\%usern%\permnum.txt
-echo.creator=%ruser% > %file%\Users\%usern%\creator.txt
-echo.%usern%:perm=%perm%,permnum=%permnum%,password=%pass%,creator=%ruser% >> %file%\Users\ALL\userdat.txt
-echo._%usern%_ >> %file%\Users\ALL\users.txt
+echo.password=%pass% > %file%\Users\%usern%\pass.dat
+echo.perm=%perm% > %file%\Users\%usern%\permfull.dat
+echo.%permnum% > %file%\Users\%usern%\permnum.dat
+echo.creator=%ruser% > %file%\Users\%usern%\creator.dat
+echo.%usern%:perm=%perm%,permnum=%permnum%,password=%pass%,creator=%ruser% >> %file%\Users\ALL\userdat.dat
+echo._%usern%_ >> %file%\Users\ALL\users.dat
 goto :menu
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
@@ -342,7 +342,7 @@ echo:
 echo Users:
 echo The username is between the underscores.
 echo:
-type %file%\Users\ALL\users.txt
+type %file%\Users\ALL\users.dat
 echo:
 echo Type exit to exit.
 echo|set /p="Please enter the username of the user that you want to delete:"
@@ -390,12 +390,12 @@ IF "%boolean%"=="yes" (
 	del /F /Q %file%\Users\%usern%
 	rd /s /q %file%\Users\%usern%
 	cd %file%\Users\ALL\
-	findstr /v %usern%: Userdat.txt > Userdatgood.txt
-	del Userdat.txt
-	ren Userdatgood.txt Userdat.txt
-	findstr /v _%usern%_ Users.txt > Usersgood.txt
-	del Users.txt
-	ren Usersgood.txt Users.txt
+	findstr /v %usern%: Userdat.dat > Userdatgood.temp
+	del Userdat.dat
+	ren Userdatgood.temp Userdat.dat
+	findstr /v _%usern%_ Users.dat > Usersgood.temp
+	del Users.dat
+	ren Usersgood.temp Users.dat
 	cd %file%
 	goto :menu
 )
@@ -428,7 +428,7 @@ echo:
 echo Users:
 echo The username is between the underscores.
 echo:
-type %file%\Users\ALL\users.txt
+type %file%\Users\ALL\users.dat
 echo:
 echo|set /p="Please enter the username of the user that logs you want to view or delete:"
 set "usern="
@@ -453,7 +453,7 @@ echo %header%
 echo:
 echo User %usern% Logs:
 echo:
-type %file%\Users\%usern%\logs\ALL.txt
+type %file%\Users\%usern%\logs\ALL.dat
 echo:
 echo What would you like to do with these logs?
 echo 0. Exit.
@@ -491,14 +491,14 @@ echo %header%
 echo:
 echo User %usern% Logs:
 echo:
-type %file%\Users\%usern%\logs\ALL.txt
+type %file%\Users\%usern%\logs\ALL.dat
 echo:
 echo|set /p="Please enter the log name of the log that you want to view(ex. 2000-01-01_00-00-00):"
 set "log="
 set /p log=
 
 ::checks if it exists
-IF NOT EXIST %file%\Users\%usern%\logs\%log%.txt (
+IF NOT EXIST %file%\Users\%usern%\logs\%log%.dat (
 	cls
 	echo %header%
 	echo:
@@ -512,7 +512,7 @@ echo %header%
 echo:
 echo Log %log%:
 echo:
-type %file%\Users\%usern%\logs\%log%.txt
+type %file%\Users\%usern%\logs\%log%.dat
 echo:
 echo:
 echo What would you like to do now?
@@ -584,7 +584,7 @@ IF "%boolean%"=="n" set "boolean=no"
 IF "%boolean%"=="yes" (
 	for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I"
 	del /F %file%\Users\%usern%\logs
-	echo. > %file%\Users\%usern%\logs\ALL.txt
+	echo. > %file%\Users\%usern%\logs\ALL.dat
 	cls
 	echo %header%
 	echo:
@@ -617,7 +617,7 @@ echo Type exit to exit.
 echo:
 echo User %usern% Logs:
 echo:
-type %file%\Users\%usern%\logs\ALL.txt
+type %file%\Users\%usern%\logs\ALL.dat
 echo:
 echo|set /p="Please enter the log name of the log that you want to delete(ex. 2000-01-01_00-00-00):"
 set "log="
@@ -626,7 +626,7 @@ set /p log=
 IF "%log%"=="exit" (
 	goto :dellogs
 )
-IF NOT EXIST %file%\Users\%usern%\logs\%log%.txt (
+IF NOT EXIST %file%\Users\%usern%\logs\%log%.dat (
 	cls
 	echo %header%
 	echo:
@@ -647,11 +647,11 @@ IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="n" set "boolean=no"
 IF "%boolean%"=="yes" (
 	for /f "usebackq delims=" %%I in (`powershell "\"%log%\".toUpper()"`) do set "log=%%~I"
-	del /F %file%\Users\%usern%\logs\%log%.txt
+	del /F %file%\Users\%usern%\logs\%log%.dat
 	cd %file%\Users\%usern%\logs
-	findstr /v %log%.txt ALL.txt > ALLgood.txt
-	del ALL.txt
-	ren ALLgood.txt ALL.txt
+	findstr /v %log%.dat ALL.dat > ALLgood.temp
+	del ALL.dat
+	ren ALLgood.temp ALL.dat
 	cd %file%
 	goto :dellogs
 )
