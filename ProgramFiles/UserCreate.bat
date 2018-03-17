@@ -255,12 +255,12 @@ IF EXIST %file%\Users\%usern% (
 	IF "%boolean%"=="yes" (
 		for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I"
 		cd %file%\Users\ALL\
-		findstr /v %usern%: Userdat.dat > Userdatgood.temp
+		findstr /v %usern%: Userdat.dat > Userdat.temp
 		del Userdat.dat
-		ren Userdatgood.temp Userdat.dat
-		findstr /v _%usern%_ Users.dat > Usersgood.temp
+		ren Userdat.temp Userdat.dat
+		findstr /v _%usern%_ Users.dat > Users.temp
 		del Users.dat
-		ren Usersgood.temp Users.dat
+		ren Users.temp Users.dat
 		cd %file%
 		goto :createcont
 	)
@@ -390,12 +390,12 @@ IF "%boolean%"=="yes" (
 	del /F /Q %file%\Users\%usern%
 	rd /s /q %file%\Users\%usern%
 	cd %file%\Users\ALL\
-	findstr /v %usern%: Userdat.dat > Userdatgood.temp
+	findstr /v %usern%: Userdat.dat > Userdat.temp
 	del Userdat.dat
-	ren Userdatgood.temp Userdat.dat
-	findstr /v _%usern%_ Users.dat > Usersgood.temp
+	ren Userdat.temp Userdat.dat
+	findstr /v _%usern%_ Users.dat > Users.temp
 	del Users.dat
-	ren Usersgood.temp Users.dat
+	ren Users.temp Users.dat
 	cd %file%
 	goto :menu
 )
@@ -649,9 +649,9 @@ IF "%boolean%"=="yes" (
 	for /f "usebackq delims=" %%I in (`powershell "\"%log%\".toUpper()"`) do set "log=%%~I"
 	del /F %file%\Users\%usern%\logs\%log%.dat
 	cd %file%\Users\%usern%\logs
-	findstr /v %log%.dat ALL.dat > ALLgood.temp
+	findstr /v %log%.dat ALL.dat > ALL.temp
 	del ALL.dat
-	ren ALLgood.temp ALL.dat
+	ren ALL.temp ALL.dat
 	cd %file%
 	goto :dellogs
 )

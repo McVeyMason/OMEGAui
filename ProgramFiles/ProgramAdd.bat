@@ -355,16 +355,17 @@ IF "%boolean%"=="yes" (
 	::Edits option file
 	cd %file%\ProgramFiles\ProgramsStart\
 	ren Option%type%.cmd Option%type%.temp
-	echo.::%name%>> Option%type%.temp
+	echo.::%name%-START>> Option%type%.temp
 	echo.IF "%%permnum%%" GTR "%perm%" ^( >> Option%type%.temp
 	echo.	echo %%op%%.  Start %name%.>> Option%type%.temp
 	echo.	set /a op^=%%op%%+1>> Option%type%.temp
 	echo.^)>> Option%type%.temp
+	echo.::%name%-END>> Option%type%.temp
 	ren Option%type%.temp Option%type%.cmd
 	
 	::Edits Choice file
 	ren Choice%type%.cmd Choice%type%.temp
-	echo.::%name%>> Choice%type%.temp
+	echo.::%name%-START>> Choice%type%.temp
 	echo.IF "%%permnum%%" GTR "%perm%" (>> Choice%type%.temp
 	echo.	IF "%%choice%%"=="%%op%%" (>> Choice%type%.temp
 	echo.		::Starts %name%>> Choice%type%.temp
@@ -374,6 +375,7 @@ IF "%boolean%"=="yes" (
 	echo.	^)>> Choice%type%.temp
 	echo.	set /a o^p=%%op%%+1>> Choice%type%.temp
 	echo.^)>> Choice%type%.temp
+	echo.::%name%-END>> Choice%type%.temp
 	ren Choice%type%.temp Choice%type%.cmd
 	cd %file%
 	
@@ -463,15 +465,26 @@ IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="n" set "boolean=no"
 IF "%boolean%"=="yes" (
 	
-	set "startstring=::%name%"
-	set "delfile=%file%\ProgramFiles\ProgramsStart\Option%type%.cmd"
-	set "numlines=5"
+	set "startstring=%name%-START"
+	set "endstring=%name%-END"
+	set "infile=%file%\ProgramFiles\ProgramsStart\Option%type%.cmd"
+	set "outfile=%file%\ProgramFiles\ProgramsStart\Option%type%.temp"
 	cmd /C %file%\ProgramFiles\dellines.cmd
 	
-	set "startstring=::%name%"
-	set "delfile=%file%\ProgramFiles\ProgramsStart\Choice%type%.cmd"
-	set "numlines=9"
+	set "infile=%file%\ProgramFiles\ProgramsStart\Choice%type%.cmd"
+	set "outfile=%file%\ProgramFiles\ProgramsStart\Choice%type%.temp"
 	cmd /C %file%\ProgramFiles\dellines.cmd
+	
+	cd %file%\ProgramFiles\ProgramsStart\
+	del Option%type%.cmd
+	ren Option%type%.temp Option%type%.cmd
+	del Choice%type%.cmd
+	ren Choice%type%.temp Choice%type%.cmd
+	findstr /v _%name%_ Programs%type%.dat > Programs%type%.temp
+	del Programs%type%.dat
+	ren Programs%type%.temp Programs%type%.dat
+	cd %file%
+	
 	cls
 	echo %header%
 	echo:

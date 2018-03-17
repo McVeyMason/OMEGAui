@@ -178,12 +178,12 @@ IF NOT "%perm%"=="%permfull%" (
 	echo.%ruser% >> %file%\Users\BLACKLIST\users.dat 
 	echo.%ruser% > %file%\Users\BLACKLIST\%ruser%.dat
 	cd %file%\Users\ALL\
-	findstr /v "%usern%:" %file%\Users\ALL\Userdat.dat > %file%\Users\ALL\Userdatgood.temp
+	findstr /v "%usern%:" %file%\Users\ALL\Userdat.dat > %file%\Users\ALL\Userdat.temp
 	del %file%\Users\ALL\Userdat.dat
-	ren Userdatgood.temp Userdat.dat
-	findstr /v "_%usern%_" %file%\Users\ALL\Users.dat > %file%\Users\ALL\Usersgood.temp
+	ren Userdat.temp Userdat.dat
+	findstr /v "_%usern%_" %file%\Users\ALL\Users.dat > %file%\Users\ALL\Users.temp
 	del %file%\Users\ALL\Users.dat
-	ren Usersgood.temp Users.dat
+	ren Users.temp Users.dat
 	cd %file%
 	echo Didn't expect that %ruser%, did you?
 	pause
