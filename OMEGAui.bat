@@ -2,21 +2,35 @@
 ::hope your using notepad++
 ::life tips:
 ::put quotes around all variables to prevent crashing
+::if it crashes check the parentheses 
 ::Thanks to all you on stack overflow
+::Please forgive my crappy spelling
 @echo off
 cls
 set "build=0.9.0"
 set "title=OMEGA %build%"
-set "header=OMEGAui version %build%"
+set "header=OMEGAui v%build%"
 ::sets file director to current directory
 set "file=%~dp0"
 ::sets real username to %username%
 set "ruser=%username%"
 title %title%
-color 03
-::sets color constants
-set "textf=36"
-set "textb=0"
+::tests if color is already set
+IF "%textf%"=="" (
+	IF "%textb%"=="" (
+		::sets initial color
+		color 03
+		::sets color constants
+		::textf is foreground color
+		set "textf=36"
+		::textb is background color
+		set "textb=0"
+		::textq is the question color
+		set "textq=32"
+		::texte is the error color
+		set "texte=91"
+	)
+)
 ::adds backlist file
 IF NOT EXIST %file%\Users\BLACKLIST\ md %file%\Users\BLACKLIST\
 ::exits for a blacklisted computer username 
@@ -65,9 +79,9 @@ IF "%loggedin%"=="y" (
 		cls
 		echo %header%
 		echo:
-		echo Error in current program
-		echo current program is set to %current%
-		pause >nul
+		echo [%texte%mError in current program.[%textb%;%textf%m
+		echo Current program is set to %current%
+		timeout 2 >nul
 		goto :start
 	)
 	goto :menu
@@ -80,7 +94,7 @@ cls
 echo %header%
 echo:
 cmd /C %file%\ProgramFiles\Symbol.cmd
-echo [32mAre you sure you want to run OMEGA? [%textb%;%textf%m
+echo [%textq%mAre you sure you want to run OMEGA? [%textb%;%textf%m
 echo This program can be dangerous to your computer.
 
 ::using simple boolean system
@@ -121,7 +135,7 @@ IF "%boolean%"=="n" exit
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :start
 --------------------------------------------------------------------------------------
@@ -183,7 +197,7 @@ set /a op=%op%+1
 
 
 echo:
-echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
@@ -298,7 +312,7 @@ IF "%choice%"=="debug" (
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------
@@ -317,7 +331,7 @@ echo 0. Exit.
 echo 1. Switch to User Manager.
 echo 2. Switch to Program Manager.
 echo:
-echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
@@ -348,7 +362,7 @@ IF "%choice%"=="1" (
 	echo:
 	echo Error invalid host
 	echo Host=%host%
-	pause >nul
+	timeout 2 >nul
 	goto :startup
 )
 IF "%choice%"=="2" (
@@ -372,13 +386,13 @@ IF "%choice%"=="2" (
 	echo:
 	echo Error invalid host
 	echo Host=%host%
-	pause >nul
+	timeout 2 >nul
 	goto :startup
 )
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :switch
 --------------------------------------------------------------------------------------
@@ -388,7 +402,7 @@ goto :switch
 cmd /C %file%\ProgramFiles\ProgramsStart\Option%menu%.cmd
 
 echo:
-echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
@@ -424,7 +438,7 @@ IF "%success%"=="exit" goto :menu
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :programs
 --------------------------------------------------------------------------------------
@@ -453,7 +467,7 @@ echo %op%. Run internet explorer fork bomb.
 set /a op=%op%+1
 echo %op%. Run file explorer fork bomb.
 echo:
-echo|set /p="[32mPlease enter your choice: [%textb%;%textf%m"
+echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
 
@@ -505,7 +519,7 @@ IF "%choice%"=="%op%" (
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :fork
 --------------------------------------------------------------------------------------
@@ -530,7 +544,7 @@ IF "%permnum%" GTR "4" (
 	echo 6. Open fork bomb folder.
 )
 echo:
-echo|set /p="[32mPlease enter your choice: [%textb%;%textf%m"
+echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
 IF "%choice%"=="0" (
@@ -601,7 +615,7 @@ IF "%permnum%" GTR "4" (
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :forkcopy
 --------------------------------------------------------------------------------------
@@ -635,7 +649,7 @@ set /a op=%op%+1
 echo %op%. \\SNOCDCR1 -Domain Controller
 
 echo:
-echo|set /p="[32mPlease enter your choice: [%textb%;%textf%m"
+echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
 set op=0
@@ -715,7 +729,7 @@ IF "%choice%"=="%op%" (
 cls
 echo OMEGAui build version %build%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :servers
 --------------------------------------------------------------------------------------------------
@@ -736,7 +750,7 @@ echo 5. #11227-JAMS
 echo 6. #741-Rhs
 
 echo:
-echo|set /p="[32mPlease enter your choice: [%textb%;%textf%m"
+echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
 
@@ -792,7 +806,7 @@ IF "%choice%"=="6" (
 cls
 echo OMEGAui build version %build%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :webserver
 --------------------------------------------------------------------------------------
@@ -802,8 +816,8 @@ goto :webserver
 cls
 echo %header%
 echo:
-echo ERROR: Please pay $0.99 to unlock this feature.
-timeout 3 >nul 
+echo [%texte%mERROR: Please pay $0.99 to unlock this feature.[%textb%;%textf%m
+timeout 2 >nul 
 echo JK, press any key to continue to the [31mc[32mo[33ml[34mo[35mr[36m s[37me[91ml[92me[93mc[94mt[95mo[96mr[97m.[%textb%;%textf%m
 pause >nul
 goto :bc
@@ -833,7 +847,7 @@ echo D = Light Purple
 echo E = Light Yellow
 echo F = Bright White
 echo:
-echo|set /p="Please select a background color:"
+echo|set /p="[%textq%mPlease select a background color:[%textb%;%textf%m"
 ::sets background color
 set "bc="
 set /p bc=
@@ -904,7 +918,7 @@ IF "%bc%"=="F" (
 cls
 echo %header%
 echo:
-echo [91mInvalid Color. Please use capitals. [%textb%;%textf%m
+echo [%texte%mInvalid Color. Please use capitals. [%textb%;%textf%m
 goto :bc
 --------------------------------------------------------------------------------------
 :fc
@@ -931,7 +945,7 @@ echo D = Light Purple
 echo E = Light Yellow
 echo F = Bright White
 echo:
-echo|set /p="Please enter a Foreground color:"
+echo|set /p="[%textq%mPlease enter a Foreground color:[%textb%;%textf%m"
 ::sets foreground color
 set "fc="
 set /p fc=
@@ -1002,7 +1016,7 @@ IF "%fc%"=="F" (
 cls
 echo %header%
 echo:
-echo [91mInvalid Color. Please use capitals. [%textb%;%textf%m
+echo [%texte%mInvalid Color. Please use capitals. [%textb%;%textf%m
 goto :fc
 --------------------------------------------------------------------------------------
 ::sets color to background color, foreground color
@@ -1020,7 +1034,7 @@ goto :menu
 cls
 echo %header%
 echo:
-echo [32mAre you sure you want to change your password?[%textb%;%textf%m
+echo [%textq%mAre you sure you want to change your password?[%textb%;%textf%m
 
 ::using simple boolean system
 set "boolean="
@@ -1032,7 +1046,7 @@ IF "%boolean%"=="n" goto :menu
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :password
 --------------------------------------------------------------------------------------
@@ -1041,7 +1055,7 @@ cls
 echo %header%
 echo:
 echo Type exit to exit.
-set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your password[%textb%;%textf%m' -AsSecureString ; ^
+set "psCommand=powershell -Command "$pword = read-host '[%textq%mPlease enter your password[%textb%;%textf%m' -AsSecureString ; ^
     $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
 		[System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
 for /f "usebackq delims=" %%p in (`%psCommand%`) do set "password=%%p" 
@@ -1059,7 +1073,7 @@ IF "exit"=="%password%" (
 cls
 echo %header%
 echo:
-echo [91mWrong password. [%textb%;%textf%m
+echo [%texte%mWrong password. [%textb%;%textf%m
 timeout 2 >nul
 goto :auth
 --------------------------------------------------------------------------------------
@@ -1067,14 +1081,14 @@ goto :auth
 cls
 echo %header%
 echo:
-echo Please enter new password:
+echo|set /p="[%textq%mPlease enter new password:[%textb%;%textf%m"
 set "npass0="
 set /p npass0=
 for /f "usebackq delims=" %%I in (`powershell "\"%npass0%\".toUpper()"`) do set "npass0=%%~I"
 cls
 echo %header%
 echo:
-echo Please reenter new password:
+echo|set /p"[%textq%mPlease reenter new password:[%textb%;%textf%m"
 set "npass1="
 set /p npass1=
 for /f "usebackq delims=" %%I in (`powershell "\"%npass1%\".toUpper()"`) do set "npass1=%%~I"
@@ -1084,7 +1098,7 @@ IF "%npass0%"=="%npass1%" (
 cls
 echo %header%
 echo:
-echo [91mPasswords do not match. Please try again. [%textb%;%textf%m
+echo [%texte%mPasswords do not match. Please try again. [%textb%;%textf%m
 timeout 2 >nul
 goto :change
 --------------------------------------------------------------------------------------

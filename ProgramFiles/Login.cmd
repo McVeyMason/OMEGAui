@@ -34,7 +34,7 @@ goto :logon
 cls
 echo %header%
 echo:
-echo [91mWrong username or password. [%textb%;%textf%m
+echo [%texte%mWrong username or password. [%textb%;%textf%m
 timeout 2 >nul
 goto :logon
 --------------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ IF "%boolean%"=="no" goto :creddefaut
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mInvalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :logon
 --------------------------------------------------------------------------------------
@@ -186,7 +186,6 @@ IF NOT "%perm%"=="%permfull%" (
 	ren Users.temp Users.dat
 	cd %file%
 	echo Didn't expect that %ruser%, did you?
-	pause
 	timeout 2 >nul
 	exit
 )
