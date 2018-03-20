@@ -79,7 +79,7 @@ IF "%loggedin%"=="y" (
 		cls
 		echo %header%
 		echo:
-		echo [%texte%mError in current program.[%textb%;%textf%m
+		echo [%texte%mError: Invalid current program. [%textb%;%textf%m
 		echo Current program is set to %current%
 		timeout 2 >nul
 		goto :start
@@ -135,7 +135,7 @@ IF "%boolean%"=="n" exit
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :start
 --------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ IF "%permnum%" EQU "5" (
 echo %op%.  Logout.
 set /a op=%op%+1
 ::all permissions
-echo %op%.  Refresh OMEGAui build version %build%.
+echo %op%.  Refresh %header%.
 set /a op=%op%+2
 ::all permissions
 echo %op%.  Open program selector.
@@ -312,7 +312,7 @@ IF "%choice%"=="debug" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------
@@ -360,7 +360,7 @@ IF "%choice%"=="1" (
 	cls
 	echo %header%
 	echo:
-	echo Error invalid host
+	echo [%texte%mError: Invalid host. [%textb%;%textf%m
 	echo Host=%host%
 	timeout 2 >nul
 	goto :startup
@@ -384,7 +384,7 @@ IF "%choice%"=="2" (
 	cls
 	echo %header%
 	echo:
-	echo Error invalid host
+	echo [%texte%mError: Invalid host. [%textb%;%textf%m
 	echo Host=%host%
 	timeout 2 >nul
 	goto :startup
@@ -392,7 +392,7 @@ IF "%choice%"=="2" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :switch
 --------------------------------------------------------------------------------------
@@ -438,7 +438,7 @@ IF "%success%"=="exit" goto :menu
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :programs
 --------------------------------------------------------------------------------------
@@ -519,7 +519,7 @@ IF "%choice%"=="%op%" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :fork
 --------------------------------------------------------------------------------------
@@ -615,7 +615,7 @@ IF "%permnum%" GTR "4" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :forkcopy
 --------------------------------------------------------------------------------------
@@ -625,7 +625,7 @@ goto :forkcopy
 set "op=0"
 
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo What server do you want to open?
 echo Options:
@@ -727,9 +727,9 @@ IF "%choice%"=="%op%" (
 	goto :servers
 )
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :servers
 --------------------------------------------------------------------------------------------------
@@ -737,7 +737,7 @@ goto :servers
 :webserver
 ::all seaches uses google search advanced options
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
 echo What server do you want to open?
 echo Options:
@@ -804,9 +804,9 @@ IF "%choice%"=="6" (
 )
 
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :webserver
 --------------------------------------------------------------------------------------
@@ -816,7 +816,7 @@ goto :webserver
 cls
 echo %header%
 echo:
-echo [%texte%mERROR: Please pay $0.99 to unlock this feature.[%textb%;%textf%m
+echo [%texte%mERROR: Please pay $0.99 to unlock this feature. [%textb%;%textf%m
 timeout 2 >nul 
 echo JK, press any key to continue to the [31mc[32mo[33ml[34mo[35mr[36m s[37me[91ml[92me[93mc[94mt[95mo[96mr[97m.[%textb%;%textf%m
 pause >nul
@@ -918,7 +918,7 @@ IF "%bc%"=="F" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid Color. Please use capitals. [%textb%;%textf%m
+echo [%texte%mError: Invalid Color. Please use capitals. [%textb%;%textf%m
 goto :bc
 --------------------------------------------------------------------------------------
 :fc
@@ -1016,7 +1016,7 @@ IF "%fc%"=="F" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid Color. Please use capitals. [%textb%;%textf%m
+echo [%texte%mError: Invalid Color. Please use capitals. [%textb%;%textf%m
 goto :fc
 --------------------------------------------------------------------------------------
 ::sets color to background color, foreground color
@@ -1046,7 +1046,7 @@ IF "%boolean%"=="n" goto :menu
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :password
 --------------------------------------------------------------------------------------
@@ -1073,7 +1073,7 @@ IF "exit"=="%password%" (
 cls
 echo %header%
 echo:
-echo [%texte%mWrong password. [%textb%;%textf%m
+echo [%texte%mError: Incorrect password. [%textb%;%textf%m
 timeout 2 >nul
 goto :auth
 --------------------------------------------------------------------------------------
@@ -1098,7 +1098,7 @@ IF "%npass0%"=="%npass1%" (
 cls
 echo %header%
 echo:
-echo [%texte%mPasswords do not match. Please try again. [%textb%;%textf%m
+echo [%texte%mError: Passwords do not match. Please try again. [%textb%;%textf%m
 timeout 2 >nul
 goto :change
 --------------------------------------------------------------------------------------
@@ -1109,9 +1109,9 @@ set permraw=%permraw: =%
 del %file%\Users\%user%\pass.dat
 echo.password=%npass0% > %file%\Users\%user%\pass.dat
 cd %file%\Users\ALL\
-findstr /v "%user%:" "Userdat.dat" > UserdatGood.temp
+findstr /v "%user%:" "Userdat.dat" > Userdat.temp
 del Userdat.dat
-ren UserdatGood.temp Userdat.dat
+ren Userdat.temp Userdat.dat
 cd %file%
 echo.%user%:%perm%,permnum=%permraw%,password=%npass0%,%creator% >> %file%\Users\ALL\Userdat.dat
 cls

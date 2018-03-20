@@ -161,7 +161,7 @@ IF "%choice%"=="4" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option! [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------
@@ -205,7 +205,7 @@ IF "%choice%"=="1" (
 	cls
 	echo %header%
 	echo:
-	echo [%texte%mError: invalid host.[%textb%;%textf%m
+	echo [%texte%mError: invalid host. [%textb%;%textf%m
 	echo Host=%host%
 	timeout 2 >nul
 	goto :startup
@@ -237,7 +237,7 @@ IF "%choice%"=="2" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :switch
 --------------------------------------------------------------------------------------
@@ -289,7 +289,7 @@ IF EXIST %file%\Users\%usern% (
 	cls
 	echo %header%
 	echo:
-	echo [%texte%mInvalid option! [%textb%;%textf%m
+	echo [%texte%mError: Invalid option. [%textb%;%textf%m
 	echo Aborting..
 	timeout 2 >nul
 	goto :menu
@@ -344,7 +344,7 @@ echo.password=%pass% > %file%\Users\%usern%\pass.dat
 echo.perm=%perm% > %file%\Users\%usern%\permfull.dat
 echo.%permnum% > %file%\Users\%usern%\permnum.dat
 echo.creator=%ruser% > %file%\Users\%usern%\creator.dat
-echo.%usern%:perm=%perm%,permnum=%permnum%,password=%pass%,creator=%ruser% >> %file%\Users\ALL\userdat.dat
+echo.%usern%:perm=%perm%,permnum=%permnum%,password=%pass%,creator=%ruser% >> %file%\Users\ALL\userdat.dat
 echo._%usern%_ >> %file%\Users\ALL\users.dat
 goto :menu
 --------------------------------------------------------------------------------------
@@ -429,7 +429,7 @@ IF "%boolean%"=="no" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option! [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 echo Aborting...
 timeout 2 >nul
 goto :delete
@@ -499,7 +499,7 @@ IF "%option%"=="3" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option! [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :logselect
 --------------------------------------------------------------------------------------
@@ -555,7 +555,7 @@ IF "%option%"=="2" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option! [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :logop
 --------------------------------------------------------------------------------------
@@ -584,7 +584,7 @@ IF "%option%"=="2" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option! [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 echo Aborting..
 timeout 2 >nul
 goto :logs
@@ -623,7 +623,7 @@ IF "%boolean%"=="no" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option! [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 echo Aborting..
 timeout 2 >nul
 goto :logs
@@ -690,7 +690,7 @@ IF "%boolean%"=="no" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option! [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 echo Aborting..
 timeout 2 >nul
 goto :dellogs
@@ -750,6 +750,11 @@ set /p pass=<%file%\Users\%usern%\pass.dat
 set /p permfull=<%file%\Users\%usern%\permfull.dat
 set /p permnum=<%file%\Users\%usern%\permnum.dat
 set /p creator=<%file%\Users\%usern%\creator.dat
+set pass=%pass: =%
+set permfull=%permfull: =%
+set permnum=%permnum: =%
+set creator=%creator: =%
+
 cls
 echo %header%
 echo:
@@ -774,7 +779,7 @@ IF "%option%"=="3" goto :changeperm
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :displayatt
 --------------------------------------------------------------------------------------
@@ -796,11 +801,14 @@ IF "%npass0%"=="EXIT" goto :displayatt
 cls
 echo %header%
 echo:
-echo|set /p"[%textq%mPlease reenter %usern%'s new password:[%textb%;%textf%m"
+echo Type exit to exit.
+echo:
+echo|set /p="[%textq%mPlease reenter %usern%'s new password:[%textb%;%textf%m"
 set "npass1="
 set /p npass1=
 for /f "usebackq delims=" %%I in (`powershell "\"%npass1%\".toUpper()"`) do set "npass1=%%~I"
 IF "%npass0%"=="%npass1%" (
+	set "npass=%npass0%"
 	goto :confirmpass
 )
 cls
@@ -814,6 +822,38 @@ goto :changepass
 cls
 echo %header%
 echo:
+echo [%textq%mAre you sure you want to change %usern%'s password to %npass%?[%textb%;%textf%m
+
+::using simple boolean system
+set "boolean="
+set /p boolean=
+
+IF "%boolean%"=="y" set "boolean=yes"
+IF "%boolean%"=="yes" (
+	del %file%\Users\%usern%\pass.dat
+	echo.password=%npass% > %file%\Users\%usern%\pass.dat
+	cd %file%\Users\ALL\
+	findstr /v "%usern%:" "Userdat.dat" > Userdat.temp
+	del Userdat.dat
+	ren Userdat.temp Userdat.dat
+	cd %file%
+	set permfull=%permfull:=%
+	echo.%usern%:%permfull%,permnum=%permnum%,password=%npass%,%creator% >> %file%\Users\ALL\Userdat.dat
+	cls
+	echo %header%
+	echo:
+	echo [92mPassword changed. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :displayatt
+)
+IF "%boolean%"=="no" goto :displayatt
+IF "%boolean%"=="n" goto :displayatt
+cls
+echo %header%
+echo:
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
+timeout 2 >nul
+goto :confirmpass
 --------------------------------------------------------------------------------------
 :changeperm
 cls

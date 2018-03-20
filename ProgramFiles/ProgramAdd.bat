@@ -72,7 +72,7 @@ IF "%loggedin%"=="y" (
 		cls
 		echo %header%
 		echo:
-		echo [%texte%mError in current program[%textb%;%textf%m
+		echo [%texte%mError: Invalid current program. [%textb%;%textf%m
 		echo Current program is set to %current%
 		timeout 2 >nul
 		goto :start
@@ -167,7 +167,7 @@ IF "%choice%"=="4" (
 cls
 echo %header%
 echo:
-echo [%texte%mWrong username or password. [%textb%;%textf%m
+echo [%texte%mError: Wrong username or password. [%textb%;%textf%m
 timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------
@@ -212,7 +212,7 @@ IF "%choice%"=="1" (
 	cls
 	echo %header%
 	echo:
-	echo [%texte%mError: Invalid host.[%textb%;%textf%m
+	echo [%texte%mError: Invalid host. [%textb%;%textf%m
 	echo Host=%host%
 	timeout 2 >nul
 	goto :startup
@@ -236,7 +236,7 @@ IF "%choice%"=="2" (
 	cls
 	echo %header%
 	echo:
-	echo [%texte%Error: Invalid host.[%textb%;%textf%m
+	echo [%texte%Error: Invalid host. [%textb%;%textf%m
 	echo Host=%host%
 	timeout 2 >nul
 	goto :startup
@@ -244,7 +244,7 @@ IF "%choice%"=="2" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option.[%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :switch
 --------------------------------------------------------------------------------------------------
@@ -283,7 +283,7 @@ IF "%nameA%"=="%nameB%" (
 cls
 echo %header%
 echo:
-echo [%texte%mError: names do not match.[%textb%;%textf%m
+echo [%texte%mError: Names do not match. [%textb%;%textf%m
 echo Please try again.
 timeout 2>nul
 goto :name
@@ -313,7 +313,7 @@ IF "%type%"=="4" goto :path
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option.[%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2>nul
 goto :type
 --------------------------------------------------------------------------------------
@@ -347,13 +347,13 @@ IF "%perm%" GTR "5" (
 	cls
 	echo %header%
 	echo:
-	echo [%texte%mError: Perition level to high.[%textb%;%textf%m
+	echo [%texte%mError: Perition level to high. [%textb%;%textf%m
 )
 IF "%perm%" LSS "1" (
 	cls
 	echo %header%
 	echo:
-	echo [%texte%mError: Perition level to low.[%textb%;%textf%m
+	echo [%texte%mError: Perition level to low. [%textb%;%textf%m
 )
 
 set /a perm=%perm%-1
@@ -413,7 +413,7 @@ IF "%boolean%"=="no" goto :menu
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option.[%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :confirm
 --------------------------------------------------------------------------------------
@@ -442,8 +442,8 @@ IF "%type%"=="4" goto :pname
 cls
 echo %header%
 echo:
-echo Invalid option.
-timeout 2>nul
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
+timeout 2 >nul
 goto :pdelete
 --------------------------------------------------------------------------------------
 :pname
@@ -467,7 +467,7 @@ IF "%ERRORLEVEL%"=="1" (
 	cls
 	echo %header%
 	echo:
-	echo [%texte%mError: Program does not exist.[%textb%;%textf%m
+	echo [%texte%mError: Program does not exist. [%textb%;%textf%m
 	timeout 2 >nul
 	goto :pname
 )
@@ -526,7 +526,7 @@ IF "%boolean%"=="no" (
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option.[%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2>nul
 goto :confirmdel
 

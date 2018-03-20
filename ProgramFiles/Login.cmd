@@ -34,7 +34,7 @@ goto :logon
 cls
 echo %header%
 echo:
-echo [%texte%mWrong username or password. [%textb%;%textf%m
+echo [%texte%mError: Wrong username or password. [%textb%;%textf%m
 timeout 2 >nul
 goto :logon
 --------------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ IF "%boolean%"=="no" goto :creddefaut
 cls
 echo %header%
 echo:
-echo [%texte%mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :logon
 --------------------------------------------------------------------------------------
