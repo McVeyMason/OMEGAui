@@ -4,16 +4,29 @@
 cls
 set "build=0.5"
 set "title=OMEGA USER MANAGER %build%"
-set "header=User Manager Version %build%"
+set "header=User Manager v%build%"
 set "file=%~dp0"
 cd %file%
 cd..
 set "file=%cd%"
 set "ruser=%username%"
 title %title%
-color 0c
-set "textf=91"
-set "textb=0"
+::tests if color is already set
+IF "%textf%"=="" (
+	IF "%textb%"=="" (
+		::sets initial color
+		color 03
+		::sets color constants
+		::textf is foreground color
+		set "textf=36"
+		::textb is background color
+		set "textb=0"
+		::textq is the question color
+		set "textq=32"
+		::texte is the error color
+		set "texte=91"
+	)
+)
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%username%.dat exit
 ::sets the current variable
@@ -59,9 +72,9 @@ IF "%loggedin%" == "y" (
 		cls
 		echo %header%
 		echo:
-		echo Error in current program
-		echo current program is set to %current%
-		pause >nul
+		echo [%texte%mError in current program.[%textb%;%textf%m
+		echo Current program is set to %current%
+		timeout 2 >nul
 		goto :start
 	)
 	goto :menu
@@ -125,7 +138,7 @@ echo 2. Delete user.
 echo 3. View user logs.
 echo 4. Change a user.
 echo:
-echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
@@ -142,14 +155,14 @@ IF "%choice%"=="3" (
 	goto :logs
 )
 IF "%choice%"=="4" (
-	goto :change
+	goto :changeuser
 )
 
 cls
 echo %header%
 echo:
-echo Invalid option!
-pause >nul
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
+timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
@@ -158,19 +171,21 @@ goto :menu
 cls
 echo %header%
 echo:
-echo What would you like to do?
+echo [%textq%mWhat would you like to do?[%textb%;%textf%m
 echo 0. Exit.
 echo 1. Switch to OMEGAui.
 echo 2. Switch to Program Manager.
 echo:
-echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
 IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
-	set "current=EXIT"
-	echo.EXIT > %file%\current.temp
+	IF NOT "%host%"=="USER" (
+		set "current=EXIT"
+		echo.EXIT > %file%\current.temp
+	)
 	exit
 )
 IF "%choice%"=="1" (
@@ -192,9 +207,9 @@ IF "%choice%"=="1" (
 	cls
 	echo %header%
 	echo:
-	echo Error invalid host
+	echo [%texte%mError: invalid host. [%textb%;%textf%m
 	echo Host=%host%
-	pause >nul
+	timeout 2 >nul
 	goto :startup
 )
 IF "%choice%"=="2" (
@@ -216,15 +231,15 @@ IF "%choice%"=="2" (
 	cls
 	echo %header%
 	echo:
-	echo Error invalid host
+	echo [%texte%mError: invalid host.[%textb%;%textf%m
 	echo Host=%host%
-	pause >nul
+	timeout 2 >nul
 	goto :startup
 )
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :switch
 --------------------------------------------------------------------------------------
@@ -234,7 +249,7 @@ cls
 echo %header%
 echo:
 echo Type exit to exit.
-echo|set /p="Please enter username of the new user:"
+echo|set /p="[%textq%mPlease enter username of the new user:[%textb%;%textf%m"
 set "usern="
 set /p usern=
 IF %usern%==exit (
@@ -246,7 +261,7 @@ IF EXIST %file%\Users\%usern% (
 	echo %header%
 	echo:
 	echo User %usern% already exists.
-	echo Are you sure you want to continue?
+	echo [%textq%mAre you sure you want to continue?[%textb%;%textf%m
 	set "boolean="
 	set /p boolean=
 	
@@ -270,33 +285,51 @@ IF EXIST %file%\Users\%usern% (
 		echo:
 		echo Canceled.
 		set "usern="
-		timeout 1 >nul
+		timeout 2 >nul
 		goto :menu
 	)
 	cls
 	echo %header%
 	echo:
-	echo Invalid option!
+	echo [%texte%mError: Invalid option. [%textb%;%textf%m
 	echo Aborting..
-	timeout 1 >nul
+	timeout 2 >nul
 	goto :menu
-) ELSE goto :createcont
+) 
+goto :createcont
 --------------------------------------------------------------------------------------
 :createcont
 
 cls
 echo %header%
 echo:
-echo|set /p="Please enter the password of user %usern%:"
+echo|set /p="[%textq%mPlease enter the password of user %usern%:[%textb%;%textf%m"
 set "pass="
 set /p pass=
 
 cls
 echo %header%
 echo:
-echo|set /p="Please enter the permition level of user %usern%(1-5):"
+echo|set /p="[%textq%mPlease enter the permition level of user %usern%(1-5):[%textb%;%textf%m"
 set "perm="
 set /p perm=
+
+IF "%perm%" GTR "5" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Perition level to high. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :createcont
+)
+IF "%perm%" LSS "1" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Perition level to low. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :createcont
+)
 
 set perm=%perm: =%
 set pass=%pass: =%
@@ -330,33 +363,37 @@ echo.password=%pass% > %file%\Users\%usern%\pass.dat
 echo.perm=%perm% > %file%\Users\%usern%\permfull.dat
 echo.%permnum% > %file%\Users\%usern%\permnum.dat
 echo.creator=%ruser% > %file%\Users\%usern%\creator.dat
-echo.%usern%:perm=%perm%,permnum=%permnum%,password=%pass%,creator=%ruser% >> %file%\Users\ALL\userdat.dat
+echo.%usern%:perm=%perm%,permnum=%permnum%,password=%pass%,creator=%ruser% >> %file%\Users\ALL\userdat.dat
 echo._%usern%_ >> %file%\Users\ALL\users.dat
 goto :menu
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
 :delete
+::delete user from the database
 cls
 echo %header%
 echo:
 echo Users:
 echo The username is between the underscores.
 echo:
+::prints all users
 type %file%\Users\ALL\users.dat
 echo:
 echo Type exit to exit.
-echo|set /p="Please enter the username of the user that you want to delete:"
+echo|set /p="[%textq%mPlease enter the username of the user that you want to delete:[%textb%;%textf%m"
 set "usern="
 set /p usern=
 set usern=%usern: =%
-IF "%usern%"=="exit" (
+
+for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I" 
+IF "%usern%"=="EXIT" (
 	goto :menu
 )
 IF NOT EXIST %file%\Users\%usern% (
 	cls
 	echo %header%
 	echo:
-	echo The user you entered does not exist.
+	echo [%texte%mError: The user you entered does not exist.[%textb%;%textf%m
 	timeout 2 >nul
 	goto :delete
 )
@@ -364,7 +401,7 @@ IF "%usern%"==" =" (
 	cls
 	echo %header%
 	echo:
-	echo The user you entered does not exist.
+	echo [%texte%mError: The user you entered does not exist.[%textb%;%textf%m
 	timeout 2 >nul
 	goto :delete
 )
@@ -372,14 +409,14 @@ IF "%usern%"=="" (
 	cls
 	echo %header%
 	echo:
-	echo The user you entered does not exist.
+	echo [%texte%mError: The user you entered does not exist.[%textb%;%textf%m
 	timeout 2 >nul
 	goto :delete
 )
 cls
 echo %header%
 echo:
-echo Are you sure that you want to delete %usern% from the database?
+echo [%textq%mAre you sure that you want to delete %usern% from the database?[%textb%;%textf%m
 
 set "boolean="
 set /p boolean=
@@ -411,9 +448,9 @@ IF "%boolean%"=="no" (
 cls
 echo %header%
 echo:
-echo Invalid option!
-echo Aborting..
-timeout 1 >nul
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
+echo Aborting...
+timeout 2 >nul
 goto :delete
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
@@ -430,7 +467,7 @@ echo The username is between the underscores.
 echo:
 type %file%\Users\ALL\users.dat
 echo:
-echo|set /p="Please enter the username of the user that logs you want to view or delete:"
+echo|set /p="[%textq%mPlease enter the username of the user that logs you want to view or delete:[%textb%;%textf%m"
 set "usern="
 set /p usern=
 
@@ -441,10 +478,11 @@ IF NOT EXIST %file%\Users\%usern% (
 	cls
 	echo %header%
 	echo:
-	echo The user you entered does not exist.
+	echo [%texte%mError: The user you entered does not exist.[%textb%;%textf%m
 	timeout 2 >nul
 	goto :logs
-) ELSE goto :logselect
+)
+goto :logselect
 --------------------------------------------------------------------------------------
 :logselect
 ::show logs and ask what to do with them
@@ -455,13 +493,13 @@ echo User %usern% Logs:
 echo:
 type %file%\Users\%usern%\logs\ALL.dat
 echo:
-echo What would you like to do with these logs?
+echo [%textq%mWhat would you like to do with these logs?[%textb%;%textf%m
 echo 0. Exit.
 echo 1. Change user.
 echo 2. View logs.
 echo 3. Delete logs.
 echo:
-echo echo|set /p="Please enter the your choice:"
+echo echo|set /p="[%textq%mPlease enter the your choice:[%textb%;%textf%m"
 set "option="
 set /p option=
 
@@ -480,8 +518,8 @@ IF "%option%"=="3" (
 cls
 echo %header%
 echo:
-echo Invalid option!
-pause >nul
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
+timeout 2 >nul
 goto :logselect
 --------------------------------------------------------------------------------------
 :logview
@@ -489,11 +527,12 @@ goto :logselect
 cls
 echo %header%
 echo:
-echo User %usern% Logs:
+echo User %usern%'s Logs:
 echo:
+::Prints all of the users logs
 type %file%\Users\%usern%\logs\ALL.dat
 echo:
-echo|set /p="Please enter the log name of the log that you want to view(ex. 2000-01-01_00-00-00):"
+echo|set /p="[%textq%mPlease enter the log name of the log that you want to view(ex. 2000-01-01_00-00-00):[%textb%;%textf%m"
 set "log="
 set /p log=
 
@@ -515,11 +554,11 @@ echo:
 type %file%\Users\%usern%\logs\%log%.dat
 echo:
 echo:
-echo What would you like to do now?
+echo [%textq%mWhat would you like to do now?[%textb%;%textf%m
 echo 0. Back.
 echo 1. View another log.
 echo 2. View another users logs.
-echo|set /p="please enter you choice:"
+echo|set /p="[%textq%mplease enter you choice:[%textb%;%textf%m"
 set "option="
 set /p option=
 
@@ -535,8 +574,8 @@ IF "%option%"=="2" (
 cls
 echo %header%
 echo:
-echo Invalid option!
-pause >nul
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
+timeout 2 >nul
 goto :logop
 --------------------------------------------------------------------------------------
 :dellogs
@@ -544,11 +583,11 @@ goto :logop
 cls
 echo %header%
 echo:
-echo What would you like to do with %usern%'s logs?
+echo [%textq%mWhat would you like to do with %usern%'s logs?[%textb%;%textf%m
 echo 0. Back.
 echo 1. Delete all.
 echo 2. Delete 1.
-echo|set /p="please enter you choice:"
+echo|set /p="[%textq%mPlease enter you choice:[%textb%;%textf%m"
 set "option="
 set /p option=
 
@@ -564,9 +603,9 @@ IF "%option%"=="2" (
 cls
 echo %header%
 echo:
-echo Invalid option!
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 echo Aborting..
-timeout 1 >nul
+timeout 2 >nul
 goto :logs
 --------------------------------------------------------------------------------------
 :delall
@@ -574,7 +613,7 @@ goto :logs
 cls
 echo %header%
 echo:
-echo Are you sure that you want to delete all of %usern%'s logs from the database?
+echo [%textq%mAre you sure that you want to delete all of %usern%'s logs from the database?[%textb%;%textf%m
 
 set "boolean="
 set /p boolean=
@@ -589,7 +628,7 @@ IF "%boolean%"=="yes" (
 	echo %header%
 	echo:
 	echo Deleted.
-	timeout 1 >nul
+	timeout 2 >nul
 	goto :logs
 )
 IF "%boolean%"=="no" (
@@ -597,15 +636,15 @@ IF "%boolean%"=="no" (
 	echo %header%
 	echo:
 	echo Canceled.
-	timeout 1 >nul
+	timeout 2 >nul
 	goto :logs
 )
 cls
 echo %header%
 echo:
-echo Invalid option!
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 echo Aborting..
-timeout 1 >nul
+timeout 2 >nul
 goto :logs
 --------------------------------------------------------------------------------------
 :dellog
@@ -619,7 +658,7 @@ echo User %usern% Logs:
 echo:
 type %file%\Users\%usern%\logs\ALL.dat
 echo:
-echo|set /p="Please enter the log name of the log that you want to delete(ex. 2000-01-01_00-00-00):"
+echo|set /p="[%textq%mPlease enter the log name of the log that you want to delete(ex. 2000-01-01_00-00-00):[%textb%;%textf%m"
 set "log="
 set /p log=
 
@@ -638,7 +677,7 @@ IF NOT EXIST %file%\Users\%usern%\logs\%log%.dat (
 cls
 echo %header%
 echo:
-echo Are you sure that you want to delete log %log%?
+echo [%textq%mAre you sure that you want to delete log %log%?[%textb%;%textf%m
 
 set "boolean="
 set /p boolean=
@@ -653,6 +692,11 @@ IF "%boolean%"=="yes" (
 	del ALL.dat
 	ren ALL.temp ALL.dat
 	cd %file%
+	cls
+	echo %header%
+	echo:
+	echo Log deleted.
+	timeout 2 >nul
 	goto :dellogs
 )
 IF "%boolean%"=="no" (
@@ -660,16 +704,262 @@ IF "%boolean%"=="no" (
 	echo %header%
 	echo:
 	echo Canceled.
-	timeout 1 >nul
+	timeout 2 >nul
 	goto :dellogs
 cls
 echo %header%
 echo:
-echo Invalid option!
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 echo Aborting..
-timeout 1 >nul
+timeout 2 >nul
 goto :dellogs
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
-:change
+:changeuser
+cls
+echo %header%
+echo:
+echo Users:
+echo The username is between the underscores.
+echo:
+::prints all users
+type %file%\Users\ALL\users.dat
+echo:
+echo Type exit to exit.
+echo|set /p="[%textq%mPlease enter the username of the user that you want to edit:[%textb%;%textf%m"
+set "usern="
+set /p usern=
 
+set usern=%usern: =%
+for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I" 
+IF "%usern%"=="EXIT" (
+	goto :menu
+)
+IF NOT EXIST %file%\Users\%usern% (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: The user you entered does not exist.[%textb%;%textf%m
+	timeout 2 >nul
+	goto :changeuser
+)
+IF "%usern%"==" =" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: The user you entered does not exist.[%textb%;%textf%m
+	timeout 2 >nul
+	goto :changeuser
+)
+IF "%usern%"=="" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: The user you entered does not exist.[%textb%;%textf%m
+	timeout 2 >nul
+	goto :changeuser
+)
+goto :displayatt
+--------------------------------------------------------------------------------------
+:displayatt
+::displays the users attributes  
+
+::setting all variables to dat files
+set /p pass=<%file%\Users\%usern%\pass.dat
+set /p permfull=<%file%\Users\%usern%\permfull.dat
+set /p permnum=<%file%\Users\%usern%\permnum.dat
+set /p creator=<%file%\Users\%usern%\creator.dat
+set pass=%pass: =%
+set permfull=%permfull: =%
+set permnum=%permnum: =%
+set creator=%creator: =%
+
+cls
+echo %header%
+echo:
+echo User %usern%:
+echo %usern%'s password is "%pass%"
+echo %usern%'s permisson level is "%permfull%"
+echo:
+echo [%textq%mWhat would you like to change?[%textb%;%textf%m
+echo 0. Exit.
+echo 1. Switch user.
+echo 2. Change %usern%'s password.
+echo 3. Change %usern%'s permisson level.
+echo|set /p="[%textq%mPlease enter you choice:[%textb%;%textf%m"
+set "option="
+set /p option=
+
+IF "%option%"=="0" goto :menu
+IF "%option%"=="1" goto :changeuser
+IF "%option%"=="2" goto :changepass
+IF "%option%"=="3" goto :changeperm
+
+cls
+echo %header%
+echo:
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
+timeout 2 >nul
+goto :displayatt
+--------------------------------------------------------------------------------------
+:changepass
+::change password
+cls
+echo %header%
+echo:
+echo Type exit to exit.
+echo:
+echo %usern%'s password is "%pass%"
+echo|set /p="[%textq%mPlease enter %usern%'s new password:[%textb%;%textf%m"
+set "npass0="
+set /p npass0=
+
+for /f "usebackq delims=" %%I in (`powershell "\"%npass0%\".toUpper()"`) do set "npass0=%%~I"
+IF "%npass0%"=="EXIT" goto :displayatt
+::reenter password
+cls
+echo %header%
+echo:
+echo Type exit to exit.
+echo:
+echo|set /p="[%textq%mPlease reenter %usern%'s new password:[%textb%;%textf%m"
+set "npass1="
+set /p npass1=
+for /f "usebackq delims=" %%I in (`powershell "\"%npass1%\".toUpper()"`) do set "npass1=%%~I"
+IF "%npass0%"=="%npass1%" (
+	set "npass=%npass0%"
+	goto :confirmpass
+)
+cls
+echo %header%
+echo:
+echo [%texte%mPasswords do not match. Please try again. [%textb%;%textf%m
+timeout 2 >nul
+goto :changepass
+--------------------------------------------------------------------------------------
+:confirmpass
+cls
+echo %header%
+echo:
+echo [%textq%mAre you sure you want to change %usern%'s password to %npass%? [%textb%;%textf%m
+
+::using simple boolean system
+set "boolean="
+set /p boolean=
+
+IF "%boolean%"=="y" set "boolean=yes"
+IF "%boolean%"=="yes" (
+	del %file%\Users\%usern%\pass.dat
+	echo.password=%npass% > %file%\Users\%usern%\pass.dat
+	cd %file%\Users\ALL\
+	findstr /v "%usern%:" "Userdat.dat" > Userdat.temp
+	del Userdat.dat
+	ren Userdat.temp Userdat.dat
+	cd %file%
+	set permfull=%permfull:=%
+	echo.%usern%:%permfull%,permnum=%permnum%,password=%npass%,%creator% >> %file%\Users\ALL\Userdat.dat
+	cls
+	echo %header%
+	echo:
+	echo [92mPassword changed. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :displayatt
+)
+IF "%boolean%"=="no" goto :displayatt
+IF "%boolean%"=="n" goto :displayatt
+cls
+echo %header%
+echo:
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
+timeout 2 >nul
+goto :confirmpass
+--------------------------------------------------------------------------------------
+:changeperm
+cls
+echo %header%
+echo:
+echo Type exit to exit.
+echo:
+echo|set /p="[%textq%mWhat would you like to change %usern%'s permisson level to (1-5):[%textb%;%textf%m"
+set "nperm="
+set /p nperm=
+
+IF "%nperm%" GTR "5" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Perition level to high. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :changeperm
+)
+IF "%nperm%" LSS "1" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Perition level to low. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :changeperm
+)
+goto :confirmperm
+--------------------------------------------------------------------------------------
+:confirmperm
+cls
+echo %header%
+echo:
+echo [%textq%mAre you sure you want to change %usern%'s permission level to %nperm%? [%textb%;%textf%m
+
+::using simple boolean system
+set "boolean="
+set /p boolean=
+
+IF "%boolean%"=="no" goto :displayatt
+IF "%boolean%"=="n" goto :displayatt
+
+IF "%boolean%"=="y" set "boolean=yes"
+IF NOT "%boolean%"=="yes" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Invalid option. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :confirmperm
+)
+
+set nperm=%nperm: =%
+set "npermnum=%nperm%"
+::anti forge
+IF "%npermnum%"=="1" (
+	set "npermnum="
+)
+IF "%npermnum%"=="2" (
+	set "npermnum="
+)
+IF "%npermnum%"=="3" (
+	set "npermnum="
+)
+IF "%npermnum%"=="4" (
+	set "npermnum="
+)
+IF "%npermnum%"=="5" (
+	set "npermnum="
+)
+
+del %file%\Users\%usern%\permfull.dat
+del %file%\Users\%usern%\permnum.dat
+echo.perm=%nperm% > %file%\Users\%usern%\permfull.dat
+echo.%npermnum% > %file%\Users\%usern%\permnum.dat
+cd %file%\Users\ALL\
+findstr /v "%usern%:" "Userdat.dat" > Userdat.temp
+del Userdat.dat
+ren Userdat.temp Userdat.dat
+cd %file%
+echo.%usern%:perm=%nperm%,permnum=%npermnum%,%pass%,%creator% >> %file%\Users\ALL\Userdat.dat
+cls
+echo %header%
+echo:
+echo [92mPermission level changed. [%textb%;%textf%m
+timeout 2 >nul
+goto :displayatt
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------

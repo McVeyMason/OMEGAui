@@ -3,7 +3,7 @@
 @echo off
 cls
 set "build=0.5"
-set "title=OMEGA PROGRAM MANAGER %build%"
+set "title=OMEGA PROGRAM MANAGER v%build%"
 set "header=Program Manager Version %build%"
 set "file=%~dp0"
 cd %file%
@@ -11,9 +11,22 @@ cd..
 set "file=%cd%"
 set "ruser=%username%"
 title %title%
-color 0c
-set "textf=91"
-set "textb=0"
+::tests if color is already set
+IF "%textf%"=="" (
+	IF "%textb%"=="" (
+		::sets initial color
+		color 03
+		::sets color constants
+		::textf is foreground color
+		set "textf=36"
+		::textb is background color
+		set "textb=0"
+		::textq is the question color
+		set "textq=32"
+		::texte is the error color
+		set "texte=91"
+	)
+)
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%username%.dat exit
 ::sets the current variable
@@ -59,9 +72,9 @@ IF "%loggedin%"=="y" (
 		cls
 		echo %header%
 		echo:
-		echo Error in current program
-		echo current program is set to %current%
-		pause
+		echo [%texte%mError: Invalid current program. [%textb%;%textf%m
+		echo Current program is set to %current%
+		timeout 2 >nul
 		goto :start
 	)
 	goto :menu
@@ -119,14 +132,14 @@ exit
 cls
 echo %header%
 echo:
-echo Please select an option.
+echo What would you like to do.
 echo 0. Switch programs or exit.
 echo 1. Add a program.
-echo 2. Remove a program. (WIP)
-echo 3. Add a section.
+echo 2. Remove a program.
+echo 3. Add a section. (WIP)
 echo 4. Remove a section. (WIP)
 echo:
-echo|set /p="Please enter your choice:"
+echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
@@ -154,7 +167,7 @@ IF "%choice%"=="4" (
 cls
 echo %header%
 echo:
-echo [91mWrong username or password. [%textb%;%textf%m
+echo [%texte%mError: Wrong username or password. [%textb%;%textf%m
 timeout 2 >nul
 goto :menu
 --------------------------------------------------------------------------------------
@@ -164,20 +177,22 @@ goto :menu
 cls
 echo %header%
 echo:
-echo What would you like to do?
+echo [%textq%mWhat would you like to do?[%textb%;%textf%m
 echo 0. Exit.
 echo 1. Switch to OMEGAui.
 echo 2. Switch to User Manager.
 echo:
-echo|set /p="[32mPlease enter your choice:[%textb%;%textf%m"
+echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
 set "current=EXIT"
 IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
-	set "current=EXIT"
-	echo.EXIT > %file%\current.temp
+	IF NOT "%host%"=="PROGRAM" (
+		set "current=EXIT"
+		echo.EXIT > %file%\current.temp
+	)
 	exit
 )
 IF "%choice%"=="1" (
@@ -199,9 +214,9 @@ IF "%choice%"=="1" (
 	cls
 	echo %header%
 	echo:
-	echo Error invalid host
+	echo [%texte%mError: Invalid host. [%textb%;%textf%m
 	echo Host=%host%
-	pause >nul
+	timeout 2 >nul
 	goto :startup
 )
 IF "%choice%"=="2" (
@@ -223,15 +238,15 @@ IF "%choice%"=="2" (
 	cls
 	echo %header%
 	echo:
-	echo Error invalid host
+	echo [%texte%Error: Invalid host. [%textb%;%textf%m
 	echo Host=%host%
-	pause >nul
+	timeout 2 >nul
 	goto :startup
 )
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :switch
 --------------------------------------------------------------------------------------------------
@@ -245,26 +260,24 @@ echo %header%
 echo:
 echo Type exit to exit.
 echo:
-echo|set /p="What is the name of this program:"
+echo|set /p="[%textq%mWhat is the name of this program:[%textb%;%textf%m"
 set "nameA="
 set /p nameA=
 
 for /f "usebackq delims=" %%I in (`powershell "\"%nameA%\".toUpper()"`) do set "nameA=%%~I" 
-
+IF "%nameA%"=="EXIT" goto :menu
 ::verify name
 cls
 echo %header%
 echo:
 echo Type exit to exit.
 echo:
-echo|set /p="Please renter the name:"
+echo|set /p="[%textq%mPlease renter the name:[%textb%;%textf%m"
 set "nameB="
 set /p nameB=
 
 for /f "usebackq delims=" %%I in (`powershell "\"%nameB%\".toUpper()"`) do set "nameB=%%~I" 
-
-IF "%nameA%"=="exit" exit
-IF "%nameB%"=="exit" exit
+IF "%nameB%"=="EXIT" goto :menu
 IF "%nameA%"=="%nameB%" (
 	set "name=%nameA%"
 	goto :type
@@ -272,8 +285,8 @@ IF "%nameA%"=="%nameB%" (
 cls
 echo %header%
 echo:
-echo ERROR:Names do not match.
-echo Pleas try again.
+echo [%texte%mError: Names do not match. [%textb%;%textf%m
+echo Please try again.
 timeout 2>nul
 goto :name
 --------------------------------------------------------------------------------------
@@ -288,7 +301,7 @@ echo 1.  Browser.
 echo 2.  Game.
 echo 3.  Utility.
 echo 4.  Other.
-echo|set /p="What type is %name%:"
+echo|set /p="[%textq%mWhat type is %name%:[%textb%;%textf%m"
 set "type="
 set /p type=
 
@@ -302,7 +315,7 @@ IF "%type%"=="4" goto :path
 cls
 echo %header%
 echo:
-echo Invalid option.
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2>nul
 goto :type
 --------------------------------------------------------------------------------------
@@ -313,7 +326,7 @@ echo %header%
 echo:
 echo Type exit to exit.
 echo:
-echo|set /p="Please type the file path for %name%:"
+echo|set /p="[%textq%mPlease type the file path for %name%:[%textb%;%textf%m"
 set "path="
 set /p path=
 
@@ -327,11 +340,28 @@ echo %header%
 echo:
 echo Type exit to exit.
 echo:
-echo|set /p="Please type the requred permission level for %name%(1-4):"
+echo|set /p="[%textq%mPlease type the requred permission level for %name%(1-5):[%textb%;%textf%m"
 set "perm="
 set /p perm=
 
 IF "%perm%"=="exit" goto :type
+IF "%perm%" GTR "5" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Perition level to high. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :perm
+)
+IF "%perm%" LSS "1" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Perition level to low. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :perm
+)
+
 set /a perm=%perm%-1
 goto :confirm
 --------------------------------------------------------------------------------------
@@ -340,10 +370,10 @@ goto :confirm
 cls
 echo %header%
 echo:
-echo Are you sure you want to add program %name%?
 echo Path=%path%.
 echo Type=%type%.
 echo Perition greater than %perm%.
+echo [%textq%mAre you sure you want to add program %name%?[%textb%;%textf%m
 
 set "boolean="
 set /p boolean=
@@ -389,7 +419,7 @@ IF "%boolean%"=="no" goto :menu
 cls
 echo %header%
 echo:
-echo Invalid option.
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :confirm
 --------------------------------------------------------------------------------------
@@ -405,7 +435,7 @@ echo 1.  Browser.
 echo 2.  Game.
 echo 3.  Utility.
 echo 4.  Other.
-echo|set /p="What type of program do you want to delete:"
+echo|set /p="[%textq%mWhat type of program do you want to delete:[%textb%;%textf%m"
 set "type="
 set /p type=
 
@@ -418,8 +448,8 @@ IF "%type%"=="4" goto :pname
 cls
 echo %header%
 echo:
-echo Invalid option.
-timeout 2>nul
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
+timeout 2 >nul
 goto :pdelete
 --------------------------------------------------------------------------------------
 :pname
@@ -432,7 +462,7 @@ type %file%\ProgramFiles\ProgramsStart\Programs%type%.dat
 echo:
 echo Type name without underscores.
 echo Type exit to exit.
-echo|set /p="What program would you like to delete:"
+echo|set /p="[%textq%mWhat program would you like to delete:[%textb%;%textf%m"
 set "name="
 set /p name=
 
@@ -443,11 +473,10 @@ IF "%ERRORLEVEL%"=="1" (
 	cls
 	echo %header%
 	echo:
-	echo Invalid name.
+	echo [%texte%mError: Program does not exist. [%textb%;%textf%m
 	timeout 2 >nul
 	goto :pname
 )
-pause
 goto :confirmdel
 --------------------------------------------------------------------------------------
 :confirmdel
@@ -455,7 +484,7 @@ goto :confirmdel
 cls
 echo %header%
 echo:
-echo Are you sure you want to delete program %name%?
+echo [%textq%mAre you sure you want to delete program %name%?[%textb%;%textf%m
 
 set "boolean="
 set /p boolean=
@@ -489,7 +518,7 @@ IF "%boolean%"=="yes" (
 	echo %header%
 	echo:
 	echo Done!
-	pause 
+	timeout 2 >nul
 	goto :menu
 )
 IF "%boolean%"=="no" (
@@ -503,7 +532,7 @@ IF "%boolean%"=="no" (
 cls
 echo %header%
 echo:
-echo Invalid option.
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2>nul
 goto :confirmdel
 
