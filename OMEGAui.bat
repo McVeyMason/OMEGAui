@@ -337,8 +337,10 @@ set /p choice=
 
 IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
-	set "current=EXIT"
-	echo.EXIT > %file%\current.temp
+	IF NOT "%host%"=="OMEGA" (
+		set "current=EXIT"
+		echo.EXIT > %file%\current.temp
+	)
 	exit
 )
 IF "%choice%"=="1" (

@@ -182,8 +182,10 @@ set /p choice=
 
 IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
-	set "current=EXIT"
-	echo.EXIT > %file%\current.temp
+	IF NOT "%host%"=="USER" (
+		set "current=EXIT"
+		echo.EXIT > %file%\current.temp
+	)
 	exit
 )
 IF "%choice%"=="1" (
@@ -311,6 +313,23 @@ echo:
 echo|set /p="[%textq%mPlease enter the permition level of user %usern%(1-5):[%textb%;%textf%m"
 set "perm="
 set /p perm=
+
+IF "%perm%" GTR "5" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Perition level to high. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :createcont
+)
+IF "%perm%" LSS "1" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Perition level to low. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :createcont
+)
 
 set perm=%perm: =%
 set pass=%pass: =%
@@ -822,7 +841,7 @@ goto :changepass
 cls
 echo %header%
 echo:
-echo [%textq%mAre you sure you want to change %usern%'s password to %npass%?[%textb%;%textf%m
+echo [%textq%mAre you sure you want to change %usern%'s password to %npass%? [%textb%;%textf%m
 
 ::using simple boolean system
 set "boolean="
@@ -859,5 +878,88 @@ goto :confirmpass
 cls
 echo %header%
 echo:
+echo Type exit to exit.
+echo:
+echo|set /p="[%textq%mWhat would you like to change %usern%'s permisson level to (1-5):[%textb%;%textf%m"
+set "nperm="
+set /p nperm=
+
+IF "%nperm%" GTR "5" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Perition level to high. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :changeperm
+)
+IF "%nperm%" LSS "1" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Perition level to low. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :changeperm
+)
+goto :confirmperm
+--------------------------------------------------------------------------------------
+:confirmperm
+cls
+echo %header%
+echo:
+echo [%textq%mAre you sure you want to change %usern%'s permission level to %nperm%? [%textb%;%textf%m
+
+::using simple boolean system
+set "boolean="
+set /p boolean=
+
+IF "%boolean%"=="no" goto :displayatt
+IF "%boolean%"=="n" goto :displayatt
+
+IF "%boolean%"=="y" set "boolean=yes"
+IF NOT "%boolean%"=="yes" (
+	cls
+	echo %header%
+	echo:
+	echo [%texte%mError: Invalid option. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :confirmperm
+)
+
+set nperm=%nperm: =%
+set "npermnum=%nperm%"
+::anti forge
+IF "%npermnum%"=="1" (
+	set "npermnum="
+)
+IF "%npermnum%"=="2" (
+	set "npermnum="
+)
+IF "%npermnum%"=="3" (
+	set "npermnum="
+)
+IF "%npermnum%"=="4" (
+	set "npermnum="
+)
+IF "%npermnum%"=="5" (
+	set "npermnum="
+)
+
+del %file%\Users\%usern%\permfull.dat
+del %file%\Users\%usern%\permnum.dat
+echo.perm=%nperm% > %file%\Users\%usern%\permfull.dat
+echo.%npermnum% > %file%\Users\%usern%\permnum.dat
+cd %file%\Users\ALL\
+findstr /v "%usern%:" "Userdat.dat" > Userdat.temp
+del Userdat.dat
+ren Userdat.temp Userdat.dat
+cd %file%
+echo.%usern%:perm=%nperm%,permnum=%npermnum%,%pass%,%creator% >> %file%\Users\ALL\Userdat.dat
+cls
+echo %header%
+echo:
+echo [92mPermission level changed. [%textb%;%textf%m
+timeout 2 >nul
+goto :displayatt
+
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------

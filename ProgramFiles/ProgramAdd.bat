@@ -189,8 +189,10 @@ set /p choice=
 set "current=EXIT"
 IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
-	set "current=EXIT"
-	echo.EXIT > %file%\current.temp
+	IF NOT "%host%"=="PROGRAM" (
+		set "current=EXIT"
+		echo.EXIT > %file%\current.temp
+	)
 	exit
 )
 IF "%choice%"=="1" (
@@ -348,12 +350,16 @@ IF "%perm%" GTR "5" (
 	echo %header%
 	echo:
 	echo [%texte%mError: Perition level to high. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :perm
 )
 IF "%perm%" LSS "1" (
 	cls
 	echo %header%
 	echo:
 	echo [%texte%mError: Perition level to low. [%textb%;%textf%m
+	timeout 2 >nul
+	goto :perm
 )
 
 set /a perm=%perm%-1
