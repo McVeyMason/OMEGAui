@@ -774,12 +774,23 @@ set permfull=%permfull: =%
 set permnum=%permnum: =%
 set creator=%creator: =%
 
+::start of pass file
+set "spass=password="
+::start of permission file
+set "perms=perm="
+
+::gets only the password
+for /f "tokens=1 delims=%spass% " %%a in ("%pass%") do set "jpass=%%a"
+::gets only the permission level
+for /f "tokens=1 delims=%perms% " %%a in ("%permfull%") do set "jperm=%%a"
+set jperm=%jperm:=%
+
 cls
 echo %header%
 echo:
 echo User %usern%:
-echo %usern%'s password is "%pass%"
-echo %usern%'s permisson level is "%permfull%"
+echo %usern%'s password is "%jpass%"
+echo %usern%'s permisson level is "%jperm%"
 echo:
 echo [%textq%mWhat would you like to change?[%textb%;%textf%m
 echo 0. Exit.
