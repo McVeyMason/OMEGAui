@@ -86,6 +86,8 @@ echo This program can be dangerous to your computer.
 ::using simple boolean system
 set "boolean="
 set /p boolean=
+set boolean=%boolean:&=%
+set boolean=%boolean:"=%
 IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="yes" (
 	cmd /C %file%\ProgramFiles\Login.cmd
@@ -164,16 +166,12 @@ IF "%permnum%" GTR "2" (
 	echo %op%.  Open the fork bomb menu.
 	set /a op=%op%+1
 ) 
-::only shows the sever menu to users with permissions above 3
-IF "%permnum%" GTR "3" (
-	echo %op%.  Open the servers menu.
-	set /a op=%op%+1
-)
-::only shows the site servers menu to users with permissions above 1
-IF "%permnum%" GTR "1" (
-	echo %op%.  Open the web servers menu.
-	set /a op=%op%+1
-)
+::all permissions
+echo %op%.  Open the files menu.
+set /a op=%op%+1
+::all permissions
+echo %op%.  Open the websites menu.
+set /a op=%op%+1
 ::all permissions
 echo %op%.  Open the [31mc[32mo[33ml[34mo[35mr[36m s[37me[91ml[92me[93mc[94mt[95mo[96mr[97m.[%textb%;%textf%m
 set /a op=%op%+1
@@ -219,6 +217,7 @@ IF "%choice%"=="%op%" (
 	goto :logout
 )
 set /a op=%op%+1
+::all permission
 IF "%choice%"=="%op%" (
 	echo.[%time%]:Found option 3, user is Observant. >> %file%\Users\%user%\logs\%now%.log  
 	::Rick roll
@@ -226,6 +225,7 @@ IF "%choice%"=="%op%" (
 	echo  [%textb%;%textf%m
 	goto :menu
 )
+::all permission
 set /a op=%op%+1
 IF "%choice%"=="%op%" (
 	echo.[%time%]:Opened program menu. >> %file%\Users\%user%\logs\%now%.log 
@@ -242,45 +242,35 @@ IF "%permnum%" GTR "2" (
 	)
 	set /a op=%op%+1
 )
-::permission level 4+ only
-IF "%permnum%" GTR "3" (
-	IF "%choice%"=="%op%" (
-		::Logging servers
-		echo.[%time%]:Opened server menu. >> %file%\Users\%user%\logs\%now%.log  
-		goto :servers
-	)
-	set /a op=%op%+1
+::all permission
+IF "%choice%"=="%op%" (
+	::files
+	echo.[%time%]:Opened files menu. >> %file%\Users\%user%\logs\%now%.log  
+	goto :files
 )
-::permission level 2+ only
-IF "%permnum%" GTR "1" (
-	IF "%choice%"=="%op%" (
-		::goes to the web server selector
-		echo.[%time%]:Opened web server menu. >> %file%\Users\%user%\logs\%now%.log  
-		goto :webserver
-	)
-	set /a op=%op%+1
+set /a op=%op%+1
+::all permission
+IF "%choice%"=="%op%" (
+	::goes to the websites selector
+	echo.[%time%]:Opened websites menu. >> %file%\Users\%user%\logs\%now%.log  
+	goto :websites
 )
+set /a op=%op%+1
+::all permission
 IF "%choice%"=="%op%" (
 	::goes to the colour  selector
 	echo.[%time%]:Changed the color. >> %file%\Users\%user%\logs\%now%.log  
 	goto :color
 )
 set /a op=%op%+1
+::all permission
 IF "%choice%"=="%op%" (
 	::goes to the password changer.
 	echo.[%time%]:Changing their password. >> %file%\Users\%user%\logs\%now%.log  
 	goto :password
 )
 set /a op=%op%+1
-::permission level 5 only
-IF "%permnum%" GTR "4" (
-	IF "%choice%"=="%op%" (
-		::Enters daughter program menu.
-		echo.[%time%]:Opened daughter program menu. >> %file%\Users\%user%\logs\%now%.log  
-		goto :subprograms
-	)
-	set /a op=%op%+1
-)
+::all permission
 IF "%choice%"=="debug" (
 	::do
 	cls
@@ -606,195 +596,17 @@ timeout 2 >nul
 goto :forkcopy
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
-:servers
-::setup for permissions
-set "op=0"
-
+:files
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
-echo What server do you want to open?
-echo Options:
-echo %op%. Back.
-set /a op=%op%+1
-echo %op%. \\snocwindcp02 -Domain Controller
-set /a op=%op%+1
-::only for permissions over 3
-IF "%permnum%" GTR "3" (
-	echo %op%. \\spnhfp01 -Hazel Wolf Files
-	set /a op=%op%+1
-)
-echo %op%. \\snocdc01 -Domain Controller
-set /a op=%op%+1
-echo %op%. \\snocdc02 -Domain Controller
-set /a op=%op%+1
-echo %op%. \\snocdc04 -Domain Controller
-set /a op=%op%+1
-echo %op%. \\snocdc05 -Domain Controller
-set /a op=%op%+1
-echo %op%. \\SNOCDCR1 -Domain Controller
-
-echo:
-echo|set /p="[32mPlease enter your choice: [%textb%;%textf%m"
-set "choice="
-set /p choice=
-set op=0
-
-IF "%choice%"=="%op%" (
-	::goes to main menu
-	::ending sever log
-	set "log=%log%\"
-	echo.[%time%]:----Exited sever menu. >> %file%\Users\%user%\logs\%now%.txt
-	goto :menu
-)
-set /a op=%op%+1
-IF "%choice%"=="%op%" (
-	::logging sever
-	echo.[%time%]:----Opened sever \\snocwindcp02. >> %file%\Users\%user%\logs\%now%.txt
-	::opens \\snocwindcp02
-	::Domain controller 
-	start \\snocwindcp02 >nul
-	goto :servers
-)
-set /a op=%op%+1
-IF "%permnum%" GTR "3" (
-	IF "%choice%"=="%op%" (
-		::logging sever
-		echo.[%time%]:----Opened sever \\spnhfp01. >> %file%\Users\%user%\logs\%now%.txt
-		::opens \\spnhfp01
-		::Hazel Wolf Files
-		start \\spnhfp01 >nul
-		goto :servers
-	)
-	set /a op=%op%+1
-)
-IF "%choice%"=="%op%" (
-	::logging sever
-	echo.[%time%]:----Opened sever \\snocdc01. >> %file%\Users\%user%\logs\%now%.txt
-	::opens \\snocdc01
-	::Domain controller
-	start \\snocdc01 >nul
-	goto :servers
-)
-set /a op=%op%+1
-IF "%choice%"=="%op%" (
-	::logging sever
-	echo.[%time%]:----Opened server \\snocdc02. >> %file%\Users\%user%\logs\%now%.txt
-	::opens \\snocdc02
-	::Domain controller
-	start \\snocdc02 >nul
-	goto :servers
-)
-set /a op=%op%+1
-IF "%choice%"=="%op%" (
-	::logging sever
-	echo.[%time%]:----Opened server \\snocdc04. >> %file%\Users\%user%\logs\%now%.txt
-	::opens \\snocdc04
-	::Domain controller
-	start \\snocdc04 >nul
-	goto :servers
-)
-set /a op=%op%+1
-IF "%choice%"=="%op%" (
-	::logging sever
-	echo.[%time%]:----Opened server \\snocdc05. >> %file%\Users\%user%\logs\%now%.txt
-	::opens \\snocdc05
-	::Domain controller
-	start \\snocdc05 >nul
-	goto :servers
-)
-set /a op=%op%+1
-IF "%choice%"=="%op%" (
-	::logging sever
-	echo.[%time%]:----Opened server \\SNOCDCR1. >> %file%\Users\%user%\logs\%now%.txt
-	::opens \\SNOCDCR1
-	::Domain controller
-	start \\SNOCDCR1 >Nul
-	goto :servers
-)
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+:websites
 cls
-echo OMEGAui build version %build%
+echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
-timeout 2 >nul
-goto :servers
---------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------
-:webserver
-::all seaches uses google search advanced options
-cls
-echo OMEGAui build version %build%
-echo:
-echo What server do you want to open?
-echo Options:
-echo 0. Back
-echo 1. #6-facilities?
-echo 2. #9730-hazel wolf
-echo 3. #543-forms?
-echo 4. #10683-ingrahm
-echo 5. #11227-JAMS
-echo 6. #741-Rhs
 
-echo:
-echo|set /p="[32mPlease enter your choice: [%textb%;%textf%m"
-set "choice="
-set /p choice=
-
-IF "%choice%"=="0" (
-	::goes to main menu
-	::ending web sever log
-	echo.[%time%]:----Closed web sever menu. >> %file%\Users\%user%\logs\%now%.txt
-	goto :menu
-)
-IF "%choice%"=="1" (
-	::logging sever number
-	echo.[%time%]:----Opened web sever #6. >> %file%\Users\%user%\logs\%now%.txt
-	::opens website https://www.google.com/search?q=site:%3A%22seattleschools.org%22+inurl:%3A%2FUserFiles%2FServers%2FServer_37&ie=utf-8&oe=utf-8#safe=strict&q=site:%22seattleschools.org%22+inurl:%2FUserFiles%2FServers%2FServer_6
-	start chrome.exe "https://goo.gl/ELzdiz"
-	goto :webserver
-)
-IF "%choice%"=="2" (
-	::logging sever number
-	echo.[%time%]:----Opened web sever #9730. >> %file%\Users\%user%\logs\%now%.txt
-	::opens website https://www.google.com/search?q=site:%3A%22seattleschools.org%22+inurl:%3A%2FUserFiles%2FServers%2FServer_37&ie=utf-8&oe=utf-8#q=site:%22seattleschools.org%22+inurl:/UserFiles/Servers/Server_9730&safe=strict&filter=0
-	start chrome.exe "https://goo.gl/tj1SFh"
-	goto :webserver
-)
-IF "%choice%"=="3" (
-	::logging sever number
-	echo.[%time%]:----Opened web server #543. >> %file%\Users\%user%\logs\%now%.txt
-	::opens website https://www.google.com/search?safe=strict&biw=845&bih=544&noj=1&q=site%3A%22seattleschools.org%22+inurl%3A%2FUserFiles%2FServers%2FServer_543&oq=site%3A%22seattleschools.org%22+inurl%3A%2FUserFiles%2FServers%2FServer_543&gs_l=serp.3...139232.140142.0.140580.3.3.0.0.0.0.85.207.3.3.0....0...1c.1.64.serp..0.0.0.W1TNaRcapbA
-	start chrome.exe "https://goo.gl/RKiU5D"
-	goto :webserver
-)
-IF "%choice%"=="4" (
-	::logging sever number
-	echo.[%time%]:----Opened web server #10683. >> %file%\Users\%user%\logs\%now%.txt
-	::opens website https://www.google.com/search?sclient=psy-ab&safe=strict&biw=845&bih=544&q=site:%22seattleschools.org%22+inurl:%2FUserFiles%2FServers%2FServer_10683&oq=site:%22seattleschools.org%22+inurl:%2FUserFiles%2FServers%2FServer_10683&gs_l=serp.3...3482.22789.1.24148.8.8.0.0.0.0.261.737.6j1j1.8.0....0...1c.1.64.psy-ab..0.0.0.yE7EEs6ULYI&pbx=1&bav=on.2,or.&bvm=bv.139782543,d.cGc&ech=1&psi=T9FBWKDBG4jOjwPjjobYBQ.1480708432565.5&ei=W9FBWOWhHsSJ0wLArpjoBA&emsg=NCSR&noj=1
-	start chrome.exe "https://goo.gl/t8Vrfj"
-	goto :webserver
-)
-IF "%choice%"=="5" (
-	::logging sever number
-	echo.[%time%]:----Opened web server #11227. >> %file%\Users\%user%\logs\%now%.txt
-	::opens website https://www.google.com/search?sclient=psy-ab&safe=strict&biw=845&bih=544&noj=1&q=site%3A%22seattleschools.org%22+inurl%3A%2FUserFiles%2FServers%2FServer_11227&oq=site%3A%22seattleschools.org%22+inurl%3A%2FUserFiles%2FServers%2FServer_11227&gs_l=serp.3...22426.24308.1.24797.5.5.0.0.0.0.306.585.4j3-1.5.0....0...1c.1.64.serp..0.0.0.WZP8tfEI2MI
-	start chrome.exe "https://goo.gl/EwFKgl"
-	goto :webserver
-)
-IF "%choice%"=="6" (
-	::logging sever number
-	echo.[%time%]:----Opened web server #741. >> %file%\Users\%user%\logs\%now%.txt
-	::opens website https://www.google.com/search?q=site:%5E22seattleschools.org%5E22+inurl:/UserFiles/Servers/Server_7419%5Esafe=strict%5Ebiw=845%5Ebih=544%5Enoj=1%5Efilter=0&safe=active&ssui=on#safe=strict&q=site:seattleschools.org+inurl:%2FUserFiles%2FServers%2FServer_7419
-	start chrome.exe "https://goo.gl/OcqA5C"
-	goto :webserver
-)
-
-cls
-echo OMEGAui build version %build%
-echo:
-echo [91mInvalid option. [%textb%;%textf%m
-timeout 2 >nul
-goto :webserver
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
 :color

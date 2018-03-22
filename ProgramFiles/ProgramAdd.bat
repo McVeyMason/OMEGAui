@@ -4,7 +4,7 @@
 cls
 set "build=0.5"
 set "title=OMEGA PROGRAM MANAGER %build%"
-set "header=Program Manager Version %build%"
+set "header=Program Manager v%build%"
 set "file=%~dp0"
 cd %file%
 cd..
@@ -122,9 +122,11 @@ echo:
 echo Please select an option.
 echo 0. Switch programs or exit.
 echo 1. Add a program.
-echo 2. Remove a program. (WIP)
-echo 3. Add a section.
+echo 2. Remove a program.
+echo 3. Add a section. (WIP)
 echo 4. Remove a section. (WIP)
+echo 5. Add a website. (WIP)
+echo 6. Remove a website. (WIP)
 echo:
 echo|set /p="Please enter your choice:"
 set "choice="
