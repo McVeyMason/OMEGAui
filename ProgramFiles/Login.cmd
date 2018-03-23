@@ -54,8 +54,11 @@ echo [32mDo you want to use your default account? [%textb%;%textf%m
 set "boolean="
 set /p boolean=
 
-set boolean=%boolean:"=%
-set boolean=%boolean:&=%
+IF NOT [%boolean%]==[] (
+	set boolean=%boolean:"=%
+	set boolean=%boolean:&=%
+	set boolean=%boolean: =%
+)
 
 IF "%boolean%"=="y" goto :creduser
 IF "%boolean%"=="yes" goto :creduser
@@ -79,6 +82,11 @@ set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your p
     $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
 		[System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
 for /f "usebackq delims=" %%p in (`%psCommand%`) do set "password=%%p" 
+IF NOT [%password%]==[] (
+	set password=%password:"=&%
+	set password=%password:&= %
+	set password=%password: =%
+)
 goto :logonscript
 --------------------------------------------------------------------------------------
 :creddefaut
@@ -91,8 +99,11 @@ set "user="
 echo|set /p="[32mPlease enter your username:[%textb%;%textf%m"
 set /p user=
 
-set user=%user:"=%
-set user=%user:&=%
+IF NOT [%user%]==[] (
+	set user=%user:"=%
+	set user=%user:&=%
+	set user=%user: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%user%\".toUpper()"`) do set "user=%%~I" 
 findstr "_%user%_" "%file%\Users\ALL\Users.dat"
@@ -108,6 +119,11 @@ set "psCommand=powershell -Command "$pword = read-host '[32mPlease enter your p
     $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
         [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
 for /f "usebackq delims=" %%p in (`%psCommand%`) do set "password=%%p" 
+IF NOT [%password%]==[] (
+	set password=%password:"=&%
+	set password=%password:&= %
+	set password=%password: =%
+)
 goto :logonscript
 --------------------------------------------------------------------------------------
 :logonscript

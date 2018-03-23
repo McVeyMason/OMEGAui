@@ -123,10 +123,14 @@ echo This program can be dangerous to your computer.
 ::using simple boolean system
 set "boolean="
 set /p boolean=
+
 set boolean=%boolean:"=%
 set boolean=%boolean:&=%
+set boolean=%boolean: =%
 
-IF "%boolean%"=="y" set "boolean=yes"
+IF "%boolean%"=="y" (
+set "boolean=yes"
+)
 IF "%boolean%"=="yes" (
 	cmd /C %file%\ProgramFiles\Login.cmd
 	set "miss=0"
@@ -227,8 +231,11 @@ echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 set "op=0"
 
@@ -364,8 +371,11 @@ echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
@@ -440,8 +450,11 @@ echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 echo.false> %file%\ProgramFiles\Temp\success.temp
 ::interprets the entered choice 
@@ -508,8 +521,11 @@ echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 ::setup for permissions
 set "op=0"
@@ -588,8 +604,11 @@ echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 IF "%choice%"=="0" (
 	::goes to main fork selector
@@ -697,8 +716,11 @@ echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 set op=0
 
@@ -802,8 +824,11 @@ echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 IF "%choice%"=="0" (
 	::goes to main menu
@@ -903,8 +928,11 @@ echo|set /p="[%textq%mPlease select a background color:[%textb%;%textf%m"
 set "bc="
 set /p bc=
 
-set bc=%bc:"=%
-set bc=%bc:&=%
+IF NOT [%bc%]==[] (
+	set bc=%bc:"=%
+	set bc=%bc:&=%
+	set bc=%bc: =%
+)
 
 IF "%bc%"=="0" (
 	set "textb=40"
@@ -1005,8 +1033,11 @@ echo|set /p="[%textq%mPlease enter a Foreground color:[%textb%;%textf%m"
 set "fc="
 set /p fc=
 
-set fc=%fc:"=%
-set fc=%fc:&=%
+IF NOT [%fc%]==[] (
+	set fc=%fc:"=%
+	set fc=%fc:&=%
+	set fc=%fc: =%
+)
 
 IF "%fc%"=="0" (
 	set "textf=30"
@@ -1099,8 +1130,11 @@ echo [%textq%mAre you sure you want to change your password?[%textb%;%textf%m
 set "boolean="
 set /p boolean=
 
-set boolean=%boolean:"=%
-set boolean=%boolean:&=%
+IF NOT [%boolean%]==[] (
+	set boolean=%boolean:"=%
+	set boolean=%boolean:&=%
+	set boolean=%boolean: =%
+)
 
 IF "%boolean%"=="yes" goto :auth
 IF "%boolean%"=="y" goto :auth
@@ -1148,8 +1182,11 @@ echo|set /p="[%textq%mPlease enter new password:[%textb%;%textf%m"
 set "npass0="
 set /p npass0=
 
-set npass0=%npass0:"=%
-set npass0=%npass0:&=%
+IF NOT [%npass0%]==[] (
+	set npass0=%npass0:"=%
+	set npass0=%npass0:&=%
+	set npass0=%npass0: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%npass0%\".toUpper()"`) do set "npass0=%%~I"
 cls
@@ -1159,8 +1196,11 @@ echo|set /p"[%textq%mPlease reenter new password:[%textb%;%textf%m"
 set "npass1="
 set /p npass1=
 
-set npass1=%npass1:"=%
-set npass1=%npass1:&=%
+IF NOT [%npass1%]==[] (
+	set npass1=%npass1:"=%
+	set npass1=%npass1:&=%
+	set npass1=%npass1: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%npass1%\".toUpper()"`) do set "npass1=%%~I"
 IF "%npass0%"=="%npass1%" (

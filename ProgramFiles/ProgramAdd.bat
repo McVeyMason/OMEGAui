@@ -143,8 +143,11 @@ echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 IF "%choice%"=="0" (
 	::goes to switch menu
@@ -189,8 +192,11 @@ echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 set "current=EXIT"
 IF "%choice%"=="0" (
@@ -270,8 +276,11 @@ echo|set /p="[%textq%mWhat is the name of this program:[%textb%;%textf%m"
 set "nameA="
 set /p nameA=
 
-set nameA=%nameA:"=%
-set nameA=%nameA:&=%
+IF NOT [%nameA%]==[] (
+	set nameA=%nameA:"=%
+	set nameA=%nameA:&=%
+	set nameA=%nameA: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%nameA%\".toUpper()"`) do set "nameA=%%~I" 
 IF "%nameA%"=="EXIT" goto :menu
@@ -285,8 +294,11 @@ echo|set /p="[%textq%mPlease renter the name:[%textb%;%textf%m"
 set "nameB="
 set /p nameB=
 
-set nameB=%nameB:"=%
-set nameB=%nameB:&=%
+IF NOT [%nameB%]==[] (
+	set nameB=%nameB:"=%
+	set nameB=%nameB:&=%
+	set nameB=%nameB: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%nameB%\".toUpper()"`) do set "nameB=%%~I" 
 IF "%nameB%"=="EXIT" goto :menu
@@ -317,8 +329,11 @@ echo|set /p="[%textq%mWhat type is %name%:[%textb%;%textf%m"
 set "type="
 set /p type=
 
-set type=%type:"=%
-set type=%type:&=%
+IF NOT [%type%]==[] (
+	set type=%type:"=%
+	set type=%type:&=%
+	set type=%type: =%
+)
 
 IF "%type%"=="0" goto :menu
 IF "%type%"=="1" goto :path
@@ -345,8 +360,11 @@ echo|set /p="[%textq%mPlease type the file path for %name%:[%textb%;%textf%m"
 set "path="
 set /p path=
 
-set path=%path:"=%
-set path=%path:&=%
+IF NOT [%path%]==[] (
+	set path=%path:"=%
+	set path=%path:&=%
+	set path=%path: =%
+)
 
 IF "%path%"=="exit" goto :type
 goto :perm
@@ -362,8 +380,11 @@ echo|set /p="[%textq%mPlease type the requred permission level for %name%(1-5):
 set "perm="
 set /p perm=
 
-set perm=%perm:"=%
-set perm=%perm:&=%
+IF NOT [%perm%]==[] (
+	set perm=%perm:"=%
+	set perm=%perm:&=%
+	set perm=%perm: =%
+)
 
 IF "%perm%"=="exit" goto :type
 IF "%perm%" GTR "5" (
@@ -399,8 +420,11 @@ echo [%textq%mAre you sure you want to add program %name%?[%textb%;%textf%m
 set "boolean="
 set /p boolean=
 
-set boolean=%boolean:"=%
-set boolean=%boolean:&=%
+IF NOT [%boolean%]==[] (
+	set boolean=%boolean:"=%
+	set boolean=%boolean:&=%
+	set boolean=%boolean: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%name%\".toUpper()"`) do set "name=%%~I" 
 
@@ -463,8 +487,11 @@ echo|set /p="[%textq%mWhat type of program do you want to delete:[%textb%;%tex
 set "type="
 set /p type=
 
-set type=%type:"=%
-set type=%type:&=%
+IF NOT [%type%]==[] (
+	set type=%type:"=%
+	set type=%type:&=%
+	set type=%type: =%
+)
 
 IF "%type%"=="0" goto :menu
 IF "%type%"=="1" goto :pname
@@ -493,8 +520,11 @@ echo|set /p="[%textq%mWhat program would you like to delete:[%textb%;%textf%m"
 set "name="
 set /p name=
 
-set name=%name:"=%
-set name=%name:&=%
+IF NOT [%name%]==[] (
+	set name=%name:"=%
+	set name=%name:&=%
+	set name=%name:	=%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%name%\".toUpper()"`) do set "name=%%~I"
 IF "%name%"=="EXIT" goto :menu
@@ -519,8 +549,11 @@ echo [%textq%mAre you sure you want to delete program %name%?[%textb%;%textf%m
 set "boolean="
 set /p boolean=
 
-set boolean=%boolean:"=%
-set boolean=%boolean:&=%
+IF NOT [%boolean%]==[] (
+	set boolean=%boolean:"=%
+	set boolean=%boolean:&=%
+	set boolean=%boolean: =%
+)
 
 IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="n" set "boolean=no"

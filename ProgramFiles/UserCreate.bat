@@ -142,8 +142,11 @@ echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 IF "%choice%"=="0" (
 	goto :switch
@@ -183,8 +186,11 @@ echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
-set choice=%choice:"=%
-set choice=%choice:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
 IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
@@ -259,8 +265,11 @@ echo|set /p="[%textq%mPlease enter username of the new user:[%textb%;%textf%m"
 set "usern="
 set /p usern=
 
-set usern=%usern:"=%
-set usern=%usern:&=%
+IF NOT [%usern%]==[] (
+	set usern=%usern:"=%
+	set usern=%usern:&=%
+	set usern=%usern: =%
+)
 
 IF %usern%==exit (
 	goto :menu
@@ -275,8 +284,11 @@ IF EXIST %file%\Users\%usern% (
 	set "boolean="
 	set /p boolean=
 	
-	set boolean=%boolean:"=%
-	set boolean=%boolean:&=%
+	IF NOT [%boolean%]==[] (
+		set boolean=%boolean:"=%
+		set boolean=%boolean:&=%
+		set boolean=%boolean: =%
+	)
 	
 	IF "%boolean%"=="y" set "boolean=yes"
 	IF "%boolean%"=="n" set "boolean=no"
@@ -320,8 +332,11 @@ echo|set /p="[%textq%mPlease enter the password of user %usern%:[%textb%;%text
 set "pass="
 set /p pass=
 
-set pass=%pass:"=%
-set pass=%pass:&=%
+IF NOT [%pass%]==[] (
+	set pass=%pass:"=%
+	set pass=%pass:&=%
+	set pass=%pass: =%
+)
 
 cls
 echo %header%
@@ -330,8 +345,11 @@ echo|set /p="[%textq%mPlease enter the permition level of user %usern%(1-5):[%
 set "perm="
 set /p perm=
 
-set perm=%perm:"=%
-set perm=%perm:&=%
+IF NOT [%perm%]==[] (
+	set perm=%perm:"=%
+	set perm=%perm:&=%
+	set perm=%perm: =%
+)
 
 IF "%perm%" GTR "5" (
 	cls
@@ -403,9 +421,11 @@ echo|set /p="[%textq%mPlease enter the username of the user that you want to de
 set "usern="
 set /p usern=
 
-set usern=%usern: =%
-set usern=%usern:&=%
-set usern=%usern:"=%
+IF NOT [%usern%]==[] (
+	set usern=%usern:&=%
+	set usern=%usern:"=%
+	set usern=%usern: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I" 
 IF "%usern%"=="EXIT" (
@@ -443,8 +463,11 @@ echo [%textq%mAre you sure that you want to delete %usern% from the database?[
 set "boolean="
 set /p boolean=
 
-set boolean=%boolean:"=%
-set boolean=%boolean:&=%
+IF NOT [%boolean%]==[] (
+	set boolean=%boolean:"=%
+	set boolean=%boolean:&=%
+	set boolean=%boolean: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I"
 IF "%boolean%"=="y" set "boolean=yes"
@@ -497,8 +520,11 @@ echo|set /p="[%textq%mPlease enter the username of the user that logs you want 
 set "usern="
 set /p usern=
 
-set usern=%usern:"=%
-set usern=%usern:&=%
+IF NOT [%usern%]==[] (
+	set usern=%usern:"=%
+	set usern=%usern:&=%
+	set usern=%usern: =%
+)
 
 IF "%usern%"=="exit" (
 	goto :menu
@@ -529,22 +555,25 @@ echo 2. View logs.
 echo 3. Delete logs.
 echo:
 echo echo|set /p="[%textq%mPlease enter the your choice:[%textb%;%textf%m"
-set "option="
-set /p option=
+set "choice="
+set /p choice=
 
-set option=%option:"=%
-set option=%option:&=%
+IF NOT [%perm%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
-IF "%option%"=="0" (
+IF "%choice%"=="0" (
 	goto :menu
 )
-IF "%option%"=="1" (
+IF "%choice%"=="1" (
 	goto :logs
 )
-IF "%option%"=="2" (
+IF "%choice%"=="2" (
 	goto :logview
 )
-IF "%option%"=="3" (
+IF "%choice%"=="3" (
 	goto :dellogs
 )
 cls
@@ -568,8 +597,11 @@ echo|set /p="[%textq%mPlease enter the log name of the log that you want to vie
 set "log="
 set /p log=
 
-set log=%log:"=%
-set log=%log:&=%
+IF NOT [%log%]==[] (
+	set log=%log:"=%
+	set log=%log:&=%
+	set log=%log: =%
+)
 
 ::checks if it exists
 IF NOT EXIST %file%\Users\%usern%\logs\%log%.dat (
@@ -594,19 +626,22 @@ echo 0. Back.
 echo 1. View another log.
 echo 2. View another users logs.
 echo|set /p="[%textq%mplease enter you choice:[%textb%;%textf%m"
-set "option="
-set /p option=
+set "choice="
+set /p choice=
 
-set option=%option:"=%
-set option=%option:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
-IF "%option%"=="0" (
+IF "%choice%"=="0" (
 	goto :menu
 )
-IF "%option%"=="1" (
+IF "%choice%"=="1" (
 	goto :logview
 )
-IF "%option%"=="2" (
+IF "%choice%"=="2" (
 	goto :logs
 )
 cls
@@ -626,19 +661,22 @@ echo 0. Back.
 echo 1. Delete all.
 echo 2. Delete 1.
 echo|set /p="[%textq%mPlease enter you choice:[%textb%;%textf%m"
-set "option="
-set /p option=
+set "choice="
+set /p choice=
 
-set option=%option:"=%
-set option=%option:&=%
+IF NOT [%choice%]==[] (
+	set choice=%choice:"=%
+	set choice=%choice:&=%
+	set choice=%choice: =%
+)
 
-IF "%option%"=="0" (
+IF "%choice%"=="0" (
 	goto :logs
 )
-IF "%option%"=="1" (
+IF "%choice%"=="1" (
 	goto :delall
 )
-IF "%option%"=="2" (
+IF "%choice%"=="2" (
 	goto :dellog
 )
 cls
@@ -659,8 +697,11 @@ echo [%textq%mAre you sure that you want to delete all of %usern%'s logs from t
 set "boolean="
 set /p boolean=
 
-set boolean=%boolean:"=%
-set boolean=%boolean:&=%
+IF NOT [%boolean%]==[] (
+	set boolean=%boolean:"=%
+	set boolean=%boolean:&=%
+	set boolean=%boolean: =%
+)
 
 IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="n" set "boolean=no"
@@ -706,8 +747,11 @@ echo|set /p="[%textq%mPlease enter the log name of the log that you want to del
 set "log="
 set /p log=
 
-set log=%log:"=%
-set log=%log:&=%
+IF NOT [%log%]==[] (
+	set log=%log:"=%
+	set log=%log:&=%
+	set log=%log: =%
+)
 
 IF "%log%"=="exit" (
 	goto :dellogs
@@ -729,8 +773,11 @@ echo [%textq%mAre you sure that you want to delete log %log%?[%textb%;%textf%m
 set "boolean="
 set /p boolean=
 
-set boolean=%boolean:"=%
-set boolean=%boolean:&=%
+IF NOT [%boolean%]==[] (
+	set boolean=%boolean:"=%
+	set boolean=%boolean:&=%
+	set boolean=%boolean: =%
+)
 
 IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="n" set "boolean=no"
@@ -780,9 +827,11 @@ echo|set /p="[%textq%mPlease enter the username of the user that you want to ed
 set "usern="
 set /p usern=
 
-set usern=%usern:"=%
-set usern=%usern:&=%
-set usern=%usern: =%
+IF NOT [%usern%]==[] (
+	set usern=%usern:"=%
+	set usern=%usern:&=%
+	set usern=%usern: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%usern%\".toUpper()"`) do set "usern=%%~I" 
 IF "%usern%"=="EXIT" (
@@ -851,16 +900,19 @@ echo 1. Switch user.
 echo 2. Change %usern%'s password.
 echo 3. Change %usern%'s permisson level.
 echo|set /p="[%textq%mPlease enter you choice:[%textb%;%textf%m"
-set "option="
-set /p option=
+set "choice="
+set /p choice=
 
-set option=%option:"=%
-set option=%option:&=%
+IF NOT [%choice%]==[] (
+set choice=%choice:"=%
+set choice=%choice:&=%
+set choice=%choice: =%
+)
 
-IF "%option%"=="0" goto :menu
-IF "%option%"=="1" goto :changeuser
-IF "%option%"=="2" goto :changepass
-IF "%option%"=="3" goto :changeperm
+IF "%choice%"=="0" goto :menu
+IF "%choice%"=="1" goto :changeuser
+IF "%choice%"=="2" goto :changepass
+IF "%choice%"=="3" goto :changeperm
 
 cls
 echo %header%
@@ -881,8 +933,11 @@ echo|set /p="[%textq%mPlease enter %usern%'s new password:[%textb%;%textf%m"
 set "npass0="
 set /p npass0=
 
-set npass0=%npass0:"=%
-set npass0=%npass0:&=%
+IF NOT [%npass0%]==[] (
+	set npass0=%npass0:"=%
+	set npass0=%npass0:&=%
+	set npass0=%npass0: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%npass0%\".toUpper()"`) do set "npass0=%%~I"
 IF "%npass0%"=="EXIT" goto :displayatt
@@ -896,8 +951,11 @@ echo|set /p="[%textq%mPlease reenter %usern%'s new password:[%textb%;%textf%m"
 set "npass1="
 set /p npass1=
 
-set npass1=%npass1:"=%
-set npass1=%npass1:&=%
+IF NOT [%npass1%]==[] (
+	set npass1=%npass1:"=%
+	set npass1=%npass1:&=%
+	set npass1=%npass1: =%
+)
 
 for /f "usebackq delims=" %%I in (`powershell "\"%npass1%\".toUpper()"`) do set "npass1=%%~I"
 IF "%npass0%"=="%npass1%" (
@@ -921,8 +979,11 @@ echo [%textq%mAre you sure you want to change %usern%'s password to %npass%? [
 set "boolean="
 set /p boolean=
 
-set boolean=%boolean:"=%
-set boolean=%boolean:&=%
+IF NOT [%boolean%]==[] (
+	set boolean=%boolean:"=%
+	set boolean=%boolean:&=%
+	set boolean=%boolean: =%
+)
 
 IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="yes" (
@@ -961,8 +1022,11 @@ echo|set /p="[%textq%mWhat would you like to change %usern%'s permisson level t
 set "nperm="
 set /p nperm=
 
-set nperm=%nperm:"=%
-set nperm=%nperm:&=%
+IF NOT [%nperm%]==[] (
+	set nperm=%nperm:"=%
+	set nperm=%nperm:&=%
+	set nperm=%nperm: =%
+)
 
 IF "%nperm%" GTR "5" (
 	cls
@@ -992,8 +1056,11 @@ echo [%textq%mAre you sure you want to change %usern%'s permission level to %np
 set "boolean="
 set /p boolean=
 
-set boolean=%boolean:"=%
-set boolean=%boolean:&=%
+IF NOT [%boolean%]==[] (
+	set boolean=%boolean:"=%
+	set boolean=%boolean:&=%
+	set boolean=%boolean: =%
+)
 
 IF "%boolean%"=="no" goto :displayatt
 IF "%boolean%"=="n" goto :displayatt
