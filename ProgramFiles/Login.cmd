@@ -206,9 +206,9 @@ IF /I "%pass%"=="%RP%" (
 goto :error
 --------------------------------------------------------------------------------------
 :load
-echo.%perm%> %file%\ProgramFiles\perm.temp
-echo.%permnum%> %file%\ProgramFiles\permnum.temp
-echo.%user%> %file%\ProgramFiles\user.temp
-echo.%now%> %file%\ProgramFiles\now.temp
-echo.%creator%> %file%\ProgramFiles\creator.temp
+echo.%perm%> %file%\ProgramFiles\Temp\perm.temp
+echo.%permnum%> %file%\ProgramFiles\Temp\permnum.temp
+echo.%user%> %file%\ProgramFiles\Temp\user.temp
+echo.%now%> %file%\ProgramFiles\Temp\now.temp
+echo.%creator%> %file%\ProgramFiles\Temp\creator.temp
 exit

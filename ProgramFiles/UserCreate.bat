@@ -30,9 +30,9 @@ IF "%textf%"=="" (
 ::exits for a blacklisted computer username 
 IF EXIST %file%\Users\BLACKLIST\%username%.dat exit
 ::sets the current variable
-set /p current=<%file%\current.temp
+set /p current=<%file%\ProgramFiles\Temp\current.temp
 set current=%current: =%
-del %file%\current.temp
+del %file%\ProgramFiles\Temp\current.temp
 ::Check if the user is logged in
 IF "%loggedin%" == "y" (
 	IF "%current%"=="EXIT" exit
@@ -97,28 +97,28 @@ cmd /K %file%\ProgramFiles\Login.cmd
 del %file%\Users\%user%\logs\%now%.dat
 
 set "miss=0"
-	IF NOT EXIST %file%\ProgramFiles\perm.temp set "miss=1"
-IF NOT EXIST %file%\ProgramFiles\permnum.temp set "miss=1"
-IF NOT EXIST %file%\ProgramFiles\user.temp set "miss=1"
-IF NOT EXIST %file%\ProgramFiles\now.temp set "miss=1"
-IF NOT EXIST %file%\ProgramFiles\creator.temp set "miss=1"
+	IF NOT EXIST %file%\ProgramFiles\Temp\perm.temp set "miss=1"
+IF NOT EXIST %file%\ProgramFiles\Temp\permnum.temp set "miss=1"
+IF NOT EXIST %file%\ProgramFiles\Temp\user.temp set "miss=1"
+IF NOT EXIST %file%\ProgramFiles\Temp\now.temp set "miss=1"
+IF NOT EXIST %file%\ProgramFiles\Temp\creator.temp set "miss=1"
 IF "miss"=="1" exit
 IF EXIST %file%\Users\BLACKLIST\%ruser%.dat exit
 
-set /p perm=<%file%\ProgramFiles\perm.temp
-set /p permnum=<%file%\ProgramFiles\permnum.temp
-set /p user=<%file%\ProgramFiles\user.temp
-set /p now=<%file%\ProgramFiles\now.temp
-set /p creator=<%file%\ProgramFiles\creator.temp
+set /p perm=<%file%\ProgramFiles\Temp\perm.temp
+set /p permnum=<%file%\ProgramFiles\Temp\permnum.temp
+set /p user=<%file%\ProgramFiles\Temp\user.temp
+set /p now=<%file%\ProgramFiles\Temp\now.temp
+set /p creator=<%file%\ProgramFiles\Temp\creator.temp
 set "loggedin=y"
 set "host=USER"
 set "current=USER"
 
-del %file%\ProgramFiles\perm.temp
-del %file%\ProgramFiles\permnum.temp
-del %file%\ProgramFiles\user.temp
-del %file%\ProgramFiles\now.temp
-del %file%\ProgramFiles\creator.temp
+del %file%\ProgramFiles\Temp\perm.temp
+del %file%\ProgramFiles\Temp\permnum.temp
+del %file%\ProgramFiles\Temp\user.temp
+del %file%\ProgramFiles\Temp\now.temp
+del %file%\ProgramFiles\Temp\creator.temp
 title %title%
 IF "%permnum%" GTR "4" (
 		goto :menu
@@ -190,24 +190,24 @@ IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
 	IF NOT "%host%"=="USER" (
 		set "current=EXIT"
-		echo.EXIT > %file%\current.temp
+		echo.EXIT > %file%\ProgramFiles\Temp\current.temp
 	)
 	exit
 )
 IF "%choice%"=="1" (
 	::opens OMEGAui 
 	IF "%host%"=="PROGRAM" (
-		echo.OMEGA > %file%\current.temp
+		echo.OMEGA > %file%\ProgramFiles\Temp\current.temp
 		exit
 	)
 	IF "%host%"=="USER" (
 		set "current=OMEGA"
-		echo.OMEGA > %file%\current.temp
+		echo.OMEGA > %file%\ProgramFiles\Temp\current.temp
 		cmd /C %file%\OMEGAui.bat
 		goto :startup
 	)
 	IF "%host%"=="OMEGA" (
-		echo.OMEGA > %file%\current.temp
+		echo.OMEGA > %file%\ProgramFiles\Temp\current.temp
 		exit
 	)
 	cls
@@ -221,17 +221,17 @@ IF "%choice%"=="1" (
 IF "%choice%"=="2" (
 	::opens Program manager 
 	IF "%host%"=="PROGRAM" (
-		echo.PROGRAM > %file%\current.temp
+		echo.PROGRAM > %file%\ProgramFiles\Temp\current.temp
 		exit
 	)
 	IF "%host%"=="USER" (
 		set "current=PROGRAM"
-		echo.PROGRAM > %file%\current.temp
+		echo.PROGRAM > %file%\ProgramFiles\Temp\current.temp
 		cmd /C %file%\ProgramFiles\ProgramAdd.bat
 		goto :startup
 	)
 	IF "%host%"=="OMEGA" (
-		echo.PROGRAM > %file%\current.temp
+		echo.PROGRAM > %file%\ProgramFiles\Temp\current.temp
 		exit
 	)
 	cls
