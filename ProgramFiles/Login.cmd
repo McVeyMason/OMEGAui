@@ -34,7 +34,7 @@ goto :logon
 cls
 echo %header%
 echo:
-echo [91mWrong username or password. [%textb%;%textf%m
+echo [%texte%mError: Wrong username or password. [%textb%;%textf%m
 timeout 2 >nul
 goto :logon
 --------------------------------------------------------------------------------------
@@ -53,6 +53,10 @@ echo [32mDo you want to use your default account? [%textb%;%textf%m
 ::using simple boolean system
 set "boolean="
 set /p boolean=
+
+set boolean=%boolean:"=%
+set boolean=%boolean:&=%
+
 IF "%boolean%"=="y" goto :creduser
 IF "%boolean%"=="yes" goto :creduser
 IF "%boolean%"=="n" goto :creddefaut
@@ -61,7 +65,7 @@ IF "%boolean%"=="no" goto :creddefaut
 cls
 echo %header%
 echo:
-echo [91mInvalid option. [%textb%;%textf%m
+echo [%texte%mError: Invalid option. [%textb%;%textf%m
 timeout 2 >nul
 goto :logon
 --------------------------------------------------------------------------------------
@@ -86,6 +90,9 @@ echo:
 set "user="
 echo|set /p="[32mPlease enter your username:[%textb%;%textf%m"
 set /p user=
+
+set user=%user:"=%
+set user=%user:&=%
 
 for /f "usebackq delims=" %%I in (`powershell "\"%user%\".toUpper()"`) do set "user=%%~I" 
 findstr "_%user%_" "%file%\Users\ALL\Users.dat"
@@ -186,7 +193,6 @@ IF NOT "%perm%"=="%permfull%" (
 	ren Users.temp Users.dat
 	cd %file%
 	echo Didn't expect that %ruser%, did you?
-	pause
 	timeout 2 >nul
 	exit
 )
