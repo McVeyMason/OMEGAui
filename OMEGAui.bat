@@ -9,12 +9,28 @@
 cls
 set "build=0.9.0"
 set "title=OMEGA %build%"
-set "header=OMEGAui version %build%"
+set "header=OMEGAui v%build%"
 ::sets file director to current directory
 set "file=%~dp0"
 ::sets real username to %username%
 set "ruser=%username%"
 title %title%
+::tests if color is already set
+IF "%textf%"=="" (
+	IF "%textb%"=="" (
+		::sets initial color
+		color 03
+		::sets color constants
+		::textf is foreground color
+		set "textf=36"
+		::textb is background color
+		set "textb=0"
+		::textq is the question color
+		set "textq=32"
+		::texte is the error color
+		set "texte=91"
+	)
+)
 ::adds backlist file
 IF NOT EXIST %file%\Users\BLACKLIST\ md %file%\Users\BLACKLIST\
 ::exits for a blacklisted computer username 
@@ -382,6 +398,11 @@ goto :switch
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
 :programs
+
+cls
+echo %header%
+echo:
+set op=0
 ::Opens the selected options menu
 cmd /C %file%\ProgramFiles\ProgramsStart\Option%menu%.cmd
 
@@ -395,6 +416,10 @@ set choice=%choice:&=%
 
 echo.false> %file%\ProgramFiles\ProgramsStart\success.temp
 ::interprets the entered choice 
+cls
+echo %header%
+echo:
+set op=0
 cmd /C %file%\ProgramFiles\ProgramsStart\Choice%menu%.cmd
 set /p success=<%file%\ProgramFiles\ProgramsStart\success.temp
 del %file%\ProgramFiles\ProgramsStart\success.temp >nul
@@ -618,12 +643,55 @@ goto :forkcopy
 cls
 echo %header%
 echo:
---------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------
-:websites
+set op=0
+::Opens the selected options menu
+cmd /C %file%\Users\%user%\programs\filesO.cmd
+
+echo:
+echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
+set "choice="
+set /p choice=
+
+set choice=%choice:"=%
+set choice=%choice:&=%
+
+echo.false> cmd /C %file%\Users\%user%\programs\success.temp
+::interprets the entered choice 
 cls
 echo %header%
 echo:
+set op=0
+cmd /C %file%\Users\%user%\programs\filesC.cmd
+set /p success=<cmd /C %file%\Users\%user%\programs\success.temp
+del cmd /C %file%\Users\%user%\programs\success.temp >nul
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+:websites
+
+cls
+echo %header%
+echo:
+set op=0
+::Opens the website options menu
+cmd /C %file%\Users\%user%\programs\websitesO.cmd
+
+echo:
+echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
+set "choice="
+set /p choice=
+
+set choice=%choice:"=%
+set choice=%choice:&=%
+
+echo.false> cmd /C %file%\Users\%user%\programs\success.temp
+::interprets the entered choice 
+cls
+echo %header%
+echo:
+set op=0
+cmd /C %file%\Users\%user%\programs\websitesC.cmd
+set /p success=<cmd /C %file%\Users\%user%\programs\success.temp
+del cmd /C %file%\Users\%user%\programs\success.temp >nul
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
 :color
