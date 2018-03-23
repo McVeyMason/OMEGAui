@@ -53,6 +53,10 @@ echo [32mDo you want to use your default account? [%textb%;%textf%m
 ::using simple boolean system
 set "boolean="
 set /p boolean=
+
+set boolean=%boolean:"=%
+set boolean=%boolean:&=%
+
 IF "%boolean%"=="y" goto :creduser
 IF "%boolean%"=="yes" goto :creduser
 IF "%boolean%"=="n" goto :creddefaut
@@ -86,6 +90,9 @@ echo:
 set "user="
 echo|set /p="[32mPlease enter your username:[%textb%;%textf%m"
 set /p user=
+
+set user=%user:"=%
+set user=%user:&=%
 
 for /f "usebackq delims=" %%I in (`powershell "\"%user%\".toUpper()"`) do set "user=%%~I" 
 findstr "_%user%_" "%file%\Users\ALL\Users.dat"

@@ -100,6 +100,9 @@ echo This program can be dangerous to your computer.
 ::using simple boolean system
 set "boolean="
 set /p boolean=
+set boolean=%boolean:"=%
+set boolean=%boolean:&=%
+
 IF "%boolean%"=="y" set "boolean=yes"
 IF "%boolean%"=="yes" (
 	cmd /C %file%\ProgramFiles\Login.cmd
@@ -200,6 +203,9 @@ echo:
 echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
+
+set choice=%choice:"=%
+set choice=%choice:&=%
 
 set "op=0"
 
@@ -335,6 +341,9 @@ echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
+set choice=%choice:"=%
+set choice=%choice:&=%
+
 IF "%choice%"=="0" (
 	::set program to exit and exits User Manager
 	IF NOT "%host%"=="OMEGA" (
@@ -408,6 +417,9 @@ echo|set /p="[%textq%mPlease enter your choice:[%textb%;%textf%m"
 set "choice="
 set /p choice=
 
+set choice=%choice:"=%
+set choice=%choice:&=%
+
 echo.false> %file%\ProgramFiles\ProgramsStart\success.temp
 ::interprets the entered choice 
 cmd /C %file%\ProgramFiles\ProgramsStart\Choice%menu%.cmd
@@ -472,6 +484,9 @@ echo:
 echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
+
+set choice=%choice:"=%
+set choice=%choice:&=%
 
 ::setup for permissions
 set "op=0"
@@ -549,6 +564,10 @@ echo:
 echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
+
+set choice=%choice:"=%
+set choice=%choice:&=%
+
 IF "%choice%"=="0" (
 	::goes to main fork selector
 	echo.[%time%]:----++++Exited fork copy menu. >> %file%\Users\%user%\logs\%now%.log
@@ -654,6 +673,10 @@ echo:
 echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
+
+set choice=%choice:"=%
+set choice=%choice:&=%
+
 set op=0
 
 IF "%choice%"=="%op%" (
@@ -756,6 +779,9 @@ echo|set /p="[%textq%mPlease enter your choice: [%textb%;%textf%m"
 set "choice="
 set /p choice=
 
+set choice=%choice:"=%
+set choice=%choice:&=%
+
 IF "%choice%"=="0" (
 	::goes to main menu
 	::ending web sever log
@@ -853,6 +879,10 @@ echo|set /p="[%textq%mPlease select a background color:[%textb%;%textf%m"
 ::sets background color
 set "bc="
 set /p bc=
+
+set bc=%bc:"=%
+set bc=%bc:&=%
+
 IF "%bc%"=="0" (
 	set "textb=40"
 	goto :fc
@@ -951,6 +981,10 @@ echo|set /p="[%textq%mPlease enter a Foreground color:[%textb%;%textf%m"
 ::sets foreground color
 set "fc="
 set /p fc=
+
+set fc=%fc:"=%
+set fc=%fc:&=%
+
 IF "%fc%"=="0" (
 	set "textf=30"
 	goto :setc
@@ -1041,6 +1075,10 @@ echo [%textq%mAre you sure you want to change your password?[%textb%;%textf%m
 ::using simple boolean system
 set "boolean="
 set /p boolean=
+
+set boolean=%boolean:"=%
+set boolean=%boolean:&=%
+
 IF "%boolean%"=="yes" goto :auth
 IF "%boolean%"=="y" goto :auth
 IF "%boolean%"=="no" goto :menu
@@ -1086,6 +1124,10 @@ echo:
 echo|set /p="[%textq%mPlease enter new password:[%textb%;%textf%m"
 set "npass0="
 set /p npass0=
+
+set npass0=%npass0:"=%
+set npass0=%npass0:&=%
+
 for /f "usebackq delims=" %%I in (`powershell "\"%npass0%\".toUpper()"`) do set "npass0=%%~I"
 cls
 echo %header%
@@ -1093,6 +1135,10 @@ echo:
 echo|set /p"[%textq%mPlease reenter new password:[%textb%;%textf%m"
 set "npass1="
 set /p npass1=
+
+set npass1=%npass1:"=%
+set npass1=%npass1:&=%
+
 for /f "usebackq delims=" %%I in (`powershell "\"%npass1%\".toUpper()"`) do set "npass1=%%~I"
 IF "%npass0%"=="%npass1%" (
 	goto :editfiles
